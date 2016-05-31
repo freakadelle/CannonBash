@@ -1,0 +1,16 @@
+D:\Fusee Projekte\GameEngineering\Fusee.Tutorial-master\Tutorial04\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\Cube.fus
+D:\Fusee Projekte\GameEngineering\Fusee.Tutorial-master\Tutorial04\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\Cone.fus
+D:\Fusee Projekte\GameEngineering\Fusee.Tutorial-master\Tutorial04\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\Cylinder.fus
+D:\Fusee Projekte\GameEngineering\Fusee.Tutorial-master\Tutorial04\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\Pyramid.fus
+D:\Fusee Projekte\GameEngineering\Fusee.Tutorial-master\Tutorial04\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\RocketPartsGreen.fus
+D:\Fusee Projekte\GameEngineering\Fusee.Tutorial-master\Tutorial04\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\RocketPartsGrey.fus
+D:\Fusee Projekte\GameEngineering\Fusee.Tutorial-master\Tutorial04\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\RocketPartsWhite.fus
+D:\Fusee Projekte\GameEngineering\Fusee.Tutorial-master\Tutorial04\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\SoccerBall.fus
+D:\Fusee Projekte\GameEngineering\Fusee.Tutorial-master\Tutorial04\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\Sphere.fus
+D:\Fusee Projekte\GameEngineering\Fusee.Tutorial-master\Tutorial04\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\Styles\browser.css
+D:\Fusee Projekte\GameEngineering\Fusee.Tutorial-master\Tutorial04\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\Styles\loading_rocket.png
+D:\Fusee Projekte\GameEngineering\Fusee.Tutorial-master\Tutorial04\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Fusee.Tutorial.Web.exe
+D:\Fusee Projekte\GameEngineering\Fusee.Tutorial-master\Tutorial04\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Fusee.Tutorial.Web.pdb
+D:\Fusee Projekte\GameEngineering\Fusee.Tutorial-master\Tutorial04\tmp\Obj\Fusee.Tutorial.Web\Debug\Fusee.Tutorial04.Web.csprojResolveAssemblyReference.cache
+D:\Fusee Projekte\GameEngineering\Fusee.Tutorial-master\Tutorial04\tmp\Obj\Fusee.Tutorial.Web\Debug\Fusee.Tutorial.Web.exe
+D:\Fusee Projekte\GameEngineering\Fusee.Tutorial-master\Tutorial04\tmp\Obj\Fusee.Tutorial.Web\Debug\Fusee.Tutorial.Web.pdb
