@@ -8,8 +8,11 @@ using Fusee.Engine.Common;
 using Fusee.Engine.Core;
 using Fusee.Math.Core;
 using Fusee.Serialization;
+using Fusee.Tutorial.Core.Assets;
 using Fusee.Xene;
+using static System.Math;
 using static Fusee.Engine.Core.Input;
+using static Fusee.Engine.Core.Time;
 
 namespace Fusee.Tutorial.Core
 {
@@ -17,172 +20,49 @@ namespace Fusee.Tutorial.Core
     [FuseeApplication(Name = "Tutorial Example", Description = "The official FUSEE Tutorial.")]
     public class Tutorial : RenderCanvas
     {
-        private Mesh _mesh;
-        private Random rnd;
-        private const string _vertexShader = @"
-            attribute vec3 fuVertex;
-            attribute vec3 fuNormal;
-            uniform mat4 FUSEE_MVP;
-            uniform mat4 FUSEE_MV;
-            uniform mat4 FUSEE_ITMV;
+        // angle variables
+        private static float _angleHorz = M.PiOver6 * 2.0f, _angleVert = -M.PiOver6 * 0.5f,
+                             _angleVelHorz, _angleVelVert, _angleRoll, _angleRollInit, _zoomVel, _zoom;
+        private static float2 _offset;
+        private static float2 _offsetInit;
 
-            varying vec3 modelpos;
-            varying vec3 normal;
-            varying vec3 normal_model;
+        private const float RotationSpeed = 7;
+        private const float Damping = 0.8f;
 
-            void main()
-            {
-                modelpos = fuVertex;
-                normal_model = fuNormal;
-                normal = normalize(mat3(FUSEE_MVP) * fuNormal);
-                gl_Position = FUSEE_MVP * vec4(fuVertex, 1.0);
-            }";
+        private SceneContainer _scene;
+        private float4x4 _sceneCenter;
+        private float4x4 _sceneScale;
+        private float4x4 _projection;
+        private bool _twoTouchRepeated;
 
-        private const string _pixelShader = @"
-            #ifdef GL_ES
-                precision highp float;
-            #endif
-            varying vec3 modelpos;
-            varying vec3 normal;
-            varying vec3 normal_model;
+        private bool _keys;
 
-            uniform vec3 albedo;
+        private TransformComponent _bunkers;
+        private TransformComponent _bunkers2;
 
-            void main()
-            {
-                float intensity = dot(normal, vec3(0, 0, -1));
-                gl_FragColor = vec4(intensity * albedo, 1);
-            }";
-
-
-        private float _alpha;
-        private float _beta;
-
-        private IShaderParam _albedoParam;
-        private SceneOb _humanModel_root;
-        private Dictionary<string, SceneOb> _humanModelChilds = new Dictionary<string, SceneOb>();
-        private List <SceneOb> _humanModel_movableChilds;
+        private Renderer _renderer;
 
         // Init is called on startup. 
         public override void Init()
         {
-            // Initialize the shader(s)
-            var shader = RC.CreateShader(_vertexShader, _pixelShader);
-            RC.SetShader(shader);
-            _albedoParam = RC.GetShaderParam(shader, "albedo");
+            // Load the scene
+            Bunker.load();
 
-            // Load some meshes
-            Mesh cone = LoadMesh("Cone.fus");
-            Mesh cube = LoadMesh("Cube.fus");
-            Mesh cylinder = LoadMesh("Cylinder.fus");
-            Mesh pyramid = LoadMesh("Pyramid.fus");
-            Mesh sphere = LoadMesh("Sphere.fus");
+            _scene = Bunker.scene;
+            _bunkers = _scene.Children.FindNodes(c => c.Name == "Bunker").First()?.GetTransform();
+            _bunkers.Scale = new float3(0.005f, 0.005f, 0.005f);
 
-            // Setup a list of objects
-            _humanModel_root = new SceneOb {
-                Children = new List<SceneOb>(new[] {
-                    // Body
-                    new SceneOb { Mesh = cylinder,     Pos = new float3(0, 3.05f, 0),     ModelScale = new float3(0.65f, 0.45f, 0.35f), Albedo = new float3(0.8f, 0.6f, 0.7f), ob_name = "upper_body"},
-                    new SceneOb { Mesh = cube,     Pos = new float3(0, 2.35f, 0),     ModelScale = new float3(0.4f, 0.45f, 0.2f), Albedo = new float3(0.8f, 0.6f, 0.7f), ob_name = "lower_body"},
-                    new SceneOb { Mesh = pyramid,     Pos = new float3(0, 2.1f, 0),     ModelScale = new float3(0.7f, 0.3f, 0.35f), Albedo = new float3(0.8f, 0.6f, 0.7f), ob_name = "hipp"},
-                    new SceneOb { Mesh = cube,     Pos = new float3(0, 1.7f, 0),     ModelScale = new float3(0.7f, 0.1f, 0.35f), Albedo = new float3(0.8f, 0.6f, 0.7f), ob_name = "hipp2"},
-                
-                    //Breast - 4
-                    new SceneOb { Mesh = sphere,     Pos = new float3(-0.3f, 3.1f, -0.35f),     ModelScale = new float3(0.2f, 0.3f, 0.2f), Albedo = new float3(0.8f, 0.6f, 0.7f), ob_name = "left_breast"},
-                    new SceneOb { Mesh = sphere,     Pos = new float3(0.3f, 3.1f, -0.35f),     ModelScale = new float3(0.2f, 0.3f, 0.2f), Albedo = new float3(0.8f, 0.6f, 0.7f), ob_name = "right_breast"},
-                
-                    // LEFT LEG
-                    new SceneOb
-                    {
-                        Children = new List<SceneOb>(new[] {
-                            new SceneOb { Mesh = sphere, Pos = new float3(0.0f, -0.7f, 0),    ModelScale = new float3(0.25f, 0.25f, 0.25f), Albedo = new float3(0.3f, 0.4f, 0.75f), ob_name = "left_knee"},
-                            new SceneOb
-                            {
-                                Children = new List<SceneOb>(new[] {
-                                    new SceneOb { Mesh = cube, Pos = new float3(0.0f, -0.45f, -0.2f),    ModelScale = new float3(0.2f, 0.1f, 0.4f), Albedo = new float3(0.6f, 0.3f, 0.1f), ob_name = "left_foot"},
-                                }),
-                                Mesh = cylinder, Pos = new float3(0.0f, -1.2f, 0),    ModelScale = new float3(0.2f, 0.45f, 0.2f), Pivot = new float3(0, 0.5f, 0), Rotbounds = new float3x3(-2.5f, 0.1f, 0.0f, -0, 0, 0.0f, 0.0f, 0.0f, 0.0f), Albedo = new float3(0.3f, 0.4f, 0.75f), ob_name = "lower_left_leg"
-                            },
-                        }),
-                        Mesh = cylinder, Pos = new float3(-0.35f, 1.1f, 0),    ModelScale = new float3(0.3f, 0.6f, 0.25f), Pivot = new float3(0, 0.6f, 0), Rotbounds = new float3x3(-0.5f, 1.5f, 0.0f, 0, 0, 0.0f, -1.0f, 0.0f, 0.0f), Albedo = new float3(0.3f, 0.4f, 0.75f), ob_name = "upper_left_leg"
-                    },
+            MapGenerator.mapSize = new float2(10, 10);
+            _scene.Children.Add(MapGenerator.generate());
 
-                    //RIGHT LEG
-                    new SceneOb
-                    {
-                        Children = new List<SceneOb>(new[] {
-                            new SceneOb { Mesh = sphere, Pos = new float3(0.0f, -0.7f, 0),    ModelScale = new float3(0.25f, 0.25f, 0.25f), Albedo = new float3(0.3f, 0.4f, 0.75f), ob_name = "right_knee"},
-                            new SceneOb
-                            {
-                                Children = new List<SceneOb>(new[] {
-                                    new SceneOb { Mesh = cube, Pos = new float3(0.0f, -0.45f, -0.2f),    ModelScale = new float3(0.2f, 0.1f, 0.4f), Albedo = new float3(0.6f, 0.3f, 0.1f), ob_name = "right_foot"},
-                                }), 
-                                Mesh = cylinder, Pos = new float3(0.0f, -1.2f, 0),    ModelScale = new float3(0.2f, 0.45f, 0.2f), Pivot = new float3(0, 0.5f, 0), Rotbounds = new float3x3(-2.5f, 0.1f, 0.0f, -0, 0, 0.0f, 0.0f, 0.0f, 0.0f), Albedo = new float3(0.3f, 0.4f, 0.75f), ob_name = "lower_right_leg"
-                            },
-                        }),
-                        Mesh = cylinder, Pos = new float3(0.35f, 1.1f, 0),    ModelScale = new float3(0.3f, 0.6f, 0.25f), Pivot = new float3(0, 0.6f, 0), Rotbounds = new float3x3(-0.5f, 1.5f, 0.0f, -0, 0, 0.0f, 0.0f, 1.0f, 0.0f), Albedo = new float3(0.3f, 0.4f, 0.75f), ob_name = "upper_right_leg"
-                    },
-                    
-                    // Shoulders
-                    new SceneOb { Mesh = sphere,   Pos = new float3(-0.7f, 3.3f, 0), ModelScale = new float3(0.3f, 0.3f, 0.3f), Albedo = new float3(0.8f, 0.6f, 0.7f), ob_name = "left_shoulder"},
-                    new SceneOb { Mesh = sphere,   Pos = new float3( 0.7f, 3.3f, 0), ModelScale = new float3(0.3f, 0.3f, 0.3f), Albedo = new float3(0.8f, 0.6f, 0.7f), ob_name = "right_shoulder"},
-                    new SceneOb { Mesh = cone, Pos = new float3(0, 3.7f, 0), ModelScale = new float3(0.65f, 0.2f, 0.35f), Albedo = new float3(0.8f, 0.7f, 0.6f), ob_name = "neck"},
-               
-                    // Arms - 17
-                    new SceneOb
-                    {
-                        Children = new List<SceneOb>(new[] {
-                            new SceneOb { Mesh = sphere, Pos = new float3( 0.0f, -0.4f, 0), ModelScale = new float3(0.2f, 0.2f, 0.2f), Albedo = new float3(0.8f, 0.7f, 0.6f), ob_name = "left_elbow"},
-                            new SceneOb { Mesh = cylinder, Pos = new float3(0.0f, -0.9f, 0), ModelScale = new float3(0.12f, 0.4f, 0.12f), Pivot = new float3(0, 0.5f, 0), Rotbounds = new float3x3(-0.5f, 2.5f, 0.0f, -0, 0, 0.0f, 0.0f, 0f, 0.0f), Albedo = new float3(0.8f, 0.7f, 0.6f), ob_name = "lower_left_arm"},
-                        }),
-                        Mesh = cylinder, Pos = new float3(-0.85f, 2.8f, 0), ModelScale = new float3(0.15f, 0.5f, 0.15f), Pivot = new float3(0, 0.5f, 0), Rotbounds = new float3x3(-0.5f, 2.5f, 0.0f, -0, 0, 0.0f, -2.5f, 0f, 0.0f), Albedo = new float3(0.8f, 0.7f, 0.6f), ob_name = "upper_left_arm"
-                    },
-                    new SceneOb
-                    {
-                        Children = new List<SceneOb>(new[] {
-                            new SceneOb { Mesh = sphere, Pos = new float3( 0.0f, -0.4f, 0), ModelScale = new float3(0.2f, 0.2f, 0.2f), Albedo = new float3(0.8f, 0.7f, 0.6f), ob_name = "right_elbow"},
+            _sceneScale = float4x4.CreateScale(5);
 
-                            new SceneOb { Mesh = cylinder, Pos = new float3( 0.0f, -0.9f, 0), ModelScale = new float3(0.12f, 0.4f, 0.12f), Pivot = new float3(0, 0.5f, 0), Rotbounds = new float3x3(-0.5f, 2.5f, 0.0f, -0, 0, 0.0f, 0.0f, 0.0f, 0.0f), Albedo = new float3(0.8f, 0.7f, 0.6f), ob_name = "lower_right_arm"},
-                        }),
-                        Mesh = cylinder, Pos = new float3( 0.85f, 2.8f, 0), ModelScale = new float3(0.15f, 0.5f, 0.15f), Pivot = new float3(0, 0.5f, 0), Rotbounds = new float3x3(-0.5f, 2.5f, 0.0f, -0, 0, 0.0f, 0.0f, 2.5f, 0.0f), Albedo = new float3(0.8f, 0.7f, 0.6f), ob_name = "upper_right_arm"
-                    },
-                    
-                    
-                
-                    // Head
-                    new SceneOb
-                    {
-                        Children = new List<SceneOb>(new[] {
-                             new SceneOb { Mesh = cone, Pos = new float3(0, 0.5f, 0), ModelScale = new float3(1, 0.2f, 1), Albedo = new float3(0.45f, 0.4f, 0.2f), ob_name = "hat"},
-                        }),
-                        Mesh = sphere,   Pos = new float3(0, 4.2f, 0), ModelScale = new float3(0.35f, 0.5f, 0.35f), Pivot = new float3(0, -0.4f, 0), Rotbounds = new float3x3(-1f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0f, 0.0f), Albedo = new float3(0.8f, 0.7f, 0.6f), ob_name = "head"
-                    },
-                   
-                })
-            };
-
-            //create associative dictionary from sceneObchilds and their string names
-            _humanModelChilds = createDictFromSceneObChilds(_humanModel_root);
-
-            //add movable sceneOb Childs to movable List by name
-            _humanModel_movableChilds = new List<SceneOb>();
-            _humanModel_movableChilds.Add(_humanModelChilds["head"]);
-            _humanModel_movableChilds.Add(_humanModelChilds["lower_right_arm"]);
-            _humanModel_movableChilds.Add(_humanModelChilds["lower_left_arm"]);
-            _humanModel_movableChilds.Add(_humanModelChilds["upper_right_arm"]);
-            _humanModel_movableChilds.Add(_humanModelChilds["upper_left_arm"]);
-            _humanModel_movableChilds.Add(_humanModelChilds["lower_right_leg"]);
-            _humanModel_movableChilds.Add(_humanModelChilds["lower_left_leg"]);
-            _humanModel_movableChilds.Add(_humanModelChilds["upper_right_leg"]);
-            _humanModel_movableChilds.Add(_humanModelChilds["upper_left_leg"]);
-
-            rnd = new Random();
+            // Instantiate our self-written renderer
+            _renderer = new Renderer(RC);
 
             // Set the clear color for the backbuffer
-            RC.ClearColor = new float4(0.2f, 0.2f, 0.2f, 1);
+            RC.ClearColor = new float4(1, 1, 1, 1);
         }
-
-        
 
         // RenderAFrame is called once a frame
         public override void RenderAFrame()
@@ -190,38 +70,108 @@ namespace Fusee.Tutorial.Core
             // Clear the backbuffer
             RC.Clear(ClearFlags.Color | ClearFlags.Depth);
 
-            //Mouse interaction camera view
-            float2 speed = Mouse.Velocity + Touch.GetVelocity(TouchPoints.Touchpoint_0);
-            if (Mouse.LeftButton || Touch.GetTouchActive(TouchPoints.Touchpoint_0))
+            var curDamp = (float)System.Math.Exp(-Damping * DeltaTime);
+
+            // Zoom & Roll
+            if (Touch.TwoPoint)
             {
-                _alpha -= speed.x*0.0001f;
-                _beta  -= speed.y*0.0001f;
+                if (!_twoTouchRepeated)
+                {
+                    _twoTouchRepeated = true;
+                    _angleRollInit = Touch.TwoPointAngle - _angleRoll;
+                    _offsetInit = Touch.TwoPointMidPoint - _offset;
+                }
+                _zoomVel = Touch.TwoPointDistanceVel * -0.01f;
+                _angleRoll = Touch.TwoPointAngle - _angleRollInit;
+                _offset = Touch.TwoPointMidPoint - _offsetInit;
+            }
+            else
+            {
+                _twoTouchRepeated = false;
+                _zoomVel = Mouse.WheelVel * -0.5f;
+                _angleRoll *= curDamp * 0.8f;
+                _offset *= curDamp * 0.8f;
             }
 
-            //Update movable Childs of SceneOb
-            foreach (SceneOb child in _humanModel_movableChilds)
+            // UpDown / LeftRight rotation
+            if (Mouse.LeftButton)
             {
-                if (child.hasReachedTarget())
+                _keys = false;
+                _angleVelHorz = -RotationSpeed * Mouse.XVel * 0.000002f;
+                _angleVelVert = -RotationSpeed * Mouse.YVel * 0.000002f;
+            }
+            else if (Touch.GetTouchActive(TouchPoints.Touchpoint_0) && !Touch.TwoPoint)
+            {
+                _keys = false;
+                float2 touchVel;
+                touchVel = Touch.GetVelocity(TouchPoints.Touchpoint_0);
+                _angleVelHorz = -RotationSpeed * touchVel.x * 0.000002f;
+                _angleVelVert = -RotationSpeed * touchVel.y * 0.000002f;
+            }
+            else
+            {
+                if (_keys)
                 {
-                    child.rndNewTarget(rnd);
+                    _angleVelHorz = -RotationSpeed * Keyboard.LeftRightAxis * 0.002f;
+                    _angleVelVert = -RotationSpeed * Keyboard.UpDownAxis * 0.002f;
                 }
                 else
                 {
-                    child.update();
-                    child.adjustBoundsOfRotation();
+                    _angleVelHorz *= curDamp;
+                    _angleVelVert *= curDamp;
                 }
             }
 
-            // Setup View and Projection
-            var aspectRatio = Width / (float)Height;
-            var view = float4x4.CreateTranslation(0, 0, 8)*float4x4.CreateRotationY(_alpha)*float4x4.CreateRotationX(_beta)* float4x4.CreateTranslation(0, -2, 0);
-            RC.Projection = float4x4.CreatePerspectiveFieldOfView(3.141592f * 0.25f, aspectRatio, 0.01f, 20);
+            // SCRATCH:
+            // _guiSubText.Text = target.Name + " " + target.GetComponent<TargetComponent>().ExtraInfo;
+            float camYaw = 0;
 
-            RenderSceneOb(_humanModel_root, view);
+            camYaw = NormRot(camYaw);
 
-            // Swap buffers: Show the contents of the backbuffer (containing the currently rendered farame) on the front buffer.
+            _zoom += _zoomVel;
+            //Limit zoom
+            if (_zoom < 80)
+                _zoom = 20;
+            if (_zoom > 2000)
+                _zoom = 300;
+
+            _angleHorz += _angleVelHorz;
+            // Wrap-around to keep _angleHorz between -PI and + PI
+            _angleHorz = M.MinAngle(_angleHorz);
+
+            _angleVert += _angleVelVert;
+            // Limit pitch to the range between [-PI/2, + PI/2]
+            _angleVert = M.Clamp(_angleVert, -M.PiOver2, M.PiOver2);
+
+            // Wrap-around to keep _angleRoll between -PI and + PI
+            _angleRoll = M.MinAngle(_angleRoll);
+
+
+            // Create the camera matrix and set it as the current ModelView transformation
+            var mtxRot = float4x4.CreateRotationZ(_angleRoll) * float4x4.CreateRotationX(_angleVert) * float4x4.CreateRotationY(_angleHorz);
+            var mtxCam = float4x4.LookAt(0, 10, -_zoom, 0, 0, 0, 0, 1, 0);
+            _renderer.View = mtxCam * mtxRot * _sceneScale;
+            var mtxOffset = float4x4.CreateTranslation(2 * _offset.x / Width, -2 * _offset.y / Height, 0);
+            RC.Projection = mtxOffset * _projection;
+
+            
+            //_renderer.Traverse(_scene.Children);
+            _renderer.Traverse(_scene.Children);
+
+            // Swap buffers: Show the contents of the backbuffer (containing the currently rerndered farame) on the front buffer.
             Present();
+
         }
+
+        public static float NormRot(float rot)
+        {
+            while (rot > M.Pi)
+                rot -= M.TwoPi;
+            while (rot < -M.Pi)
+                rot += M.TwoPi;
+            return rot;
+        }
+
 
 
         // Is called when the window was resized
@@ -231,73 +181,13 @@ namespace Fusee.Tutorial.Core
             RC.Viewport(0, 0, Width, Height);
 
             // Create a new projection matrix generating undistorted images on the new aspect ratio.
-            var aspectRatio = Width/(float) Height;
+            var aspectRatio = Width / (float)Height;
 
             // 0.25*PI Rad -> 45° Opening angle along the vertical direction. Horizontal opening angle is calculated based on the aspect ratio
             // Front clipping happens at 1 (Objects nearer than 1 world unit get clipped)
             // Back clipping happens at 2000 (Anything further away from the camera than 2000 world units gets clipped, polygons will be cut)
-            var projection = float4x4.CreatePerspectiveFieldOfView(3.141592f * 0.25f, aspectRatio, 1, 20000);
-            RC.Projection = projection;
+            _projection = float4x4.CreatePerspectiveFieldOfView(M.PiOver4, aspectRatio, 1, 20000);
         }
 
-        //None override functions
-        //-------------------------------------------------------------------------------
-        private static Mesh LoadMesh(string assetName)
-        {
-            SceneContainer sc = AssetStorage.Get<SceneContainer>(assetName);
-            MeshComponent mc = sc.Children.FindComponents<MeshComponent>(c => true).First();
-            return new Mesh
-            {
-                Vertices = mc.Vertices,
-                Normals = mc.Normals,
-                Triangles = mc.Triangles
-            };
-        }
-
-        private static float4x4 ModelXForm(float3 pos, float3 rot, float3 pivot)
-        {
-            return float4x4.CreateTranslation(pos + pivot)
-                   * float4x4.CreateRotationY(rot.y)
-                   * float4x4.CreateRotationX(rot.x)
-                   * float4x4.CreateRotationZ(rot.z)
-                   * float4x4.CreateTranslation(-pivot);
-        }
-
-        private void RenderSceneOb(SceneOb so, float4x4 modelView)
-        {
-            modelView = modelView * ModelXForm(so.Pos, so.Rot, so.Pivot) * float4x4.CreateScale(so.Scale);
-            if (so.Mesh != null)
-            {
-                RC.ModelView = modelView * float4x4.CreateScale(so.ModelScale);
-                RC.SetShaderParam(_albedoParam, so.Albedo);
-                RC.Render(so.Mesh);
-            }
-
-            if (so.Children != null)
-            {
-                foreach (var child in so.Children)
-                {
-                    RenderSceneOb(child, modelView);
-                }
-            }
-        }
-
-        private Dictionary<string, SceneOb> createDictFromSceneObChilds(SceneOb so, Dictionary<string, SceneOb> tempDict = null)
-        {
-            if (tempDict == null)
-            {
-                tempDict = new Dictionary<string, SceneOb>();
-            }
-
-            if (so.Children != null)
-            {
-                foreach (var child in so.Children)
-                {
-                    tempDict.Add(child.ob_name, child);
-                    createDictFromSceneObChilds(child, tempDict);
-                }
-            }
-            return tempDict;
-        }
     }
 }
