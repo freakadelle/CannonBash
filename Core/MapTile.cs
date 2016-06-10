@@ -12,12 +12,15 @@ namespace Fusee.Tutorial.Core
     {
         public float3 pos;
         public List<MapTile> neighbours;
-        public Dictionary<verticeDirection, float3> tileVertices; 
+        public Dictionary<verticeDirection, int> verticesIndex;
+         
 
         public MapTile(String name)
         {
             Components = new List<SceneComponentContainer>();
             Children = new List<SceneNodeContainer>();
+
+            verticesIndex = new Dictionary<verticeDirection, int>();
 
             //pos = _pos;
             neighbours = new List<MapTile>();
