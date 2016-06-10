@@ -55,9 +55,9 @@ namespace Fusee.Tutorial.Core
             _bunkers = _scene.Children.FindNodes(c => c.Name == "Bunker").First()?.GetTransform();
             _bunkers.Scale = new float3(0.005f, 0.005f, 0.005f);
 
-            MapGenerator.tileLength = 3;
-            MapGenerator.jointLength = 0.2f;
-            MapGenerator.mapSize = new float2(20, 20);
+            MapGenerator.tileLength = 0.5f;
+            MapGenerator.jointLength = 0.5f;
+            MapGenerator.mapSize = new float2(50, 50);
             
             _scene.Children.Add(MapGenerator.generate());
 
@@ -69,8 +69,7 @@ namespace Fusee.Tutorial.Core
 
             foreach (KeyValuePair<string, MapTile> entry in MapGenerator.positionIndex)
             {
-                Debug.WriteLine(RandomTileHeight(0, 2));
-                translateTile(entry.Value.verticesIndex, new float3(0, RandomTileHeight(0, 4), 0));
+                translateTile(entry.Value.verticesIndex, new float3(0, RandomTileHeight(0, 5), 0));
             }
 
             // Set the clear color for the backbuffer
