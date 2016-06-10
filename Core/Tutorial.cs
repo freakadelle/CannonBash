@@ -22,6 +22,7 @@ namespace Fusee.Tutorial.Core
         Seltsam: Culling total verhauen bei c4D Fus Objekt
 
         Frage: Wie wird diese Kamera richtig bedient?!
+        Frage: Mehrere Objekte mit unterschiedlichen Shadern. Materialien dem Shader zuspielen
     */
 
     [FuseeApplication(Name = "Tutorial Example", Description = "The official FUSEE Tutorial.")]
