@@ -41,6 +41,7 @@ namespace Fusee.Tutorial.Core
         private TransformComponent _bunkers2;
 
         private Renderer _renderer;
+        private float height = 0;
 
         // Init is called on startup. 
         public override void Init()
@@ -52,7 +53,7 @@ namespace Fusee.Tutorial.Core
             _bunkers = _scene.Children.FindNodes(c => c.Name == "Bunker").First()?.GetTransform();
             _bunkers.Scale = new float3(0.005f, 0.005f, 0.005f);
 
-            MapGenerator.mapSize = new float2(50, 50);
+            MapGenerator.mapSize = new float2(5, 5);
             
             _scene.Children.Add(MapGenerator.generate());
 
@@ -132,9 +133,9 @@ namespace Fusee.Tutorial.Core
             _zoom += _zoomVel;
             //Limit zoom
             if (_zoom < 80)
-                _zoom = 20;
+                _zoom = 80;
             if (_zoom > 2000)
-                _zoom = 300;
+                _zoom = 2000;
 
             _angleHorz += _angleVelHorz;
             // Wrap-around to keep _angleHorz between -PI and + PI
@@ -155,13 +156,24 @@ namespace Fusee.Tutorial.Core
             var mtxOffset = float4x4.CreateTranslation(2 * _offset.x / Width, -2 * _offset.y / Height, 0);
             RC.Projection = mtxOffset * _projection;
 
-            
+            translateTile(MapGenerator.positionIndex["0.0"].verticesIndex, float3.One);
+
             //_renderer.Traverse(_scene.Children);
             _renderer.Traverse(_scene.Children);
 
             // Swap buffers: Show the contents of the backbuffer (containing the currently rerndered farame) on the front buffer.
             Present();
 
+        }
+
+        private void translateTile(Dictionary<verticeDirection, int> vertInd, float3 translation)
+        {
+            foreach (KeyValuePair<verticeDirection, int> entry in vertInd)
+            {
+                float3 vertice = MapGenerator.mapScene.GetMesh().Vertices[entry.Value];
+                vertice = new float3(vertice.x + translation.x, vertice.y + translation.y, vertice.z + translation.z);
+                MapGenerator.mapScene.GetMesh().Vertices[entry.Value] = vertice;
+            }
         }
 
         public static float NormRot(float rot)
@@ -172,8 +184,6 @@ namespace Fusee.Tutorial.Core
                 rot += M.TwoPi;
             return rot;
         }
-
-
 
         // Is called when the window was resized
         public override void Resize()
