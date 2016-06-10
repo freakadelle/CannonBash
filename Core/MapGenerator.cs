@@ -65,6 +65,8 @@ namespace Fusee.Tutorial.Core
                     tempVerticeList.Add(verticePoint);
                     tile.verticesIndex.Add(verticeDirection.LOWER_RIGHT, ((tileCount * 4) + 3));
 
+
+
                     //BASE TRIANGLES OF MAP TILE
                     tempTriangleList.Add(Convert.ToUInt16((tileCount * 4)));
                     tempTriangleList.Add(Convert.ToUInt16(((tileCount * 4) + 1)));
@@ -74,18 +76,52 @@ namespace Fusee.Tutorial.Core
                     tempTriangleList.Add(Convert.ToUInt16(((tileCount * 4) + 2)));
 
                     //TRIANGLES OF MAP-TILE-JOINTS
-                    tempTriangleList.Add(Convert.ToUInt16(((tileCount * 4) + 1)));
-                    tempTriangleList.Add(Convert.ToUInt16(((tileCount * 4) + 4)));
-                    tempTriangleList.Add(Convert.ToUInt16(((tileCount * 4) + 3)));
-                    tempTriangleList.Add(Convert.ToUInt16(((tileCount * 4) + 4)));
-                    tempTriangleList.Add(Convert.ToUInt16(((tileCount * 4) + 6)));
-                    tempTriangleList.Add(Convert.ToUInt16(((tileCount * 4) + 3)));
+                    Debug.WriteLine("Abfuck: " + ((mapSize.y)*(x + 1) - 1) + "TileCount: " + tileCount);
+
+                    if (x < mapSize.x && y < (mapSize.y - 1))
+                    {
+                        //HORIZONTALS
+                        tempTriangleList.Add(Convert.ToUInt16(((tileCount * 4) + 3)));
+                        tempTriangleList.Add(Convert.ToUInt16(((tileCount * 4) + 4)));
+                        tempTriangleList.Add(Convert.ToUInt16(((tileCount * 4) + 2)));
+                        tempTriangleList.Add(Convert.ToUInt16(((tileCount * 4) + 3)));
+                        tempTriangleList.Add(Convert.ToUInt16(((tileCount * 4) + 5)));
+                        tempTriangleList.Add(Convert.ToUInt16(((tileCount * 4) + 4)));
+
+
+                    }
+
+                    if (x < (mapSize.x - 1) && y < mapSize.y)
+                    {
+                        //VERTICALS
+                        tempTriangleList.Add(Convert.ToUInt16((((tileCount)*4) + 1)));
+                        tempTriangleList.Add(Convert.ToUInt16((((tileCount + mapSize.x)*4) + 2)));
+                        tempTriangleList.Add(Convert.ToUInt16((((tileCount)*4) + 3)));
+                        tempTriangleList.Add(Convert.ToUInt16((((tileCount)*4) + 1)));
+                        tempTriangleList.Add(Convert.ToUInt16((((tileCount + mapSize.x)*4) + 0)));
+                        tempTriangleList.Add(Convert.ToUInt16((((tileCount + mapSize.x)*4) + 2)));
+                    }
 
                     positionIndex.Add(x + "." + y, tile);
 
                     tileCount++;
                 }
             }
+
+
+            for (int x = 0; x < mapSize.x - 1; x++)
+            {
+                for (int y = 0; y < mapSize.y - 1; y++)
+                {
+                   // verticePoint = new float3(((x * (tileLength + jointLength)) + (tileLength + (0.5f * jointLength))), 0, ((y * (tileLength + jointLength)) + (tileLength + (0.5f * jointLength))));
+                   //tempVerticeList.Add(verticePoint);
+
+                    //tile.verticesIndex.Add(verticeDirection.UPPER_LEFT, (tileCount * 4));
+                }
+            }
+            //tempTriangleList.Add(Convert.ToUInt16(3));
+            //tempTriangleList.Add(Convert.ToUInt16(((tileCount + 1) * 4)));
+            //tempTriangleList.Add(Convert.ToUInt16(5));
 
             meshComp.Vertices = tempVerticeList.ToArray();
             meshComp.Triangles = tempTriangleList.ToArray();

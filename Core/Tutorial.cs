@@ -43,6 +43,8 @@ namespace Fusee.Tutorial.Core
         private Renderer _renderer;
         private float height = 0;
 
+        Random random = new Random();
+
         // Init is called on startup. 
         public override void Init()
         {
@@ -53,7 +55,9 @@ namespace Fusee.Tutorial.Core
             _bunkers = _scene.Children.FindNodes(c => c.Name == "Bunker").First()?.GetTransform();
             _bunkers.Scale = new float3(0.005f, 0.005f, 0.005f);
 
-            MapGenerator.mapSize = new float2(5, 5);
+            MapGenerator.tileLength = 3;
+            MapGenerator.jointLength = 0.2f;
+            MapGenerator.mapSize = new float2(20, 20);
             
             _scene.Children.Add(MapGenerator.generate());
 
@@ -61,6 +65,13 @@ namespace Fusee.Tutorial.Core
 
             // Instantiate our self-written renderer
             _renderer = new Renderer(RC);
+
+
+            foreach (KeyValuePair<string, MapTile> entry in MapGenerator.positionIndex)
+            {
+                Debug.WriteLine(RandomTileHeight(0, 2));
+                translateTile(entry.Value.verticesIndex, new float3(0, RandomTileHeight(0, 4), 0));
+            }
 
             // Set the clear color for the backbuffer
             RC.ClearColor = new float4(1, 1, 1, 1);
@@ -156,9 +167,7 @@ namespace Fusee.Tutorial.Core
             var mtxOffset = float4x4.CreateTranslation(2 * _offset.x / Width, -2 * _offset.y / Height, 0);
             RC.Projection = mtxOffset * _projection;
 
-            translateTile(MapGenerator.positionIndex["0.0"].verticesIndex, float3.One);
 
-            //_renderer.Traverse(_scene.Children);
             _renderer.Traverse(_scene.Children);
 
             // Swap buffers: Show the contents of the backbuffer (containing the currently rerndered farame) on the front buffer.
@@ -168,7 +177,7 @@ namespace Fusee.Tutorial.Core
 
         public float RandomTileHeight(int minHeight, int maxHeight)
         {
-            Random random = new Random();
+           
             float height = random.Next(minHeight, maxHeight);
             return height;
         }
