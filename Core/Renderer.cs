@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Fusee.Base.Common;
@@ -21,6 +22,7 @@ namespace Fusee.Tutorial.Core
         public float4x4 View;
         private Dictionary<MeshComponent, Mesh> _meshes = new Dictionary<MeshComponent, Mesh>();
         private CollapsingStateStack<float4x4> _model = new CollapsingStateStack<float4x4>();
+
         private Mesh LookupMesh(MeshComponent mc)
         {
             Mesh mesh;
@@ -97,21 +99,16 @@ namespace Fusee.Tutorial.Core
         [VisitMethod]
         void OnMaterial(MaterialComponent material)
         {
+           
             if (material.HasDiffuse)
             {
+                
                 ShaderEffect.SetEffectParam("albedo", material.Diffuse.Color);
-                if (material.Diffuse.Texture == "Leaves.jpg")
-                {
-                    ShaderEffect.SetEffectParam("texture", _leafTexture);
-                    ShaderEffect.SetEffectParam("texmix", 1.0f);
-                }
-                else
-                {
-                    ShaderEffect.SetEffectParam("texmix", 0.0f);
-                }
+                ShaderEffect.SetEffectParam("texmix", 0.0f);
             }
             else
             {
+                
                 ShaderEffect.SetEffectParam("albedo", float3.Zero);
             }
             if (material.HasSpecular)
