@@ -13,13 +13,14 @@ namespace Fusee.Tutorial.Core
         public float3 pos;
         public List<MapTile> neighbours;
         public Dictionary<verticeDirection, int> verticesIndex;
-         
+        public List<int> neighborJointIndex;
 
         public MapTile(String name)
         {
             Components = new List<SceneComponentContainer>();
             Children = new List<SceneNodeContainer>();
 
+            neighborJointIndex = new List<int>();
             verticesIndex = new Dictionary<verticeDirection, int>();
 
             //pos = _pos;

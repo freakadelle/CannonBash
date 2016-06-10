@@ -17,6 +17,13 @@ using static Fusee.Engine.Core.Time;
 namespace Fusee.Tutorial.Core
 {
 
+    /*
+        Seltsam: Material des generierten SceneNodeContainer wird deaktiviert, wenn man ein fus. Objekt mit Cinema4D rein lädt
+        Seltsam: Culling total verhauen bei c4D Fus Objekt
+
+        Frage: Wie wird diese Kamera richtig bedient?!
+    */
+
     [FuseeApplication(Name = "Tutorial Example", Description = "The official FUSEE Tutorial.")]
     public class Tutorial : RenderCanvas
     {
@@ -44,6 +51,8 @@ namespace Fusee.Tutorial.Core
         private Renderer _renderer;
         private float height = 0;
 
+        private Camera cam;
+
         Random random = new Random();
 
         // Init is called on startup. 
@@ -52,9 +61,9 @@ namespace Fusee.Tutorial.Core
             // Load the scene
             Bunker.load();
 
-            MapGenerator.tileLength = 0.5f;
-            MapGenerator.jointLength = 0.5f;
-            MapGenerator.mapSize = new float2(50, 50);
+            MapGenerator.tileLength = 11f;
+            MapGenerator.jointLength = 33f;
+            MapGenerator.mapSize = new float2(30, 30);
 
             SceneNodeContainer map = MapGenerator.generate();
             SceneNodeContainer bunker = Bunker.scene.Children[0];
@@ -72,7 +81,14 @@ namespace Fusee.Tutorial.Core
 
             _bunkerRoot.Scale = new float3(0.005f, 0.005f, 0.005f);
 
+            _bunkerRoot.Translation = new float3(0, 0, 0);
+
             _sceneScale = float4x4.CreateScale(5);
+
+            cam = new Camera();
+            //cam.Translation.y += 10;
+            //cam.Translation = _bunkerRoot.Translation;
+            adjustProjectionMatrice();
 
             // Instantiate our self-written renderer
             _renderer = new Renderer(RC);
@@ -80,7 +96,7 @@ namespace Fusee.Tutorial.Core
 
             foreach (KeyValuePair<string, MapTile> entry in MapGenerator.positionIndex)
             {
-                translateTile(entry.Value.verticesIndex, new float3(0, RandomTileHeight(0, 5), 0));
+                translateTile(entry.Value, new float3(0, RandomTileHeight(0, 100), 0));
             }
 
             // Set the clear color for the backbuffer
@@ -172,11 +188,24 @@ namespace Fusee.Tutorial.Core
 
             // Create the camera matrix and set it as the current ModelView transformation
             var mtxRot = float4x4.CreateRotationZ(_angleRoll) * float4x4.CreateRotationX(_angleVert) * float4x4.CreateRotationY(_angleHorz);
-            var mtxCam = float4x4.LookAt(0, 10, -_zoom, 0, 0, 0, 0, 1, 0);
+            var mtxCam = float4x4.LookAt(0, 0, -_zoom, 50, 50, 50, 0, 1, 0);
             _renderer.View = mtxCam * mtxRot * _sceneScale;
-            var mtxOffset = float4x4.CreateTranslation(2 * _offset.x / Width, -2 * _offset.y / Height, 0);
+            //var mtxOffset = float4x4.CreateTranslation(2 * _offset.x / Width, (-2 * _offset.y / Height), 0);
+            var mtxOffset = float4x4.CreateTranslation(_bunkerRoot.Translation);
             RC.Projection = mtxOffset * _projection;
 
+            height += 0.001f;
+            _bunkerTurn.Rotation = new float3(0, height, 0);
+
+            //CAMERA CALCULATION
+            //Input controlls and calculation for camera
+            //cam.pivotPoint = cam.Translation;
+            //cam.move(Keyboard.UpDownAxis, Keyboard.LeftRightAxis);
+            ////Cam look at target not working properly
+            ////cam.lookAtTarget(_bunkerRoot.Translation);
+            //cam.FieldOfView += Keyboard.LeftRightAxis / 100.0f;
+
+            //adjustProjectionMatrice();
 
             _renderer.Traverse(_scene.Children);
 
@@ -192,14 +221,27 @@ namespace Fusee.Tutorial.Core
             return height;
         }
 
-        private void translateTile(Dictionary<verticeDirection, int> vertInd, float3 translation)
+        private void translateTile(MapTile tile, float3 translation)
         {
-            foreach (KeyValuePair<verticeDirection, int> entry in vertInd)
+            foreach (KeyValuePair<verticeDirection, int> entry in tile.verticesIndex)
             {
                 float3 vertice = MapGenerator.mapScene.GetMesh().Vertices[entry.Value];
                 vertice = new float3(vertice.x + translation.x, vertice.y + translation.y, vertice.z + translation.z);
                 MapGenerator.mapScene.GetMesh().Vertices[entry.Value] = vertice;
             }
+
+            foreach (int index in tile.neighborJointIndex)
+            {
+                float3 vertice = MapGenerator.mapScene.GetMesh().Vertices[index];
+                vertice = new float3(vertice.x, vertice.y + translation.y/3.0f, vertice.z);
+                MapGenerator.mapScene.GetMesh().Vertices[index] = vertice;
+            }
+        }
+
+        public void adjustProjectionMatrice()
+        {
+            var aspectRatio = Width / (float)Height;
+            RC.Projection = float4x4.CreatePerspectiveFieldOfView(cam.FieldOfView, aspectRatio, 0.01f, 20);
         }
 
         public static float NormRot(float rot)

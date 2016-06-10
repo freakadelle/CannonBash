@@ -153,6 +153,23 @@ namespace Fusee.Tutorial.Core
                     verticePoint = new float3(((x * (tileLength + jointLength)) + (tileLength + (0.5f * jointLength))), 0, ((y * (tileLength + jointLength)) + (tileLength + (0.5f * jointLength))));
                     tempVerticeList.Add(verticePoint);
 
+                    MapTile tile;
+
+                    for (int iMin = -1; iMin < 1; iMin++)
+                    {
+                        for (int iMax = -1; iMax < 1; iMax++)
+                        {
+                            int xNeighbor = x + iMin;
+                            int yNeighbor = y + iMax;
+
+                            if (xNeighbor > 0 && xNeighbor < mapSize.x && yNeighbor > 0 && y < mapSize.y)
+                            {
+                                tile = positionIndex[xNeighbor + "." + yNeighbor];
+                                tile.neighborJointIndex.Add(tempVerticeList.Count - 1);
+                            }
+                        }
+                    }
+
                     if (x < mapSize.x && y < (mapSize.y - 1))
                     {
 
