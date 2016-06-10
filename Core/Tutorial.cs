@@ -52,7 +52,8 @@ namespace Fusee.Tutorial.Core
             _bunkers = _scene.Children.FindNodes(c => c.Name == "Bunker").First()?.GetTransform();
             _bunkers.Scale = new float3(0.005f, 0.005f, 0.005f);
 
-            MapGenerator.mapSize = new float2(10, 10);
+            MapGenerator.mapSize = new float2(50, 50);
+            
             _scene.Children.Add(MapGenerator.generate());
 
             _sceneScale = float4x4.CreateScale(5);

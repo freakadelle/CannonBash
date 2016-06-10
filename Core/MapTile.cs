@@ -12,18 +12,19 @@ namespace Fusee.Tutorial.Core
     {
         public float3 pos;
         public List<MapTile> neighbours;
+        public Dictionary<verticeDirection, float3> tileVertices; 
 
-        public MapTile(String name, float3 _pos)
+        public MapTile(String name)
         {
             Components = new List<SceneComponentContainer>();
             Children = new List<SceneNodeContainer>();
 
-            pos = _pos;
+            //pos = _pos;
             neighbours = new List<MapTile>();
 
-            addTransformComponent();
-            addMaterialComponent();
-            addMeshComponent();
+            //addTransformComponent();
+            //addMaterialComponent();
+            //addMeshComponent();
 
             Name = name;
         }
@@ -89,4 +90,13 @@ namespace Fusee.Tutorial.Core
             Components.Add(meshComp);
         }
     }
+
+    public enum verticeDirection
+    {
+        UPPER_RIGHT,
+        UPPER_LEFT,
+        LOWER_RIGHT,
+        LOWER_LEFT
+    }
+
 }
