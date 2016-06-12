@@ -8,19 +8,13 @@ D:\Fusee Projekte\GameEngineering\Fusee.Tutorial-master\Tutorial06Completed\tmp\
 D:\Fusee Projekte\GameEngineering\Fusee.Tutorial-master\Tutorial06Completed\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial.Core.dll
 D:\Fusee Projekte\GameEngineering\Fusee.Tutorial-master\Tutorial06Completed\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial.Core.pdb
 D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Leaves.jpg
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\WuggyLand.fus
 D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\PixelShader.frag
 D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\VertexShader.vert
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Bunker_v2.fus
 D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Fusee.Tutorial.Core.dll
 D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Fusee.Tutorial.Core.pdb
 D:\Fusee Projekte\GameEngineering\CannonBash\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial06.Core.csprojResolveAssemblyReference.cache
 D:\Fusee Projekte\GameEngineering\CannonBash\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial.Core.dll
 D:\Fusee Projekte\GameEngineering\CannonBash\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial.Core.pdb
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Bunker_v3.fus
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Bunker_v4.fus
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Bunker_v5.fus
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\block.fus
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Assets\Leaves.jpg
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Assets\WuggyLand.fus
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Assets\PixelShader.frag
@@ -32,6 +26,9 @@ C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Assets\b
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Assets\Bunker_v5.fus
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Fusee.Tutorial.Core.dll
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Fusee.Tutorial.Core.pdb
+C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial06.Core.csprojResolveAssemblyReference.cache
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial.Core.dll
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial.Core.pdb
-C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial06.Core.csprojResolveAssemblyReference.cache
+C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial.Core.dll.mdb
+C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Fusee.Tutorial.Core.dll.mdb
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Bunker_v9.fus

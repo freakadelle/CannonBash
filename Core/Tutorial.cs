@@ -37,8 +37,9 @@ namespace Fusee.Tutorial.Core
 
         private bool _keys;
 
-        private TransformComponent _bunkers;
-        private TransformComponent _bunkers2;
+        private TransformComponent _bunkerRoot;
+        private TransformComponent _bunkerTurn;
+        private TransformComponent _bunkerCannon;
 
         private Renderer _renderer;
         private float height = 0;
@@ -50,18 +51,26 @@ namespace Fusee.Tutorial.Core
         {
             // Load the scene
             Bunker.load();
+
+            MapGenerator.tileLength = 0.5f;
+            MapGenerator.jointLength = 0.5f;
+            MapGenerator.mapSize = new float2(50, 50);
+
+            SceneNodeContainer map = MapGenerator.generate();
+            SceneNodeContainer bunker = Bunker.scene.Children[0];
+
             _scene = new SceneContainer();
             _scene.Children = new List<SceneNodeContainer>();
             _scene.Header = new SceneHeader();
-            //_scene = Bunker.scene;
-            //_bunkers = _scene.Children.FindNodes(c => c.Name == "Bunker").First()?.GetTransform();
-            //_bunkers.Scale = new float3(0.005f, 0.005f, 0.005f);
 
-            MapGenerator.tileLength = 1f;
-            MapGenerator.jointLength = 0.5f;
-            MapGenerator.mapSize = new float2(10, 10);
-            
-            _scene.Children.Add(MapGenerator.generate());
+            _scene.Children.Add(map);
+            _scene.Children.Add(bunker);
+
+            _bunkerRoot = _scene.Children.FindNodes(c => c.Name == "Base").First()?.GetTransform();
+            _bunkerTurn = _scene.Children.FindNodes(c => c.Name == "Turn").First()?.GetTransform();
+            _bunkerCannon = _scene.Children.FindNodes(c => c.Name == "CannonRohr").First()?.GetTransform();
+
+            _bunkerRoot.Scale = new float3(0.005f, 0.005f, 0.005f);
 
             _sceneScale = float4x4.CreateScale(5);
 
@@ -71,7 +80,7 @@ namespace Fusee.Tutorial.Core
 
             foreach (KeyValuePair<string, MapTile> entry in MapGenerator.positionIndex)
             {
-                translateTile(entry.Value.verticesIndex, new float3(0, RandomTileHeight(0, 2), 0));
+                translateTile(entry.Value.verticesIndex, new float3(0, RandomTileHeight(0, 5), 0));
             }
 
             // Set the clear color for the backbuffer

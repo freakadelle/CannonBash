@@ -32,6 +32,8 @@ namespace Fusee.Tutorial.Core
             addMeshComponent();
             addMaterialComponent();
 
+            mapScene.Name = "TileMap";
+
             return mapScene;
         }
 
@@ -113,8 +115,6 @@ namespace Fusee.Tutorial.Core
                     tempTriangleList.Add(Convert.ToUInt16(((tileCount * 4) + 2)));
 
                     //TRIANGLES OF MAP-TILE-JOINTS
-                    Debug.WriteLine("Abfuck: " + ((mapSize.y) * (x + 1) - 1) + "TileCount: " + tileCount);
-
                     if (x < mapSize.x && y < (mapSize.y - 1))
                     {
                         //HORIZONTALS
