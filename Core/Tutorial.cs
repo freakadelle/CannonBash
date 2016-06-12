@@ -80,7 +80,7 @@ namespace Fusee.Tutorial.Core
 
             foreach (KeyValuePair<string, MapTile> entry in MapGenerator.positionIndex)
             {
-                translateTile(entry.Value.verticesIndex, new float3(0, RandomTileHeight(0, 5), 0));
+                translateTile(entry.Value.verticesIndex, new float3(0, RandomTileHeight(0, 2), 0));
             }
 
             // Set the clear color for the backbuffer

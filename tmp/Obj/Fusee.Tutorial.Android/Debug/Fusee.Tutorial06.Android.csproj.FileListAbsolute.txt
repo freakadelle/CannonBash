@@ -1,12 +1,6 @@
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Assets\Leaves.jpg
-C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Assets\WuggyLand.fus
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Assets\PixelShader.frag
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Assets\VertexShader.vert
-C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Assets\Bunker_v2.fus
-C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Assets\Bunker_v3.fus
-C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Assets\Bunker_v4.fus
-C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Assets\block.fus
-C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Assets\Bunker_v5.fus
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Fusee.Tutorial.Android.dll
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Fusee.Tutorial.Android.pdb
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Fusee.Engine.Examples.Simple.Android.apk
@@ -34,5 +28,6 @@ C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Fusee.Math
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Fusee.Serialization.dll.mdb
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Fusee.Xene.dll.mdb
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\protobuf-net.dll.mdb
+C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Assets\Bunker_v9.fus
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Android\Debug\Fusee.Tutorial.Android.dll.mdb
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Fusee.Tutorial.Android.dll.mdb
