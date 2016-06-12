@@ -50,18 +50,18 @@ namespace Fusee.Tutorial.Core
             MaterialComponent matComp = new MaterialComponent();
 
             matComp.Diffuse = new MatChannelContainer();
-            matComp.Diffuse.Color = new float3(1, 0.5f, 0.5f);
+            matComp.Diffuse.Color = new float3(0f, 0.5f, 0.1f);
             matComp.Diffuse.Mix = 1;
 
             matComp.Emissive = new MatChannelContainer();
-            matComp.Emissive.Color = new float3(1, 0.5f, 0.5f);
+            matComp.Emissive.Color = new float3(0f, 0.5f, 0.1f);
             matComp.Emissive.Mix = 1;
 
             matComp.Specular = new SpecularChannelContainer();
             matComp.Specular.Color = float3.One;
-            matComp.Specular.Intensity = 0.01f;
+            matComp.Specular.Intensity = 0.1f;
             matComp.Specular.Mix = 1;
-            matComp.Specular.Shininess = 10;
+            matComp.Specular.Shininess = 1;
 
             mapScene.Components.Add(matComp);
         }
@@ -188,11 +188,11 @@ namespace Fusee.Tutorial.Core
             List<float3> tempNormals = new List<float3>();
             foreach (var vert in meshComp.Vertices)
             {
-                tempNormals.Add(new float3(random.Next(0, 2), random.Next(0, 2), random.Next(0, 2)));
+                tempNormals.Add(new float3(random.Next(-1, 2), random.Next(1, 2), random.Next(-1, 2)));
             }
 
             meshComp.Normals = tempNormals.ToArray();
-
+            
             mapScene.Components.Add(meshComp);
         }
     }
