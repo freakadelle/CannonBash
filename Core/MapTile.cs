@@ -11,6 +11,7 @@ namespace Fusee.Tutorial.Core
     class MapTile: SceneNodeContainer
     {
         public float3 pos;
+        public List<MapTile> neighbours;
 
         public MapTile(String name, float3 _pos)
         {
@@ -18,6 +19,7 @@ namespace Fusee.Tutorial.Core
             Children = new List<SceneNodeContainer>();
 
             pos = _pos;
+            neighbours = new List<MapTile>();
 
             addTransformComponent();
             addMaterialComponent();
