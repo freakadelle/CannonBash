@@ -164,6 +164,13 @@ namespace Fusee.Tutorial.Core
 
         }
 
+        public float RandomTileHeight(int minHeight, int maxHeight)
+        {
+            Random random = new Random();
+            float height = random.Next(minHeight, maxHeight);
+            return height;
+        }
+
         public static float NormRot(float rot)
         {
             while (rot > M.Pi)
