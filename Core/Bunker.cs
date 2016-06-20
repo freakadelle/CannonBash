@@ -12,23 +12,41 @@ namespace Fusee.Tutorial.Core.Assets
     class Bunker
     {
 
-        public static SceneContainer scene;
+        public string name;
+
+        public SceneContainer scene;
 
         public TransformComponent bunkerBase;
         public TransformComponent bunkerPlatform;
         public TransformComponent bunkerCannon;
 
-        public Bunker()
+        public Bunker(string _name)
         {
-            bunkerBase = scene.Children.FindNodes(c => c.Name == "Bunker").First()?.GetTransform();
-            bunkerPlatform = scene.Children.FindNodes(c => c.Name == "Turn").First()?.GetTransform();
-            bunkerCannon = scene.Children.FindNodes(c => c.Name == "CannonRohr").First()?.GetTransform();
+            name = _name;
         }
 
-        public static void load()
+        public void load(string fileName)
         {
-            scene = AssetStorage.Get<SceneContainer>("Bunker_v9.fus");
+            scene = AssetStorage.Get<SceneContainer>(fileName);
+
+            renameRecursively(scene.Children);
+
+            bunkerBase = scene.Children.FindNodes(c => c.Name == name + "Base").First()?.GetTransform();
+            bunkerPlatform = scene.Children.FindNodes(c => c.Name == name + "Turn").First()?.GetTransform();
+            bunkerCannon = scene.Children.FindNodes(c => c.Name == name + "CannonRohr").First()?.GetTransform();
         }
 
+        public void renameRecursively(List<SceneNodeContainer> elem)
+        {
+            foreach (var child in elem)
+            {
+                child.Name = name + child.Name;
+
+                if (child.Children != null && child.Children.Count > 0)
+                {
+                    renameRecursively(child.Children);
+                }
+            }
+        }
     }
 }

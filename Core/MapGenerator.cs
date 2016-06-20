@@ -82,6 +82,7 @@ namespace Fusee.Tutorial.Core
 
             int tileCount = 0;
 
+            //GENERATING BASE MAP TILES
             for (int x = 0; x < mapSize.x; x++)
             {
                 for (int y = 0; y < mapSize.y; y++)
@@ -103,8 +104,6 @@ namespace Fusee.Tutorial.Core
                     verticePoint = new float3(((x + 1) * tileLength) + (x * jointLength), 0, ((y + 1) * tileLength) + (y * jointLength));
                     tempVerticeList.Add(verticePoint);
                     tile.verticesIndex.Add(verticeDirection.LOWER_RIGHT, ((tileCount * 4) + 3));
-
-
 
                     //BASE TRIANGLES OF MAP TILE
                     tempTriangleList.Add(Convert.ToUInt16((tileCount * 4)));
@@ -145,11 +144,13 @@ namespace Fusee.Tutorial.Core
                 }
             }
 
+            //GENERATING CROSS JOINT TILES
             var tileCount2 = 0;
             for (int x = 0; x < mapSize.x - 1; x++)
             {
                 for (int y = 0; y < mapSize.y; y++)
                 {
+                    //VERTICE OF CROSS JOINT TILE
                     verticePoint = new float3(((x * (tileLength + jointLength)) + (tileLength + (0.5f * jointLength))), 0, ((y * (tileLength + jointLength)) + (tileLength + (0.5f * jointLength))));
                     tempVerticeList.Add(verticePoint);
 
@@ -162,7 +163,7 @@ namespace Fusee.Tutorial.Core
                             int xNeighbor = x + iMin;
                             int yNeighbor = y + iMax;
 
-                            if (xNeighbor > 0 && xNeighbor < mapSize.x && yNeighbor > 0 && y < mapSize.y)
+                            if (xNeighbor >= 0 && xNeighbor < mapSize.x && yNeighbor >= 0 && y < mapSize.y)
                             {
                                 tile = positionIndex[xNeighbor + "." + yNeighbor];
                                 tile.neighborJointIndex.Add(tempVerticeList.Count - 1);

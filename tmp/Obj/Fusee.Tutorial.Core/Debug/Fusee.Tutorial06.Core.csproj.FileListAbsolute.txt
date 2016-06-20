@@ -23,7 +23,12 @@ C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Fusee.Tu
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial06.Core.csprojResolveAssemblyReference.cache
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial.Core.dll
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial.Core.pdb
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Bunker_v9.fus
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Assets\Bunker_v9.fus
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial.Core.dll.mdb
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Fusee.Tutorial.Core.dll.mdb
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Bunker_red.fus
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Bunker_blue.fus
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Bunker_green.fus
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Bunker_pink.fus
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Bunker_white.fus
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Bunker_yellow.fus

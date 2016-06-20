@@ -23,5 +23,10 @@ C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Desktop\Fusee.Tuto
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Desktop\Debug\Fusee.Tutorial06.Desktop.csprojResolveAssemblyReference.cache
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Desktop\Debug\Fusee.Tutorial.Desktop.exe
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Desktop\Debug\Fusee.Tutorial.Desktop.pdb
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Desktop\Assets\Bunker_v9.fus
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Desktop\Assets\Bunker_v9.fus
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Desktop\Assets\Bunker_red.fus
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Desktop\Assets\Bunker_blue.fus
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Desktop\Assets\Bunker_green.fus
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Desktop\Assets\Bunker_pink.fus
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Desktop\Assets\Bunker_white.fus
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Desktop\Assets\Bunker_yellow.fus

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Fusee.Math.Core;
 using Fusee.Serialization;
+using Fusee.Tutorial.Core.Assets;
 using Fusee.Xene;
 
 namespace Fusee.Tutorial.Core
@@ -11,12 +13,16 @@ namespace Fusee.Tutorial.Core
     class MapTile: SceneNodeContainer
     {
         public float3 pos;
+        private float3 centerPos;
+        public Bunker mountedBunker;
         public List<MapTile> neighbours;
         public Dictionary<verticeDirection, int> verticesIndex;
         public List<int> neighborJointIndex;
 
         public MapTile(String name)
         {
+            mountedBunker = null;
+
             Components = new List<SceneComponentContainer>();
             Children = new List<SceneNodeContainer>();
 
@@ -25,10 +31,6 @@ namespace Fusee.Tutorial.Core
 
             //pos = _pos;
             neighbours = new List<MapTile>();
-
-            //addTransformComponent();
-            //addMaterialComponent();
-            //addMeshComponent();
 
             Name = name;
         }
@@ -92,6 +94,19 @@ namespace Fusee.Tutorial.Core
             };
 
             Components.Add(meshComp);
+        }
+
+        //GETTER SETTER
+        public float3 CenterPos
+        {
+            get
+            {
+                float3 ul = MapGenerator.mapScene.GetMesh().Vertices[verticesIndex[verticeDirection.UPPER_LEFT]];
+
+                centerPos = new float3(ul.x + (MapGenerator.tileLength/2.0f), ul.y, ul.z + (MapGenerator.tileLength / 2.0f));
+                return centerPos;
+            }
+            set { centerPos = value; }
         }
     }
 
