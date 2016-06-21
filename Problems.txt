@@ -1,0 +1,36 @@
+KONZEPT
+- Spiel angelehnt an das CannonHill
+- 3D-Variante
+- Bunker auf einer Landschaft, die sich gegenseitig abschießen können
+- Die Landschaft ist zerstörbar durch Treffer
+- Gewonnen hat der Bunker der als letztes noch übrig bleibt
+- Gespielt wird Rundenbasiert an einer Tastatur
+
+METHODIK
+- Landschaftsgenerierung des Meshs verstellung. (Tiles, Joints, Crossjoints)
+- Bunkerplatzierung
+- Kollisionsabfrage
+
+PROBLEME
+- Fus. file Culling
+	- 3D-Objekt mehrmals neu modellieren in C4D
+- Landscape generator --> Many SceneNodeComponents --> lead to lag
+	--> Komplette Logik umbauen sodass nur noch ein Mesh genriert wird.
+	--> Dadurch schwierig auf die einzelnen Flächen der Landschaft zuzugreifen
+- Material der generierten Landschaft wird im Renderer ignoriert, sobald ein fus. Objekt mit Cinema4D in der Szene enthalten ist
+	--> Keine Lösung bis jetzt
+- Kamera-Bedienung
+	- Individualisierte Kamera aus Tut 5 importiert führt dazu dassman nichts sieht
+	- Kamera aus Tut 6 ist ziemlich verwirrend zu bedienen
+- Normalen der Landschaft
+	- Für ein einigermaßen akzeptables Ergebnis --> Zufallsnormales
+	
+AKTUELLER STAND
+- Individualisierbare Landschaft
+- Bunker
+
+TO-DO
+- Steuerung
+- Kamera
+- Bullets-Physik
+- Kollisionsabfrage

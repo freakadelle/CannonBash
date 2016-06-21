@@ -13,15 +13,18 @@ namespace Fusee.Tutorial.Core
     class MapTile: SceneNodeContainer
     {
         public float3 pos;
+        public float2 index;
         private float3 centerPos;
         public Bunker mountedBunker;
         public List<MapTile> neighbours;
         public Dictionary<verticeDirection, int> verticesIndex;
         public List<int> neighborJointIndex;
 
-        public MapTile(String name)
+        public MapTile(float2 _index)
         {
             mountedBunker = null;
+
+            index = _index;
 
             Components = new List<SceneComponentContainer>();
             Children = new List<SceneNodeContainer>();
@@ -32,7 +35,7 @@ namespace Fusee.Tutorial.Core
             //pos = _pos;
             neighbours = new List<MapTile>();
 
-            Name = name;
+            Name = "Tile_" + index.x + "-" + index.y;
         }
 
         public void addTransformComponent()

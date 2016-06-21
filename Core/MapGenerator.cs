@@ -61,9 +61,9 @@ namespace Fusee.Tutorial.Core
 
             matComp.Specular = new SpecularChannelContainer();
             matComp.Specular.Color = float3.One;
-            matComp.Specular.Intensity = 0.1f;
+            matComp.Specular.Intensity = 0.001f;
             matComp.Specular.Mix = 1;
-            matComp.Specular.Shininess = 1;
+            matComp.Specular.Shininess = 0.1f;
 
             mapScene.Components.Add(matComp);
         }
@@ -82,12 +82,14 @@ namespace Fusee.Tutorial.Core
 
             int tileCount = 0;
 
+            List<float3> tempNormals = new List<float3>();
+
             //GENERATING BASE MAP TILES
             for (int x = 0; x < mapSize.x; x++)
             {
                 for (int y = 0; y < mapSize.y; y++)
                 {
-                    MapTile tile = new MapTile("Tile_" + x + "-" + y);
+                    MapTile tile = new MapTile(new float2(x, y));
 
                     verticePoint = new float3((x * tileLength) + (x * jointLength), 0, (y * tileLength) + (y * jointLength));
                     tempVerticeList.Add(verticePoint);
@@ -203,7 +205,6 @@ namespace Fusee.Tutorial.Core
             meshComp.Vertices = tempVerticeList.ToArray();
             meshComp.Triangles = tempTriangleList.ToArray();
 
-            List<float3> tempNormals = new List<float3>();
             foreach (var vert in meshComp.Vertices)
             {
                 tempNormals.Add(new float3(random.Next(-1, 2), random.Next(1, 2), random.Next(-1, 2)));

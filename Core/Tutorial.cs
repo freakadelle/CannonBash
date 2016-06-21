@@ -61,7 +61,7 @@ namespace Fusee.Tutorial.Core
             //Map Generator Settings
             MapGenerator.tileLength = 3;
             MapGenerator.jointLength = 10;
-            MapGenerator.mapSize = new float2(5, 5);
+            MapGenerator.mapSize = new float2(10, 10);
 
             // Init Amount of player bunkers
             loadPlayers(6);
@@ -71,7 +71,8 @@ namespace Fusee.Tutorial.Core
             //Random MapHeight Generation
             foreach (KeyValuePair<string, MapTile> entry in MapGenerator.positionIndex)
             {
-                translateTile(entry.Value, new float3(0, RandomTileHeight(-5.0f, 5), 0));
+                translateTile(entry.Value, new float3(0, RandomTileHeight(-5, 10), 0));
+                //translateTile(entry.Value, new float3(0, entry.Value.index.y * entry.Value.index.x, 0));
             }
 
             _scene = new SceneContainer();
