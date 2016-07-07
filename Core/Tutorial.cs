@@ -21,6 +21,7 @@ namespace Fusee.Tutorial.Core
         Seltsam: Material des generierten SceneNodeContainer wird deaktiviert, wenn man ein fus. Objekt mit Cinema4D rein lädt
         Seltsam: Culling total verhauen bei c4D Fus Objekt
 
+        Frage: Normalen defininieren von autogenerierter Landschaft. Normalen-Interpolationfür Rundungen
         Frage: Wie wird diese Kamera richtig bedient?!
         Frage: Mehrere Objekte mit unterschiedlichen Shadern. Materialien dem Shader zuspielen
     */
@@ -38,74 +39,77 @@ namespace Fusee.Tutorial.Core
         private const float Damping = 0.8f;
 
         private SceneContainer _scene;
-        private float4x4 _sceneCenter;
         private float4x4 _sceneScale;
         private float4x4 _projection;
         private bool _twoTouchRepeated;
 
         public static string[] playerNames = { "Bunker_white", "Bunker_pink", "Bunker_yellow", "Bunker_green", "Bunker_blue", "Bunker_red" };
-        private List<Bunker> players; 
+        public static int numberOfPlayers = 6;
+        private List<Bunker> players;
         private bool _keys;
 
         private Renderer _renderer;
-        private float height = 0;
-
-        private Camera cam;
 
         Random random = new Random();
 
         // Init is called on startup. 
         public override void Init()
         {
-
-            //Map Generator Settings
-            MapGenerator.tileLength = 3;
-            MapGenerator.jointLength = 10;
-            MapGenerator.mapSize = new float2(10, 10);
-
-            // Init Amount of player bunkers
-            loadPlayers(6);
-
-            SceneNodeContainer map = MapGenerator.generate();
-
-            //Random MapHeight Generation
-            foreach (KeyValuePair<string, MapTile> entry in MapGenerator.positionIndex)
-            {
-                translateTile(entry.Value, new float3(0, RandomTileHeight(-5, 10), 0));
-                //translateTile(entry.Value, new float3(0, entry.Value.index.y * entry.Value.index.x, 0));
-            }
-
+            //Crate empty Scene
             _scene = new SceneContainer();
             _scene.Children = new List<SceneNodeContainer>();
             _scene.Header = new SceneHeader();
 
+            //Map Generator Settings
+            MapGenerator.tileSize = 10;
+            MapGenerator.jointSize = 10f;
+
+            //Generate Map
+            SceneNodeContainer map = MapGenerator.instantiatePlaneMap(15, 35);
+
+            //Init Amount of player bunkers
+            loadPlayers(numberOfPlayers);
+
+            MapGenerator.addHeightNoise(0, 10);
+
+            for (int i = 0; i < numberOfPlayers; i++)
+            {
+                
+                float2 randTileGrid = new float2(random.Next(0, (int) MapGenerator.mapSize.x), random.Next(0, (int)MapGenerator.mapSize.y));
+                float2 randHillBound = new float2(random.Next(3, 6), random.Next(3, 6));
+                float randBound = random.Next(5, 9);
+                MapGenerator.createHillAt(randTileGrid, (float) (10 + random.NextDouble() * 75), new float2(10, 10), new float2(randBound, randBound));
+
+                //Add player on Hill
+                mountBunkerOnTile(MapGenerator.tileIndicies[randTileGrid], players[i]);
+
+                _scene.Children.Add(players[i].scene.Children[0]);
+            }
+
+            //Add Map to scene
             _scene.Children.Add(map);
 
-            //Random Position for each bunker and add to scene
-            foreach (var player in players)
-            {
-                float2 randBunkerPos;
-                MapTile matchingTile;
-
-                do
-                {
-                    randBunkerPos = new float2(random.Next(0, (int)MapGenerator.mapSize.x), random.Next(0, (int)MapGenerator.mapSize.y));
-                    matchingTile = MapGenerator.positionIndex[randBunkerPos.x + "." + randBunkerPos.y];
-                } while (!mountTileWithBunker(matchingTile, player));
-
-                _scene.Children.Add(player.scene.Children[0]);
-            }
             
-            _sceneScale = float4x4.CreateScale(5);
 
-            cam = new Camera();
+            ////Random Position for each bunker and add to scene
+            //foreach (var player in players)
+            //{
+            //    float2 randTileIndex;
+            //    MapTile matchingTile;
+
+            //    do
+            //    {
+            //        randTileIndex = new float2(random.Next(0, (int)MapGenerator.mapSize.x), random.Next(0, (int)MapGenerator.mapSize.y));
+            //        matchingTile = MapGenerator.tileIndicies[randTileIndex];
+            //    } while (!mountBunkerOnTile(matchingTile, player));
+
+            //    _scene.Children.Add(player.scene.Children[0]);
+            //}
             
-            adjustProjectionMatrice();
-
-            // Instantiate our self-written renderer
+            _sceneScale = float4x4.CreateScale(1);
+            
+            //Instantiate Renderer and Backbuffer
             _renderer = new Renderer(RC);
-
-            // Set the clear color for the backbuffer
             RC.ClearColor = new float4(0.1f, 0.1f, 0.1f, 1);
         }
 
@@ -168,7 +172,6 @@ namespace Fusee.Tutorial.Core
             }
 
             // SCRATCH:
-            // _guiSubText.Text = target.Name + " " + target.GetComponent<TargetComponent>().ExtraInfo;
             float camYaw = 0;
 
             camYaw = NormRot(camYaw);
@@ -196,22 +199,19 @@ namespace Fusee.Tutorial.Core
             var mtxRot = float4x4.CreateRotationZ(_angleRoll) * float4x4.CreateRotationX(_angleVert) * float4x4.CreateRotationY(_angleHorz);
             var mtxCam = float4x4.LookAt(0, 0, -_zoom, 50, 50, 50, 0, 1, 0);
             _renderer.View = mtxCam * mtxRot * _sceneScale;
+            RC.ModelView = mtxCam * mtxRot * _sceneScale;
+
             //var mtxOffset = float4x4.CreateTranslation(2 * _offset.x / Width, (-2 * _offset.y / Height), 0);
             var mtxOffset = float4x4.CreateTranslation(0,0,0);
             RC.Projection = mtxOffset * _projection;
 
-            height += 0.001f;
-            //bunker_red.bunkerBase.Rotation = new float3(0, height, 0);
-
-            //CAMERA CALCULATION
-            //Input controlls and calculation for camera
-            //cam.pivotPoint = cam.Translation;
-            //cam.move(Keyboard.UpDownAxis, Keyboard.LeftRightAxis);
-            ////Cam look at target not working properly
-            ////cam.lookAtTarget(_bunkerRoot.Translation);
-            //cam.FieldOfView += Keyboard.LeftRightAxis / 100.0f;
-
-            //adjustProjectionMatrice();
+            if (Input.Keyboard.IsKeyDown(KeyCodes.Space))
+            {
+                //Todo: MeshComponent verändert sich nicht
+                Debug.WriteLine("NOISE!!");
+                MapGenerator.addHeightNoise(-10, 10);
+                Debug.WriteLine(_scene.Children[0].GetMesh().Vertices[0]);
+            }
 
             _renderer.Traverse(_scene.Children);
 
@@ -220,30 +220,7 @@ namespace Fusee.Tutorial.Core
 
         }
 
-        public float RandomTileHeight(float minHeight, float maxHeight)
-        {
-            float height = (float) (minHeight + (random.NextDouble() * maxHeight));
-            return height;
-        }
-
-        private void translateTile(MapTile tile, float3 translation)
-        {
-            foreach (KeyValuePair<verticeDirection, int> entry in tile.verticesIndex)
-            {
-                float3 vertice = MapGenerator.mapScene.GetMesh().Vertices[entry.Value];
-                vertice = new float3(vertice.x + translation.x, vertice.y + translation.y, vertice.z + translation.z);
-                MapGenerator.mapScene.GetMesh().Vertices[entry.Value] = vertice;
-            }
-
-            foreach (int index in tile.neighborJointIndex)
-            {
-                float3 vertice = MapGenerator.mapScene.GetMesh().Vertices[index];
-                vertice = new float3(vertice.x, vertice.y + translation.y/4.0f, vertice.z);
-                MapGenerator.mapScene.GetMesh().Vertices[index] = vertice;
-            }
-        }
-
-        private bool mountTileWithBunker(MapTile tile, Bunker bunker)
+        private bool mountBunkerOnTile(MapTile tile, Bunker bunker)
         {
             if (tile.mountedBunker == null)
             {
@@ -253,12 +230,6 @@ namespace Fusee.Tutorial.Core
             }
 
             return false;
-        }
-
-        public void adjustProjectionMatrice()
-        {
-            var aspectRatio = Width / (float)Height;
-            RC.Projection = float4x4.CreatePerspectiveFieldOfView(cam.FieldOfView, aspectRatio, 0.01f, 20);
         }
 
         public static float NormRot(float rot)
@@ -274,7 +245,7 @@ namespace Fusee.Tutorial.Core
         {
             players = new List<Bunker>();
             Bunker tempBunker;
-            float tempScale = (1.0f / 600.0f) * MapGenerator.tileLength;
+            float tempScale = (1.0f / 600.0f) * MapGenerator.tileSize;
 
             for (int i = 0; i < numberOfPlayers; i++)
             {

@@ -11,6 +11,8 @@ uniform vec3 speccolor;
 uniform vec3 ambientcolor;
 uniform sampler2D texture;
 uniform float texmix;
+varying vec3 modelpos;
+
 
 void main()
 {
@@ -18,7 +20,9 @@ void main()
 	
 	// Diffuse
 	vec3 lightdir = vec3(0, 0, -1);
+    // float intensityDiff = dot(nnormal, lightdir);
     float intensityDiff = dot(nnormal, lightdir);
+	//UV neuer Vec aus einzeiliger Textur
 	vec3 resultingAlbedo = (1.0-texmix) * albedo + texmix * vec3(texture2D(texture, uv));
 
 	// Specular

@@ -1,4 +1,4 @@
-KONZEPT
+KONZEPT (Leif)
 - Spiel angelehnt an das CannonHill
 - 3D-Variante
 - Bunker auf einer Landschaft, die sich gegenseitig abschießen können
@@ -6,12 +6,12 @@ KONZEPT
 - Gewonnen hat der Bunker der als letztes noch übrig bleibt
 - Gespielt wird Rundenbasiert an einer Tastatur
 
-METHODIK
-- Landschaftsgenerierung des Meshs verstellung. (Tiles, Joints, Crossjoints)
+METHODIK (Robert)
+- Landschaftsgenerierung des Meshs vorstellen. (Tiles, Joints, Crossjoints)
 - Bunkerplatzierung
 - Kollisionsabfrage
 
-PROBLEME
+PROBLEME (Leif)
 - Fus. file Culling
 	- 3D-Objekt mehrmals neu modellieren in C4D
 - Landscape generator --> Many SceneNodeComponents --> lead to lag
@@ -25,11 +25,11 @@ PROBLEME
 - Normalen der Landschaft
 	- Für ein einigermaßen akzeptables Ergebnis --> Zufallsnormales
 	
-AKTUELLER STAND
+AKTUELLER STAND (Beide)
 - Individualisierbare Landschaft
 - Bunker
 
-TO-DO
+TO-DO (Robert)
 - Steuerung
 - Kamera
 - Bullets-Physik

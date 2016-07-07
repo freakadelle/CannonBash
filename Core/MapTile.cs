@@ -12,13 +12,12 @@ namespace Fusee.Tutorial.Core
 {
     class MapTile: SceneNodeContainer
     {
-        public float3 pos;
         public float2 index;
         private float3 centerPos;
         public Bunker mountedBunker;
-        public List<MapTile> neighbours;
-        public Dictionary<verticeDirection, int> verticesIndex;
-        public List<int> neighborJointIndex;
+        public List<MapTile> neighborMapTiles;
+        public List<int> verticesIndicies;
+        public List<int> neighborJointsIndicies;
 
         public MapTile(float2 _index)
         {
@@ -29,11 +28,11 @@ namespace Fusee.Tutorial.Core
             Components = new List<SceneComponentContainer>();
             Children = new List<SceneNodeContainer>();
 
-            neighborJointIndex = new List<int>();
-            verticesIndex = new Dictionary<verticeDirection, int>();
+            neighborJointsIndicies = new List<int>();
+            verticesIndicies = new List<int>();
 
             //pos = _pos;
-            neighbours = new List<MapTile>();
+            neighborMapTiles = new List<MapTile>();
 
             Name = "Tile_" + index.x + "-" + index.y;
         }
@@ -43,7 +42,7 @@ namespace Fusee.Tutorial.Core
             TransformComponent transComp = new TransformComponent();
             transComp.Rotation = float3.Zero;
             transComp.Scale = float3.One;
-            transComp.Translation = pos;
+            transComp.Translation = float3.Zero;
 
             Components.Add(transComp);
         }
@@ -104,21 +103,14 @@ namespace Fusee.Tutorial.Core
         {
             get
             {
-                float3 ul = MapGenerator.mapScene.GetMesh().Vertices[verticesIndex[verticeDirection.UPPER_LEFT]];
-
-                centerPos = new float3(ul.x + (MapGenerator.tileLength/2.0f), ul.y, ul.z + (MapGenerator.tileLength / 2.0f));
                 return centerPos;
+                //float3 ul = MapGenerator.mapScene.GetMesh().Vertices[verticesIndicies[0]];
+
+                //centerPos = new float3(ul.x + (MapGenerator.tileSize/2.0f), ul.y, ul.z + (MapGenerator.tileSize / 2.0f));
+                //return centerPos;
             }
             set { centerPos = value; }
         }
-    }
-
-    public enum verticeDirection
-    {
-        UPPER_RIGHT,
-        UPPER_LEFT,
-        LOWER_RIGHT,
-        LOWER_LEFT
     }
 
 }

@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Bunker.cs" />
     <Compile Include="Camera.cs" />
+    <Compile Include="Crossjoint.cs" />
     <Compile Include="MapGenerator.cs" />
     <Compile Include="MapTile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
