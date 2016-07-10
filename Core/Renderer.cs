@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using Fusee.Base.Common;
 using Fusee.Base.Core;
 using Fusee.Engine.Common;
@@ -15,51 +12,94 @@ namespace Fusee.Tutorial.Core
 {
     class Renderer : SceneVisitor
     {
-        public ShaderEffect ShaderEffect;
-
+        // ReSharper disable once InconsistentNaming
         public RenderContext RC;
-        private ITexture _leafTexture;
         public float4x4 View;
-        private Dictionary<MeshComponent, Mesh> _meshes = new Dictionary<MeshComponent, Mesh>();
-        private CollapsingStateStack<float4x4> _model = new CollapsingStateStack<float4x4>();
+        private static Dictionary<MeshComponent, Mesh> _meshes = new Dictionary<MeshComponent, Mesh>();
+        private readonly CollapsingStateStack<float4x4> _model = new CollapsingStateStack<float4x4>();
+        private readonly Dictionary<string, ITexture> _textures;
+        private readonly Dictionary<string, ShaderEffect> _shaderEffects;
+        private ITexture _textureValue;
+        private readonly ShaderEffect _shaderEffect;
+
+        #region LookupMesh
+
+        public static void translateVerticesOfMesh(MeshComponent _comp, int _vertInd, float3 _trans)
+        {
+            Mesh mesh;
+            _meshes.TryGetValue(_comp, out mesh);
+
+            mesh = new Mesh
+            {
+                Vertices = _comp.Vertices,
+                Normals = _comp.Normals,
+                UVs = _comp.UVs,
+                Triangles = _comp.Triangles
+            };
+
+            //Translate Vertice
+            float3 tempVert = mesh.Vertices[_vertInd];
+            tempVert = new float3(tempVert.x + _trans.x, tempVert.y + _trans.y, tempVert.z + _trans.z);
+            mesh.Vertices[_vertInd] = tempVert;
+
+            _meshes[_comp] = mesh;
+        }
 
         private Mesh LookupMesh(MeshComponent mc)
         {
             Mesh mesh;
-            if (!_meshes.TryGetValue(mc, out mesh))
+            if (_meshes.TryGetValue(mc, out mesh)) return mesh;
+
+            mesh = new Mesh
             {
-                mesh = new Mesh
-                {
-                    Vertices = mc.Vertices,
-                    Normals = mc.Normals,
-                    UVs = mc.UVs,
-                    Triangles = mc.Triangles,
-                };
-                _meshes[mc] = mesh;
-            }
+                Vertices = mc.Vertices,
+                Normals = mc.Normals,
+                UVs = mc.UVs,
+                Triangles = mc.Triangles
+            };
+            _meshes[mc] = mesh;
+
             return mesh;
         }
+        #endregion
 
+        #region Renderer
         public Renderer(RenderContext rc)
         {
             RC = rc;
-            // Read the Leaves.jpg image and upload it to the GPU
-            ImageData leaves = AssetStorage.Get<ImageData>("Leaves.jpg");
-            _leafTexture = RC.CreateTexture(leaves);
 
             // Initialize the shader(s)
-            ShaderEffect = new ShaderEffect(
+            _shaderEffects = new Dictionary<string, ShaderEffect>();
 
+            _textures = new Dictionary<string, ITexture>();
+
+            var leaves = AssetStorage.Get<ImageData>("Leaves.jpg");
+            _textureValue = RC.CreateTexture(leaves);
+            _textures.Add("Leaves.jpg", _textureValue);
+
+            var sky = AssetStorage.Get<ImageData>("sky.png");
+            _textureValue = RC.CreateTexture(leaves);
+            _textures.Add("sky.png", _textureValue);
+
+            var vertexShader = AssetStorage.Get<string>("VertexShader.vert");
+            var pixelShader = AssetStorage.Get<string>("PixelShader.frag");
+            var vertexShaderMountains = AssetStorage.Get<string>("VertexShader_mountain.vert");
+            var pixelShaderMountains = AssetStorage.Get<string>("PixelShader_mountains.frag");
+            var vertexShaderTexture = AssetStorage.Get<string>("VertexShader_texture.vert");
+            var pixelShaderTexture = AssetStorage.Get<string>("PixelShader_texture.frag");
+
+
+            _shaderEffect = new ShaderEffect(
                 new[]
                 {
                     new EffectPassDeclaration
                     {
-                        VS = AssetStorage.Get<string>("VertexShader.vert"),
-                        PS = AssetStorage.Get<string>("PixelShader.frag"),
+                        VS = vertexShader,
+                        PS = pixelShader,
                         StateSet = new RenderStateSet
                         {
                             ZEnable = true,
-                            CullMode = Cull.Counterclockwise,
+                            CullMode = Cull.Counterclockwise
                         }
                     }
                 },
@@ -67,13 +107,69 @@ namespace Fusee.Tutorial.Core
                 {
                     new EffectParameterDeclaration {Name = "albedo", Value = float3.One},
                     new EffectParameterDeclaration {Name = "shininess", Value = 1.0f},
-                    new EffectParameterDeclaration {Name = "specfactor", Value= 1.0f},
+                    new EffectParameterDeclaration {Name = "specfactor", Value = 1.0f},
                     new EffectParameterDeclaration {Name = "speccolor", Value = float3.Zero},
                     new EffectParameterDeclaration {Name = "ambientcolor", Value = float3.Zero},
-                    new EffectParameterDeclaration {Name = "texture", Value = _leafTexture},
-                    new EffectParameterDeclaration {Name = "texmix", Value = 0.0f},
                 });
-            ShaderEffect.AttachToContext(RC);
+
+            var shaderEffectMountains = new ShaderEffect(
+                new[]
+                {
+                    new EffectPassDeclaration
+                    {
+                        VS = vertexShaderMountains,
+                        PS = pixelShaderMountains,
+                        StateSet = new RenderStateSet
+                        {
+                            // Fix from E-Mail
+                            ZEnable = true,
+                            CullMode = Cull.Counterclockwise
+                        }
+                    }
+                },
+                new[]
+                {
+                    new EffectParameterDeclaration {Name = "albedo", Value = float3.One},
+                    new EffectParameterDeclaration {Name = "shininess", Value = 1.0f},
+                    new EffectParameterDeclaration {Name = "specfactor", Value = 1.0f},
+                    new EffectParameterDeclaration {Name = "speccolor", Value = float3.Zero},
+                    new EffectParameterDeclaration {Name = "ambientcolor", Value = float3.One},
+                    new EffectParameterDeclaration {Name = "ambientMix", Value = 1.0f},
+                    new EffectParameterDeclaration {Name = "texmix", Value = 0.0f},
+                    new EffectParameterDeclaration {Name = "texture", Value = _textureValue},
+                    new EffectParameterDeclaration {Name = "minMaxHeight", Value = MapGenerator.minMaxHeight}
+                });
+
+            var shaderEffectTexture = new ShaderEffect(
+            new[]
+            {
+                    new EffectPassDeclaration
+                    {
+                        VS = vertexShaderTexture,
+                        PS = pixelShaderTexture,
+                        StateSet = new RenderStateSet
+                        {
+                            // Fix from E-Mail
+                            ZEnable = true,
+                            CullMode = Cull.Counterclockwise
+                        }
+                    }
+            },
+            new[]
+            {
+                    new EffectParameterDeclaration {Name = "albedo", Value = float3.One},
+                    new EffectParameterDeclaration {Name = "texmix", Value = 0.0f},
+                    new EffectParameterDeclaration {Name = "texture", Value = _textureValue},
+            });
+
+            // Add ShaderEffect
+            _shaderEffects.Add("TileMap", shaderEffectMountains);
+            _shaderEffects.Add("Sky", shaderEffectTexture);
+            _shaderEffects.Add("wuerfel", shaderEffectMountains);
+
+            _shaderEffect.AttachToContext(RC);
+            shaderEffectMountains.AttachToContext(RC);
+            shaderEffectTexture.AttachToContext(RC);
         }
 
         protected override void InitState()
@@ -81,63 +177,102 @@ namespace Fusee.Tutorial.Core
             _model.Clear();
             _model.Tos = float4x4.Identity;
         }
+
         protected override void PushState()
         {
             _model.Push();
         }
+
         protected override void PopState()
         {
             _model.Pop();
             RC.ModelView = View * _model.Tos;
         }
+        #endregion
+
+        #region Visitors
         [VisitMethod]
-        void OnMesh(MeshComponent mesh)
+        public void OnMesh(MeshComponent mesh)
         {
-            ShaderEffect.RenderMesh(LookupMesh(mesh));
-            // RC.Render(LookupMesh(mesh));
+            ShaderEffect currentShaderEffect;
+            if (_shaderEffects.TryGetValue(CurrentNode.Name, out currentShaderEffect))
+                currentShaderEffect.RenderMesh(LookupMesh(mesh));
+            else
+                _shaderEffect.RenderMesh(LookupMesh(mesh));
+            //RC.Render(LookupMesh(mesh));
         }
+
+
         [VisitMethod]
-        void OnMaterial(MaterialComponent material)
+        public void OnMaterial(MaterialComponent material)
         {
-           
-            if (material.HasDiffuse)
-            {
-                
-                ShaderEffect.SetEffectParam("albedo", material.Diffuse.Color);
-                ShaderEffect.SetEffectParam("texmix", 0.0f);
-            }
-            else
-            {
-                
-                ShaderEffect.SetEffectParam("albedo", float3.Zero);
-            }
-            if (material.HasSpecular)
-            {
-                ShaderEffect.SetEffectParam("shininess", material.Specular.Shininess);
-                ShaderEffect.SetEffectParam("specfactor", material.Specular.Intensity);
-                ShaderEffect.SetEffectParam("speccolor", material.Specular.Color);
-            }
-            else
-            {
-                ShaderEffect.SetEffectParam("shininess", 0);
-                ShaderEffect.SetEffectParam("specfactor", 0);
-                ShaderEffect.SetEffectParam("speccolor", float3.Zero);
-            }
-            if (material.HasEmissive)
-            {
-                ShaderEffect.SetEffectParam("ambientcolor", material.Emissive.Color);
-            }
-            else
-            {
-                ShaderEffect.SetEffectParam("ambientcolor", float3.Zero);
-            }
+            // Prepare your Renderer to handle more than one ShaderEffect - e.g. based on object names. 
+            ShaderEffect currentShaderEffect;
+            RenderMaterial(material,
+                _shaderEffects.TryGetValue(CurrentNode.Name, out currentShaderEffect) ? currentShaderEffect : _shaderEffect);
         }
+
         [VisitMethod]
-        void OnTransform(TransformComponent xform)
+        public void OnTransform(TransformComponent xform)
         {
             _model.Tos *= xform.Matrix();
             RC.ModelView = View * _model.Tos;
         }
+
+        private void RenderMaterial(MaterialComponent material, ShaderEffect shaderEffect)
+        {
+            if (material.HasDiffuse)
+            {
+                shaderEffect.SetEffectParam("albedo", material.Diffuse.Color);
+
+                if (material.Diffuse.Texture != null)
+                {
+                    var textureKey = material.Diffuse.Texture;
+                    // Check if texture is in dictionary, else create and add it
+                    if (!_textures.TryGetValue(textureKey, out _textureValue))
+                    {
+                        var imageData = AssetStorage.Get<ImageData>(material.Diffuse.Texture);
+                        var texture = RC.CreateTexture(imageData);
+                        _textures.Add(textureKey, texture);
+                    }
+
+                    _textures.TryGetValue(textureKey, out _textureValue);
+                    // Set texture
+                    shaderEffect.SetEffectParam("texture", _textureValue);
+                    shaderEffect.SetEffectParam("texmix", material.Diffuse.Mix);
+                }
+                else
+                {
+                    shaderEffect.SetEffectParam("texmix", 0f);
+                }
+            }
+            else
+            {
+                shaderEffect.SetEffectParam("albedo", float3.Zero);
+            }
+            if (material.HasSpecular)
+            {
+                shaderEffect.SetEffectParam("shininess", material.Specular.Shininess);
+                shaderEffect.SetEffectParam("specfactor", material.Specular.Intensity);
+                shaderEffect.SetEffectParam("speccolor", material.Specular.Color);
+            }
+            else
+            {
+                shaderEffect.SetEffectParam("shininess", 0);
+                shaderEffect.SetEffectParam("specfactor", 0);
+                shaderEffect.SetEffectParam("speccolor", float3.Zero);
+            }
+            if (material.HasEmissive)
+            {
+                shaderEffect.SetEffectParam("ambientcolor", material.Emissive.Color);
+                shaderEffect.SetEffectParam("ambientMix", material.Emissive.Mix);
+            }
+            else
+            {
+                shaderEffect.SetEffectParam("ambientcolor", float3.Zero);
+            }
+        }
     }
+    #endregion
 
 }

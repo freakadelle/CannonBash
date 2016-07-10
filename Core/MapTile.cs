@@ -109,7 +109,14 @@ namespace Fusee.Tutorial.Core
                 //centerPos = new float3(ul.x + (MapGenerator.tileSize/2.0f), ul.y, ul.z + (MapGenerator.tileSize / 2.0f));
                 //return centerPos;
             }
-            set { centerPos = value; }
+            set
+            {
+                centerPos = value;
+                if (mountedBunker != null)
+                {
+                    mountedBunker.bunkerBase.Translation = centerPos;
+                }
+            }
         }
     }
 

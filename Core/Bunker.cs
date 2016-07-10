@@ -23,9 +23,10 @@ namespace Fusee.Tutorial.Core.Assets
         public Bunker(string _name)
         {
             name = _name;
+            loadAsset(name + ".fus");
         }
 
-        public void load(string fileName)
+        private void loadAsset(string fileName)
         {
             scene = AssetStorage.Get<SceneContainer>(fileName);
 

@@ -29,7 +29,7 @@
             true if this instance can handle the specified type. false otherwise.
             </returns>
         </member>
-        <member name="M:Fusee.Base.Imp.Web.WebAssetProvider.GetAsset(System.String,System.Type@)">
+        <member name="M:Fusee.Base.Imp.Web.WebAssetProvider.GetAsset(System.String,System.Type)">
             <summary>
             Retrieves the asset identified by the given string.
             </summary>
@@ -40,7 +40,7 @@
             </returns>
             <exception cref="T:System.ArgumentNullException"></exception>
         </member>
-        <member name="M:Fusee.Base.Imp.Web.WebAssetProvider.CanGet(System.String,System.Type@)">
+        <member name="M:Fusee.Base.Imp.Web.WebAssetProvider.CanGet(System.String,System.Type)">
             <summary>
             Determines whether this asset provider can get the specified asset without actually getting it.
             </summary>
@@ -96,8 +96,15 @@
             <summary>
             Loads a new Bitmap-Object from the given stream.
             </summary>
-            <param name="file">Stream containing the image in a supported format (png, jpg).</param>
+            <param name="assetOb">JSIL asset object containing the image in a supported format (png, jpg).</param>
             <returns>An ImageData object with all necessary information.</returns>
+        </member>
+        <member name="M:Fusee.Base.Imp.Web.WebAssetProvider.WrapString(System.Object)">
+            <summary>
+            Wraps a string around the given asset object. The asset must contain text data.
+            </summary>
+            <param name="storage">JSIL asset object containing the image in a supported format (png, jpg).</param>
+            <returns>A string with the asset's contents</returns>
         </member>
         <member name="T:Fusee.Base.Imp.Web.IOImp">
             <summary>
