@@ -66,5 +66,3 @@ C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Fusee.Tu
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Fusee.Tutorial.Core.pdb
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial.Core.dll
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial.Core.pdb
-C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial.Core.dll.mdb
-C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Fusee.Tutorial.Core.dll.mdb

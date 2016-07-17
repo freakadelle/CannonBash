@@ -40,7 +40,7 @@ namespace Fusee.Tutorial.Core.Assets
         public static readonly List<string> TEXTURE_GUI_FILES = new List<string>() { "crosshairTexture" };
 
         // FONT FILE NAMES
-        public static readonly List<string> FONT_FILES = new List<string>() { "Army, Cabin-Regular" };
+        public static readonly List<string> FONT_FILES = new List<string>() { "Army", "Cabin-Regular" };
 
         //FUS FILE NAMES
         public static readonly string[] FUS_BUNKER_FILES = { "Bunker_white", "Bunker_pink", "Bunker_yellow", "Bunker_green", "Bunker_blue", "Bunker_red" };
@@ -50,7 +50,7 @@ namespace Fusee.Tutorial.Core.Assets
         //ASSETS STORAGE
         public static Dictionary<string, SceneNodeContainer> fusFiles; 
         public static Dictionary<string, TextureImage> textures;
-        public static Dictionary<string, GUIImage> guiImages;
+        public static Dictionary<string, ImageData> guiImages;
         public static Dictionary<string, Font> fonts;
         public static Dictionary<string, string> shaders_pix;
         public static Dictionary<string, string> shaders_vert;
@@ -94,7 +94,7 @@ namespace Fusee.Tutorial.Core.Assets
         {
             fusFiles = new Dictionary<string, SceneNodeContainer>();
             textures = new Dictionary<string, TextureImage>();
-            guiImages = new Dictionary<string, GUIImage>();
+            guiImages = new Dictionary<string, ImageData>();
             fonts = new Dictionary<string, Font>();
             shaders_pix = new Dictionary<string, string>();
             shaders_vert = new Dictionary<string, string>();
@@ -132,15 +132,14 @@ namespace Fusee.Tutorial.Core.Assets
             foreach(var guiTex in TEXTURE_GUI_FILES)
             {
                 ImageData src = loadAsset<ImageData>(FILE_TYPE.TEXTURE_GUI, guiTex);
-
-                GUIImage _tex = new GUIImage(src, 0, 0, src.Width, src.Height);
-                guiImages.Add(guiTex, _tex);
+                guiImages.Add(guiTex, src);
             }
 
             foreach(var font in FONT_FILES)
             {
                 Font _font = loadAsset<Font>(FILE_TYPE.FONTS, font);
                 fonts.Add(font, _font);
+                System.Diagnostics.Debug.WriteLine("font: " + font + "// _font: " + _font);
             }
 
             foreach (var shader in SHADER_PIX_FILES)

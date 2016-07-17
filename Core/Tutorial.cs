@@ -43,6 +43,8 @@ namespace Fusee.Tutorial.Core
 
         #if GUI_SIMPLE
         private GUIHandler _guiHandler;
+        private GUIPanel _guiPanel;
+
         private Font _guiFont;
         private FontMap _guiFontMap;
         private GUIText _guiTextPlayer;
@@ -76,28 +78,35 @@ namespace Fusee.Tutorial.Core
             _guiHandler = new GUIHandler();
             _guiHandler.AttachToContext(RC);
 
-            _guiCrossHair = AssetsManager.guiImages["crosshairTexture"];
-            System.Diagnostics.Debug.WriteLine("_guiCrossHair: " + _guiCrossHair);
-            _guiCrossHair.PosX = 200;
-            _guiCrossHair.PosY = 500;
-
             _guiFont = AssetsManager.fonts["Army"];
             _guiFont.UseKerning = true;
             _guiFontMap = new FontMap(_guiFont, 20);
 
-            _guiTextHealth = new GUIText("100", _guiFontMap, 30, 30);
-            _guiTextHealth.TextColor = new float4(1, 1, 1, 1);
+            _guiPanel = new GUIPanel("Overlay", _guiFontMap, 0, 0, Width, Height);
 
-            _guiTextPlayer = new GUIText("Player X", _guiFontMap, 30, 60);
-            _guiTextPlayer.TextColor = new float4(1, 1, 1, 1);
+            _guiCrossHair = new GUIImage(AssetsManager.guiImages["crosshairTexture"],
+                                         (Width / 2) - (AssetsManager.guiImages["crosshairTexture"].Width / 2),
+                                         (Height / 2) - (AssetsManager.guiImages["crosshairTexture"].Height / 2),
+                                         -5,
+                                         AssetsManager.guiImages["crosshairTexture"].Width,
+                                         AssetsManager.guiImages["crosshairTexture"].Height);
 
-            _guiTextShotPower = new GUIText("0", _guiFontMap, 30, 90);
-            _guiTextShotPower.TextColor = new float4(1, 1, 1, 1);
+            //_guiTextHealth = new GUIText("100", _guiFontMap, 30, 30);
+            //_guiTextHealth.TextColor = new float4(1, 1, 1, 1);
 
-            _guiHandler.Add(_guiTextHealth);
-            _guiHandler.Add(_guiTextPlayer);
-            _guiHandler.Add(_guiTextShotPower);
-            #endif
+            //_guiTextPlayer = new GUIText("Player X", _guiFontMap, 30, 60);
+            //_guiTextPlayer.TextColor = new float4(1, 1, 1, 1);
+
+            //_guiTextShotPower = new GUIText("0", _guiFontMap, 30, 90);
+            //_guiTextShotPower.TextColor = new float4(1, 1, 1, 1);
+
+            _guiHandler.Add(_guiPanel);
+            _guiPanel.ChildElements.Add(_guiCrossHair);
+            _guiHandler.Add(_guiCrossHair);
+            //_guiHandler.Add(_guiTextHealth);
+            //_guiHandler.Add(_guiTextPlayer);
+            //_guiHandler.Add(_guiTextShotPower);
+#endif
         }
 
         //RenderAFrame is called once a frame
@@ -105,6 +114,8 @@ namespace Fusee.Tutorial.Core
         {
             //CLEAR THE BACKBUFFER
             RC.Clear(ClearFlags.Color | ClearFlags.Depth);
+
+            _guiHandler.RenderGUI();
 
             //HANDLE INPUT CONTROLS
             handleInputControls();
@@ -266,6 +277,9 @@ namespace Fusee.Tutorial.Core
         {
             // Set the new rendering area to the entire new windows size
             RC.Viewport(0, 0, Width, Height);
+
+            // resize the GUI elements
+            _guiHandler.Refresh();
 
             // Create a new projection matrix generating undistorted images on the new aspect ratio.
             var aspectRatio = Width / (float)Height;
