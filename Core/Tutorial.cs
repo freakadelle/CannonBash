@@ -6,7 +6,6 @@ using Fusee.Math.Core;
 using Fusee.Tutorial.Core.Assets;
 using static System.Math;
 using static Fusee.Engine.Core.Input;
-using static Fusee.Engine.Core.Time;
 
 namespace Fusee.Tutorial.Core
 {
@@ -21,6 +20,8 @@ namespace Fusee.Tutorial.Core
         private List<Bunker> players;
         private List<Projectile> projectiles;
         private int numberOfPlayers = 6, activePlayerId = 0;
+        private int turnTime;
+        private bool turnEnded;
 
         //INIT IS CALLED ON STARTUP
         public override void Init()
@@ -62,14 +63,26 @@ namespace Fusee.Tutorial.Core
                 {
                     SceneManager.destroyNode(SceneManager.rootNodes["projectileRoot"], projectiles[i].container.Name);
                     projectiles.RemoveAt(i);
-                    nextPlayersTurn();
+                    turnEnded = true;
                 } else if (collTile != null)
                 {
                     projectileHitTile(collTile, 8, 50);
                     SceneManager.destroyNode(SceneManager.rootNodes["projectileRoot"], projectiles[i].container.Name);
                     projectiles.RemoveAt(i);
-                    nextPlayersTurn();
+                    turnEnded = true;
                 }
+            }
+
+            if (turnTime < 0)
+            {
+                turnTime = Constants.TURN_TIME_MAX;
+                turnEnded = false;
+                nextPlayersTurn();
+            }
+
+            if (turnEnded)
+            {
+                turnTime--;
             }
 
             //WATER ANIMATION PROCESS INCREMENT
@@ -123,6 +136,9 @@ namespace Fusee.Tutorial.Core
 
             //MOUNT CAMERA ON ACTIVE BUNKER
             cam.mountCameraOnBunker(players[activePlayerId]);
+
+            turnTime = Constants.TURN_TIME_MAX;
+            turnEnded = false;
         }
 
         //LOAD SPECIFIED NUMBER OF PLAYERS
