@@ -375,7 +375,6 @@ JSIL.ImplementExternals("Fusee.Engine.Imp.Graphics.Web.RenderContextImp", functi
             this.gl.enable(this.gl.CULL_FACE);
             this.gl.clearColor(0.0, 0.0, 0.2, 1.0);
             this._currentTextureUnit = 0;
-            this._currentShaderParamHandle = 0;
             // TODO - implement this in render states!!!
             this.gl.cullFace(this.gl.BACK);
         }
@@ -1399,21 +1398,21 @@ JSIL.ImplementExternals("Fusee.Engine.Imp.Graphics.Web.RenderContextImp", functi
             switch (renderStateVal) {
                 case $fuseeCommon.Fusee.Engine.Common.RenderState.FillMode.value:
                     {
-                        if (value !=$fuseeCommon.Fusee.Engine.Common.FillMode.Solid)
+                        if (value != $fuseeCommon.Fusee.Engine.FillMode.Solid)
                             throw new Error("Line or Point fill mode (glPolygonMode) not supported in WebGL!");
                     }
                     break;
                 case $fuseeCommon.Fusee.Engine.Common.RenderState.CullMode.value:
                     switch (value) {
-                        case $fuseeCommon.Fusee.Engine.Common.Cull.None.value:
+                        case $fuseeCommon.Fusee.Engine.Cull.None.value:
                             this.gl.disable(this.gl.CULL_FACE);
                             this.gl.frontFace(this.gl.CCW);
                             break;
-                        case $fuseeCommon.Fusee.Engine.Common.Cull.Clockwise.value:
+                        case $fuseeCommon.Fusee.Engine.Cull.Clockwise.value:
                             this.gl.enable(this.gl.CULL_FACE);
                             this.gl.frontFace(this.gl.CW);
                             break;
-                        case $fuseeCommon.Fusee.Engine.Common.Cull.Counterclockwise.value:
+                        case $fuseeCommon.Fusee.Engine.Cull.Counterclockwise.value:
                             this.gl.enable(this.gl.CULL_FACE);
                             this.gl.frontFace(this.gl.CCW);
                             break;
@@ -1547,17 +1546,17 @@ JSIL.ImplementExternals("Fusee.Engine.Imp.Graphics.Web.RenderContextImp", functi
             switch (renderStateVal) {
                 case $fuseeCommon.Fusee.Engine.Common.RenderState.FillMode.value:
                     // Only solid polygon fill is supported by WebGL
-                    return $fuseeCommon.Fusee.Engine.Common.PolygonMode.Fill;
+                    return $fuseeCommon.Fusee.Engine.PolygonMode.Fill;
                 case $fuseeCommon.Fusee.Engine.Common.RenderState.CullMode.value:
                     {
                         var cullFace = this.gl.getParameter(this.gl.CULL_FACE);
                         if (cullFace == 0)
-                            return $fuseeCommon.Fusee.Engine.Common.Cull.None;
+                            return $fuseeCommon.Fusee.Engine.Cull.None;
                         var frontFace = this.gl.getParameter(this.gl.FRONT_FACE);
                         ;
                         if (frontFace == this.gl.CW)
-                            return $fuseeCommon.Fusee.Engine.Common.Cull.Clockwise;
-                        return $fuseeCommon.Fusee.Engine.Common.Counterclockwise;
+                            return $fuseeCommon.Fusee.Engine.Cull.Clockwise;
+                        return $fuseeCommon.Fusee.Engine.Counterclockwise;
                     }
                 case $fuseeCommon.Fusee.Engine.Common.RenderState.Clipping.value:
                     // clipping is always on in OpenGL - This state is simply ignored
@@ -2160,74 +2159,6 @@ JSIL.ImplementExternals("Fusee.Engine.Imp.Graphics.Web.KeyboardDeviceImp", funct
 });
 
 
-// From https://developer.mozilla.org/en-US/docs/Web/Events/wheel:
-// creates a global "addWheelListener" method
-// example: addWheelListener( elem, function( e ) { console.log( e.deltaY ); e.preventDefault(); } );
-(function (window, document) {
-
-    var prefix = "", _addEventListener, support;
-
-    // detect event model
-    if (window.addEventListener) {
-        _addEventListener = "addEventListener";
-    } else {
-        _addEventListener = "attachEvent";
-        prefix = "on";
-    }
-
-    // detect available wheel event
-    support = "onwheel" in document.createElement("div") ? "wheel" : // Modern browsers support "wheel"
-              document.onmousewheel !== undefined ? "mousewheel" : // Webkit and IE support at least "mousewheel"
-              "DOMMouseScroll"; // let's assume that remaining browsers are older Firefox
-
-    window.addWheelListener = function (elem, callback, useCapture) {
-        _addWheelListener(elem, support, callback, useCapture);
-
-        // handle MozMousePixelScroll in older Firefox
-        if (support == "DOMMouseScroll") {
-            _addWheelListener(elem, "MozMousePixelScroll", callback, useCapture);
-        }
-    };
-
-    function _addWheelListener(elem, eventName, callback, useCapture) {
-        elem[_addEventListener](prefix + eventName, support == "wheel" ? callback : function (originalEvent) {
-            !originalEvent && (originalEvent = window.event);
-
-            // create a normalized event object
-            var event = {
-                // keep a ref to the original event object
-                originalEvent: originalEvent,
-                target: originalEvent.target || originalEvent.srcElement,
-                type: "wheel",
-                deltaMode: originalEvent.type == "MozMousePixelScroll" ? 0 : 1,
-                deltaX: 0,
-                deltaZ: 0,
-                preventDefault: function () {
-                    originalEvent.preventDefault ?
-                        originalEvent.preventDefault() :
-                        originalEvent.returnValue = false;
-                }
-            };
-
-            // calculate deltaY (and deltaX) according to the event
-            if (support == "mousewheel") {
-                event.deltaY = -1 / 40 * originalEvent.wheelDelta;
-                // Webkit also support wheelDeltaX
-                originalEvent.wheelDeltaX && (event.deltaX = -1 / 40 * originalEvent.wheelDeltaX);
-            } else {
-                event.deltaY = originalEvent.detail;
-            }
-
-            // it's time to fire the callback
-            return callback(event);
-
-        }, useCapture || false);
-    }
-
-})(window, document);
-
-var FU_is_edge = navigator.appVersion.toLowerCase().indexOf('edge') > -1;
-var FU_is_firefox = !FU_is_edge && navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
 
 JSIL.ImplementExternals("Fusee.Engine.Imp.Graphics.Web.MouseDeviceImp", function ($) {
 
@@ -2237,33 +2168,17 @@ JSIL.ImplementExternals("Fusee.Engine.Imp.Graphics.Web.MouseDeviceImp", function
             var callbackClosure = this;
             this._canvas.onmousedown = function (event) {
                 callbackClosure.OnCanvasMouseDown.call(callbackClosure, event.button);
-                event.preventDefault();
             };
             this._canvas.onmouseup = function (event) {
                 callbackClosure.OnCanvasMouseUp.call(callbackClosure, event.button);
-                event.preventDefault();
             };
             this._canvas.onmousemove = function (event) {
                 var pt = new $fuseeMath.Fusee.Math.Core.float2().__Initialize__({ x: event.clientX, y: event.clientY });
                 callbackClosure.OnCanvasMouseMove.call(callbackClosure, pt);
-                event.preventDefault();
             };
-            // Firefox reports event.deltaY == 3 and deltaMode == 1 (DOM_DELTA_LINE)
-            // Edge reports event.deltaY == 256 and deltaMode == 0 (DOM_DELTA_PIXEL) 
-            // Chrome reports event.deltaY == 100 and deltaMode == 0 (DOM_DELTA_PIXEL) 
-            var _pixelsPerLine = 33;
-            var _browserFactor = (FU_is_edge) ? (100.0 / 256.0) : 1;
-
-            addWheelListener(this._canvas, function (event) {
-                var delta = -3 * _browserFactor * event.deltaY;
-                if (event.deltaMode == 1)
-                    delta *= _pixelsPerLine;
-                callbackClosure.OnCanvasMouseWheel.call(callbackClosure, delta);
-                event.preventDefault();
-            });
-            //this._canvas.onmousewheel = function (event) {
-            //    callbackClosure.OnCanvasMouseWheel.call(callbackClosure, event.wheelDelta);
-            //};
+            this._canvas.onmousewheel = function (event) {
+                callbackClosure.OnCanvasMouseWheel.call(callbackClosure, event.wheelDelta);
+            };
         }
       );
 

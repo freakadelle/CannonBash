@@ -16,49 +16,19 @@ JSIL.DeclareNamespace("Fusee.Base.Core");
     return ($T01 = JSIL.Memoize($asm14.System.Type)) ();
   };
   var $T02 = function () {
-    return ($T02 = JSIL.Memoize($asm14.System.Boolean)) ();
+    return ($T02 = JSIL.Memoize($asm14.System.String)) ();
   };
   var $T03 = function () {
-    return ($T03 = JSIL.Memoize($asm0E.ProtoBuf.ProtoContractAttribute)) ();
+    return ($T03 = JSIL.Memoize($asm14.System.Int32)) ();
   };
   var $T04 = function () {
-    return ($T04 = JSIL.Memoize($asm11.System.Linq.Enumerable)) ();
+    return ($T04 = JSIL.Memoize($asm00.Fusee.Base.Common.IAssetProvider)) ();
   };
   var $T05 = function () {
-    return ($T05 = JSIL.Memoize($asm14.System.Collections.IEnumerable)) ();
+    return ($T05 = JSIL.Memoize($asm14.System.Boolean)) ();
   };
   var $T06 = function () {
-    return ($T06 = JSIL.Memoize($asm14.System.Reflection.MemberInfo)) ();
-  };
-  var $T07 = function () {
-    return ($T07 = JSIL.Memoize($asm14.System.InvalidOperationException)) ();
-  };
-  var $T08 = function () {
-    return ($T08 = JSIL.Memoize($asm14.System.String)) ();
-  };
-  var $T09 = function () {
-    return ($T09 = JSIL.Memoize($asm14.System.Object)) ();
-  };
-  var $T0A = function () {
-    return ($T0A = JSIL.Memoize($asm08.Fusee.Serialization.Serializer)) ();
-  };
-  var $T0B = function () {
-    return ($T0B = JSIL.Memoize($asm14.System.IO.MemoryStream)) ();
-  };
-  var $T0C = function () {
-    return ($T0C = JSIL.Memoize($asm0E.ProtoBuf.Meta.TypeModel)) ();
-  };
-  var $T0D = function () {
-    return ($T0D = JSIL.Memoize($asm14.System.IO.Stream)) ();
-  };
-  var $T0E = function () {
-    return ($T0E = JSIL.Memoize($asm14.System.Int64)) ();
-  };
-  var $T0F = function () {
-    return ($T0F = JSIL.Memoize($asm14.System.Int32)) ();
-  };
-  var $T10 = function () {
-    return ($T10 = JSIL.Memoize($asm00.Fusee.Base.Common.IAssetProvider)) ();
+    return ($T06 = JSIL.Memoize($asm14.System.InvalidOperationException)) ();
   };
   var $S00 = function () {
     return ($S00 = JSIL.Memoize(new JSIL.ConstructorSignature($asm14.TypeRef("System.Collections.Generic.List`1", [$asm00.TypeRef("Fusee.Base.Common.IAssetProvider")]), null))) ();
@@ -67,19 +37,7 @@ JSIL.DeclareNamespace("Fusee.Base.Core");
     return ($S01 = JSIL.Memoize(new JSIL.ConstructorSignature($asm14.TypeRef("System.InvalidOperationException"), [$asm14.TypeRef("System.String")]))) ();
   };
   var $S02 = function () {
-    return ($S02 = JSIL.Memoize(new JSIL.ConstructorSignature($asm14.TypeRef("System.IO.MemoryStream"), null))) ();
-  };
-  var $S03 = function () {
-    return ($S03 = JSIL.Memoize(new JSIL.MethodSignature(null, [$asm14.TypeRef("System.IO.Stream"), $asm14.TypeRef("System.Object")]))) ();
-  };
-  var $S04 = function () {
-    return ($S04 = JSIL.Memoize(new JSIL.MethodSignature($asm14.TypeRef("System.Object"), [
-        $asm14.TypeRef("System.IO.Stream"), $asm14.TypeRef("System.Object"), 
-        $asm14.TypeRef("System.Type")
-      ]))) ();
-  };
-  var $S05 = function () {
-    return ($S05 = JSIL.Memoize(new JSIL.MethodSignature(null, [$asm00.TypeRef("Fusee.Base.Common.IAssetProvider")]))) ();
+    return ($S02 = JSIL.Memoize(new JSIL.MethodSignature(null, [$asm00.TypeRef("Fusee.Base.Common.IAssetProvider")]))) ();
   };
   var $IM00 = function () {
     return ($IM00 = JSIL.Memoize($asm00.Fusee.Base.Common.IAssetProvider.CanGet)) ();
@@ -91,18 +49,6 @@ JSIL.DeclareNamespace("Fusee.Base.Core");
 
   function AssetStorage__ctor () {
     this._providers = $S00().Construct();
-  }; 
-
-  function AssetStorage_DeepCopy$b1 (T, source) {
-    var flag = $T04().OfType$b1($T03())($T05().$Cast((JSIL.GetType(source)).GetCustomAttributes(true))) === null;
-    if (flag) {
-      throw $S01().Construct($T08().Format("DeepCopy: ProtoBuf.ProtoContractAttribute is not defined on '{0}'!", JSIL.Array.New($T09(), [(JSIL.GetType(source)).get_Name()])));
-    }
-    var ser = new ($T0A())();
-    var stream = $S02().Construct();
-    $S03().CallVirtual("Serialize", null, ser, stream, JSIL.CloneParameter(T, source));
-    stream.set_Position($T0E().Create(0, 0, 0));
-    return T.$As($S04().CallVirtual("Deserialize", null, ser, stream, null, T));
   }; 
 
   function AssetStorage_Get$b1 (T, id) {
@@ -143,7 +89,7 @@ JSIL.DeclareNamespace("Fusee.Base.Core");
     if (flag) {
       throw $S01().Construct(JSIL.ConcatString("Asset Provider already registered ", assetProvider));
     }
-    $S05().CallVirtual("Add", null, this._providers, assetProvider);
+    $S02().CallVirtual("Add", null, this._providers, assetProvider);
   }; 
 
   function AssetStorage_RegisterProvider (assetProvider) {
@@ -162,11 +108,6 @@ JSIL.DeclareNamespace("Fusee.Base.Core");
     $.Method({Static:false, Public:false}, ".ctor", 
       JSIL.MethodSignature.Void, 
       AssetStorage__ctor
-    );
-
-    $.Method({Static:true , Public:true }, "DeepCopy", 
-      new JSIL.MethodSignature("!!0", ["!!0"], ["T"]), 
-      AssetStorage_DeepCopy$b1
     );
 
     $.Method({Static:true , Public:true }, "Get", 

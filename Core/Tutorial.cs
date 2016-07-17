@@ -6,7 +6,6 @@ using Fusee.Math.Core;
 using Fusee.Tutorial.Core.Assets;
 using static System.Math;
 using static Fusee.Engine.Core.Input;
-using static Fusee.Engine.Core.Time;
 
 namespace Fusee.Tutorial.Core
 {
@@ -14,6 +13,19 @@ namespace Fusee.Tutorial.Core
     [FuseeApplication(Name = "Tutorial Example", Description = "The official FUSEE Tutorial.")]
     public class Tutorial : RenderCanvas
     {
+        /*
+            Todo: GUI möglich? Anzahl Schüsse/Welcher Spieler an der Reihe/Welche Spieler noch am Leben/Lebenspunkte/Windstärke etc...
+            Todo: Bug beim treffen eines Tiles in unmittelbarer Nähe. Nächster Spieler feuert automatisch Kugel ab
+            Todo: Bug mit Textur beim Verändelrn der Mapgröße.
+            Todo: Bug mit Textur wenn Textur direkt aus dem Dictionary eingelesen wird.
+            Todo: Windstärke einbauen. Macht nur Sinn wenn grafisches Interface möglich
+            Todo: Game Over. Game Win
+            Todo: Menü für die Einstellung der Spieleranzahl und der Auswahl der Map
+            Todo: Bäume auf die Insel generieren
+            Todo: Mapgenerierung verbessern?!
+            Todo: Lavamap fertig machen
+        */
+
         private bool _twoTouchRep;
 
         private Renderer _renderer;
@@ -21,6 +33,8 @@ namespace Fusee.Tutorial.Core
         private List<Bunker> players;
         private List<Projectile> projectiles;
         private int numberOfPlayers = 6, activePlayerId = 0;
+        private int turnTime;
+        private bool turnEnded;
 
         //INIT IS CALLED ON STARTUP
         public override void Init()
@@ -62,14 +76,26 @@ namespace Fusee.Tutorial.Core
                 {
                     SceneManager.destroyNode(SceneManager.rootNodes["projectileRoot"], projectiles[i].container.Name);
                     projectiles.RemoveAt(i);
-                    nextPlayersTurn();
+                    turnEnded = true;
                 } else if (collTile != null)
                 {
                     projectileHitTile(collTile, 8, 50);
                     SceneManager.destroyNode(SceneManager.rootNodes["projectileRoot"], projectiles[i].container.Name);
                     projectiles.RemoveAt(i);
-                    nextPlayersTurn();
+                    turnEnded = true;
                 }
+            }
+
+            if (turnTime < 0)
+            {
+                turnTime = Constants.TURN_TIME_MAX;
+                turnEnded = false;
+                nextPlayersTurn();
+            }
+
+            if (turnEnded)
+            {
+                turnTime--;
             }
 
             //WATER ANIMATION PROCESS INCREMENT
@@ -123,6 +149,9 @@ namespace Fusee.Tutorial.Core
 
             //MOUNT CAMERA ON ACTIVE BUNKER
             cam.mountCameraOnBunker(players[activePlayerId]);
+
+            turnTime = Constants.TURN_TIME_MAX;
+            turnEnded = false;
         }
 
         //LOAD SPECIFIED NUMBER OF PLAYERS

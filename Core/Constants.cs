@@ -8,6 +8,7 @@ namespace Fusee.Tutorial.Core.Assets
         public const float GRAVITY = -0.1f;
         public const float BUNKER_SCALE = (1.0f / 500.0f) * MapGenerator.tileSize;
         public const float PROJECTILE_SCALE = BUNKER_SCALE;
+        public const int TURN_TIME_MAX = 100;
         public static int projectile_Count = 0;
 
         public static Random random = new Random();

@@ -118,7 +118,7 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
   function Camera_mountCameraOnBunker (_bunker) {
     this.Translation = $T01().op_Subtraction(
       $T01().op_UnaryNegation(_bunker.bunkerBase.Translation.MemberwiseClone()).MemberwiseClone(), 
-      $S03().CallStatic($T01(), "op_Multiply", null, $S03().CallStatic($T01(), "op_Multiply", null, _bunker.bunkerPlatform.Translation.MemberwiseClone(), 0.0300000012).MemberwiseClone(), 1.1)
+      $S03().CallStatic($T01(), "op_Multiply", null, $S03().CallStatic($T01(), "op_Multiply", null, _bunker.bunkerPlatform.Translation.MemberwiseClone(), 0.03).MemberwiseClone(), 1.1)
     );
   }; 
 
@@ -656,7 +656,7 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
                   $S06().CallVirtual("Add", null, mapTile.verticesIndicies, (((list.get_Count() | 0) - 1) | 0));
                 }
               }
-              $S07().CallVirtual("Add", null, list2, $S08().CallStatic($T1B(), "ToUInt16", null, (((list.get_Count() | 0) - 4) | 0)));
+              $S07().CallVirtual("Add", null, list2, $S08().CallStatic($T1B(), "ToUInt16", null, (((((list.get_Count() | 0) + 0) | 0) - 4) | 0)));
               $S07().CallVirtual("Add", null, list2, $S08().CallStatic($T1B(), "ToUInt16", null, (((((list.get_Count() | 0) + 1) | 0) - 4) | 0)));
               $S07().CallVirtual("Add", null, list2, $S08().CallStatic($T1B(), "ToUInt16", null, (((((list.get_Count() | 0) + 2) | 0) - 4) | 0)));
               $S07().CallVirtual("Add", null, list2, $S08().CallStatic($T1B(), "ToUInt16", null, (((((list.get_Count() | 0) + 1) | 0) - 4) | 0)));
@@ -1179,7 +1179,7 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
     this.container = $T03().projectile.cloneContainer(_id);
     this.transform = $T04().GetTransform(this.container, 0);
     this.transform.Translation = _pos.MemberwiseClone();
-    this.transform.Scale = $S00().CallStatic($T01(), "op_Multiply", null, $T01().One.MemberwiseClone(), 0.0300000012);
+    this.transform.Scale = $S00().CallStatic($T01(), "op_Multiply", null, $T01().One.MemberwiseClone(), 0.03);
   }; 
 
   function Projectile_isCollided () {
@@ -2232,6 +2232,8 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
       list.RemoveAt(index);
     }
     (this.cam).mountCameraOnBunker((this.players).get_Item(this.activePlayerId));
+    this.turnTime = 100;
+    this.turnEnded = false;
   }; 
 
   function Tutorial_nextPlayersTurn () {
@@ -2261,7 +2263,7 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
           (this.projectiles).get_Item(i).container.Name
         );
         (this.projectiles).RemoveAt(i);
-        this.nextPlayersTurn();
+        this.turnEnded = true;
       } else {
         if (mapTile !== null) {
           this.projectileHitTile(mapTile, 8, 50);
@@ -2270,9 +2272,18 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
             (this.projectiles).get_Item(i).container.Name
           );
           (this.projectiles).RemoveAt(i);
-          this.nextPlayersTurn();
+          this.turnEnded = true;
         }
       }
+    }
+    if ((this.turnTime | 0) < 0) {
+      this.turnTime = 100;
+      this.turnEnded = false;
+      this.nextPlayersTurn();
+    }
+    var flag4 = this.turnEnded;
+    if (flag4) {
+      this.turnTime = (((this.turnTime | 0) - 1) | 0);
     }
     var num = $T1E().$Cast(((this._renderer.shaderEffects).get_Item("mapRoot")).GetEffectParam("alpha")) + 1.8;
     ((this._renderer.shaderEffects).get_Item("mapRoot")).SetEffectParam("alpha", $T1E().$Box(num));
@@ -2372,6 +2383,10 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
     $.Field({Static:false, Public:false}, "numberOfPlayers", $.Int32);
 
     $.Field({Static:false, Public:false}, "activePlayerId", $.Int32);
+
+    $.Field({Static:false, Public:false}, "turnTime", $.Int32);
+
+    $.Field({Static:false, Public:false}, "turnEnded", $.Boolean);
 
 
     return function (newThisType) { $thisType = newThisType; }; 
@@ -2743,9 +2758,11 @@ JSIL.MakeEnum(
 
     $.Constant({Static:true , Public:true }, "GRAVITY", $.Single, -0.1);
 
-    $.Constant({Static:true , Public:true }, "BUNKER_SCALE", $.Single, 0.0300000012);
+    $.Constant({Static:true , Public:true }, "BUNKER_SCALE", $.Single, 0.03);
 
-    $.Constant({Static:true , Public:true }, "PROJECTILE_SCALE", $.Single, 0.0300000012);
+    $.Constant({Static:true , Public:true }, "PROJECTILE_SCALE", $.Single, 0.03);
+
+    $.Constant({Static:true , Public:true }, "TURN_TIME_MAX", $.Int32, 100);
 
     $.Field({Static:true , Public:true }, "projectile_Count", $.Int32, 0);
 
@@ -2958,7 +2975,7 @@ JSIL.MakeEnum(
          ? $T08().GetTransform(expr_A0, 0)
          : null)
     ;
-    this.bunkerBase.Scale = $S05().CallStatic($T09(), "op_Multiply", null, $T09().One.MemberwiseClone(), 0.0300000012);
+    this.bunkerBase.Scale = $S05().CallStatic($T09(), "op_Multiply", null, $T09().One.MemberwiseClone(), 0.03);
     this.shootForce = 10;
     this.ammo = 1;
     this._rotateSpeed = 0.0001;
@@ -2994,7 +3011,7 @@ JSIL.MakeEnum(
   }; 
 
   function Bunker_shootProjectile () {
-    var pos = $T09().op_Addition($T09().op_Addition(this.bunkerBase.Translation.MemberwiseClone(), $S05().CallStatic($T09(), "op_Multiply", null, $S05().CallStatic($T09(), "op_Multiply", null, this.bunkerPlatform.Translation.MemberwiseClone(), 0.0300000012).MemberwiseClone(), 1.1)).MemberwiseClone(), $S06().Construct(0, 0, 0));
+    var pos = $T09().op_Addition($T09().op_Addition(this.bunkerBase.Translation.MemberwiseClone(), $S05().CallStatic($T09(), "op_Multiply", null, $S05().CallStatic($T09(), "op_Multiply", null, this.bunkerPlatform.Translation.MemberwiseClone(), 0.03).MemberwiseClone(), 1.1)).MemberwiseClone(), $S06().Construct(0, 0, 0));
     var projectile = new ($T0D())($T0E().projectile_Count, pos.MemberwiseClone());
     $T0E().projectile_Count = ((($T0E().projectile_Count | 0) + 1) | 0);
     var float = $T0E().angleToVector(+this.bunkerPlatform.Rotation.y + 3.14159274);
