@@ -1,10 +1,8 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using Fusee.Base.Core;
 using Fusee.Math.Core;
 using Fusee.Serialization;
+using Fusee.Tutorial.Core.Assets;
 using Fusee.Xene;
 
 namespace Fusee.Tutorial.Core
@@ -12,100 +10,56 @@ namespace Fusee.Tutorial.Core
 
     static class MapGenerator
     {
-        public static Random random = new Random();
         public static Dictionary<float2, MapTile> tileIndicies;
-        public static SceneNodeContainer mapScene;
-        public static SceneNodeContainer skyScene;
 
         public static float2 minMaxHeight = new float2(999, 0);
-        public static float mapSize;
-        public static List<string> textureMapFiles = new List<string>() { "mountainsTexture_0.png", "mountainsTexture_3.png", "mountainsTexture_4.png" };
-        public static List<string> textureSkyFiles = new List<string>() { "sky_8.png", "sky_6.png", "sky_8.png" };
+        //Todo: Mapsize ist noch nicht allgmeeingültig um verschiedene Größen der Map zu generieren
+        private static float mapSize;
+        private static int _mapTextureId, _skyTextureId;
 
         //MAP GENERATION SETTINGS
-        //Base Map Settings
         public static float2 gridSize = new float2(100, 100);
-        public static float tileSize = 15f;
-        public static float jointSize = 10f;
-        public static int nonPlayableAreaBounds = 25;
-        public static int activeTextureId = 1;
+        public const float tileSize = 15, jointSize = 3f;
+        private static float2 nonPlayableAreaBounds;
 
+
+
+        //RETURNS A PLANE MAP
         public static SceneNodeContainer instantiatePlaneMap()
         {
-            //INIT MAP
-            mapScene = new SceneNodeContainer();
-            mapScene.Children = new List<SceneNodeContainer>();
-            mapScene.Components = new List<SceneComponentContainer>();
             tileIndicies = new Dictionary<float2, MapTile>();
 
+            //INIT MAP
+            SceneNodeContainer mapScene = new SceneNodeContainer();
+            mapScene.Children = new List<SceneNodeContainer>();
+            mapScene.Components = new List<SceneComponentContainer>();
+
+            mapSize = (jointSize + tileSize) * (gridSize.x + gridSize.y) / 200.0f;
+            nonPlayableAreaBounds = new float2((int) (gridSize.x / 5.0f), (int) (gridSize.y / 5.0f));
+
             //ADD MAP COMPONENTS
-            addTransformCoponent();
-            addMaterialComponent();
-            addMeshComponent();
+            mapScene.Components.Add(generateTransform());
+            mapScene.Components.Add(generateMaterial());
+            mapScene.Components.Add(generatePlainMapMesh());
 
-            addSky();
-
-            mapSize = (jointSize + tileSize) * (gridSize.x * gridSize.y) / 10000.0f;
-            mapScene.Name = "TileMap";
+            mapScene.Children.Add(generateSky());
 
             return mapScene;
         }
 
-        /*
-        * Translates a tile and adjusts the Crossjoint neighbors and the bunker on this tile
-        */
-        public static void translateTile(MapTile tile, float3 translation, bool _isRenderTime)
-        {
-
-            //TRANSLATE SINGLE MAP TILE
-            foreach (int index in tile.verticesIndicies)
-            {
-                if (_isRenderTime)
-                {
-                    Renderer.translateVerticesOfMesh(mapScene.GetMesh(), index, translation);
-                }
-                else
-                {
-                    translateVertice(index, translation);
-                }
-            }
-
-            //Todo: CenterPos of tile adjusts only height but not x and z axis
-            tile.CenterPos = new float3(tile.CenterPos.x, mapScene.GetMesh().Vertices[tile.verticesIndicies[0]].y, tile.CenterPos.z);
-            minMaxHeight = new float2(System.Math.Min(minMaxHeight.x, tile.CenterPos.y), System.Math.Max(minMaxHeight.y, tile.CenterPos.y));
-
-            //ADJSUT CROSSJOINTS HEIGHT
-            foreach (int index in tile.neighborJointsIndicies)
-            {
-                if (_isRenderTime)
-                {
-                    Renderer.translateVerticesOfMesh(mapScene.GetMesh(), index, translation * 0.25f);
-                }
-                else
-                {
-                    translateVertice(index, translation * 0.25f);
-                }
-            }
-        }
-
-        /*
-        * Manipulates all Maptiles in vertical direction with a random value
-        */
+        //MANIPULATES ALL MAPTILES IN A RANDOM VERTICAL DIRECTION
         public static void addHeightNoise(float minHeight, float maxHeight, bool _isRenderTime = false)
         {
             float2 minMaxNoise = new float2(minHeight, maxHeight);
 
             //Random MapHeight Generation
-            foreach (KeyValuePair<float2, MapTile> entry in MapGenerator.tileIndicies)
+            foreach (KeyValuePair<float2, MapTile> entry in tileIndicies)
             {
-                translateTile(entry.Value, new float3(0, (float)(minMaxNoise.x + (random.NextDouble() * minMaxNoise.y)), 0), _isRenderTime);
+                translateTile(entry.Value, new float3(0, (float)(minMaxNoise.x + (Constants.random.NextDouble() * minMaxNoise.y)), 0), _isRenderTime);
             }
         }
 
-        /*
-        * Moves all single MapTiles in vertical Direction which are around the specified _gridPos.
-        * Creates a mountain
-        */
+        //GENERATES A SINGLE HILL
         public static void createHillAt(float2 _gridPos, float height, float2 _boundaries, bool _isRenderTime = false)
         {
             for (int x = (int)-_boundaries.x; x < (int)_boundaries.x; x++)
@@ -118,66 +72,160 @@ namespace Fusee.Tutorial.Core
                     {
                         MapTile tempTile = tileIndicies[tilePos];
                         int heightLvl = System.Math.Max(System.Math.Abs(x), System.Math.Abs(y));
-                        translateTile(tempTile, new float3(0, height - ((heightLvl/_boundaries.x) * height), 0), _isRenderTime);
+                        translateTile(tempTile, new float3(0, height - ((heightLvl / _boundaries.x) * height), 0), _isRenderTime);
                     }
+                }
+            }
+        }
+
+        //GENERATE A NUMBER OF HILLS
+        public static void generateTerrain(int _numberOfHills)
+        {
+            for (int i = 0; i < _numberOfHills; i++)
+            {
+                float2 randTileGrid = randomGrid();
+                float randHillHeight = (float)(mapSize + Constants.random.NextDouble() * mapSize) * 2f;
+                float randBound = (float)(mapSize + Constants.random.NextDouble() * mapSize) / (tileSize / 10.0f);
+
+                createHillAt(randTileGrid, randHillHeight, new float2(randBound, randBound));
+            }
+        }
+
+        //RASTERIZE THE MAP AND RETURNS A LIST OF ZENITS OF THE SPECIFIC RASTERS
+        public static List<MapTile> gridMapReturnZenitTiles(int _grids)
+        {
+            List<MapTile> zenits = new List<MapTile>();
+
+            float2 _gridSize;
+            _gridSize.x = (int)((gridSize.x + 1 - (nonPlayableAreaBounds.x * 2)) / _grids);
+            _gridSize.y = (int)((gridSize.y + 1 - (nonPlayableAreaBounds.y * 2)) / _grids);
+
+            for (int x = 0; x < _grids; x++)
+            {
+                for (int y = 0; y < _grids; y++)
+                {
+                    float2 _start = new float2(nonPlayableAreaBounds.x + (_gridSize.x * x), nonPlayableAreaBounds.y + (_gridSize.y * y));
+                    float2 _end = new float2(nonPlayableAreaBounds.x + (_gridSize.x * (x + 1)), nonPlayableAreaBounds.y + (_gridSize.y * (y + 1)));
+                    zenits.Add(getHighestTileInArea(_start, _end));
+                }
+            }
+
+            return zenits;
+        }
+
+        //TRANSLATES A TILE AND ADJUST ITS NEIGHBORS
+        public static void translateTile(MapTile tile, float3 translation, bool _isRenderTime)
+        {
+
+            //TRANSLATE SINGLE MAP TILE
+            foreach (int index in tile.verticesIndicies)
+            {
+                if (_isRenderTime)
+                {
+                    Renderer.translateVerticesOfMesh(SceneManager.rootNodes["mapRoot"].GetMesh(), index, translation);
+                }
+                else
+                {
+                    translateVertice(index, translation);
+                }
+            }
+
+            //Todo: CenterPos of tile adjusts only height but not x and z axis
+            tile.CenterPos = new float3(tile.CenterPos.x, SceneManager.rootNodes["mapRoot"].GetMesh().Vertices[tile.verticesIndicies[0]].y, tile.CenterPos.z);
+            minMaxHeight = new float2(System.Math.Min(minMaxHeight.x, tile.CenterPos.y), System.Math.Max(minMaxHeight.y, tile.CenterPos.y));
+
+            //ADJSUT CROSSJOINTS HEIGHT
+            foreach (int index in tile.neighborJointsIndicies)
+            {
+                if (_isRenderTime)
+                {
+                    Renderer.translateVerticesOfMesh(SceneManager.rootNodes["mapRoot"].GetMesh(), index, translation * 0.25f);
+                }
+                else
+                {
+                    translateVertice(index, translation * 0.25f);
                 }
             }
         }
 
         private static void translateVertice(int _vertInd, float3 translation)
         {
-            float3 vertice = mapScene.GetMesh().Vertices[_vertInd];
+            float3 vertice = SceneManager.rootNodes["mapRoot"].GetMesh().Vertices[_vertInd];
             vertice = new float3(vertice.x + translation.x, vertice.y + translation.y, vertice.z + translation.z);
-            mapScene.GetMesh().Vertices[_vertInd] = vertice;
+            SceneManager.rootNodes["mapRoot"].GetMesh().Vertices[_vertInd] = vertice;
         }
 
-        /*
-        * Returns the distance between two grids
-        */
-        public static float distanceBetweenGrids(float2 _grid1, float2 _grid2)
+        private static float distanceBetweenGrids(float2 _grid1, float2 _grid2)
         {
             float a = System.Math.Abs(_grid1.x - _grid2.x);
             float b = System.Math.Abs(_grid1.y - _grid2.y);
             return (float) System.Math.Sqrt((a * a) + (b * b));
         }
 
-        /*
-        * Returns a random grid within the playable area
-        */
-        public static float2 randomGridInPlayableArea()
+        private static float2 randomGridInPlayableArea()
         {
             float2 randTileGrid = new float2(
-                    random.Next(nonPlayableAreaBounds, (int)(gridSize.x + 1) - nonPlayableAreaBounds),
-                    random.Next(nonPlayableAreaBounds, (int)(gridSize.y + 1) - nonPlayableAreaBounds)
+                    Constants.random.Next((int) nonPlayableAreaBounds.x, (int)(gridSize.x + 1) - (int) nonPlayableAreaBounds.x),
+                    Constants.random.Next((int) nonPlayableAreaBounds.y, (int)(gridSize.y + 1) - (int) nonPlayableAreaBounds.y)
             );
             
             return randTileGrid;
         }
 
-        /*
-        * Returns a random grid within the map
-        */
-        public static float2 randomGrid()
+        private static float2 randomGrid()
         {
             float2 randTileGrid = new float2(
-                    random.Next(0, (int)(gridSize.x + 1)),
-                    random.Next(0, (int)(gridSize.y + 1))
+                    Constants.random.Next(0, (int)(gridSize.x + 1)),
+                    Constants.random.Next(0, (int)(gridSize.y + 1))
             );
 
             return randTileGrid;
         }
 
-        public static void nextTexture()
+        private static MapTile getHighestTileInArea(float2 _start, float2 _end)
         {
-            activeTextureId++;
+            MapTile _zenitTile = new MapTile(new float2(-1, -1));
+            _zenitTile.CenterPos = new float3(-1, -1, -1);
 
-            if(activeTextureId >= textureMapFiles.Count)
+            float2 diff = new float2(System.Math.Abs(_start.x - _end.x), System.Math.Abs(_start.y - _end.y));
+
+            for (int x = 0; x < diff.x; x++)
             {
-                activeTextureId = 0;
+                for (int y = 0; y < diff.y; y++)
+                {
+                    float2 _curTile = new float2(_start.x + x, _start.y + y);
+                    float _curTileHeight = tileIndicies[_curTile].CenterPos.y;
+
+                    if (_curTileHeight > _zenitTile.CenterPos.y)
+                    {
+                        _zenitTile = tileIndicies[_curTile];
+                    }
+                }
             }
 
-            mapScene.GetMaterial().Diffuse.Texture = "Textures/Landscape/" + textureMapFiles[activeTextureId];
-            mapScene.Children[0].GetMaterial().Diffuse.Texture = "Textures/Sky/" + textureSkyFiles[activeTextureId];
+            return _zenitTile;
+        }
+
+        public static void nextTexture()
+        {
+            _mapTextureId++;
+            _skyTextureId++;
+
+            if(_mapTextureId >= AssetsManager.TEXTURE_MAP_FILES.Count)
+            {
+                _mapTextureId = 0;
+            }
+
+            string texture = AssetsManager.textures[AssetsManager.TEXTURE_MAP_FILES[_mapTextureId]].path;
+            SceneManager.rootNodes["mapRoot"].GetMaterial().Diffuse.Texture = texture;
+
+            if (_skyTextureId >= AssetsManager.TEXTURE_SKY_FILES.Count)
+            {
+                _skyTextureId = 0;
+            }
+
+            texture = AssetsManager.textures[AssetsManager.TEXTURE_SKY_FILES[_skyTextureId]].path;
+            SceneManager.rootNodes["mapRoot"].Children[0].GetMaterial().Diffuse.Texture = texture;
         }
 
         //----------------------------------------------------------------------------------------------------
@@ -187,28 +235,27 @@ namespace Fusee.Tutorial.Core
         /*
         * Generates a transform copmonent
         */
-        public static void addTransformCoponent()
+        private static TransformComponent generateTransform()
         {
             TransformComponent transComp = new TransformComponent();
             transComp.Rotation = float3.Zero;
             transComp.Scale = float3.One;
             transComp.Translation = float3.Zero;
 
-            mapScene.Components.Add(transComp);
+            return transComp;
         }
 
         /*
         * Generates a material copmonent
         */
-        public static void addMaterialComponent()
+        private static MaterialComponent generateMaterial()
         {
             MaterialComponent matComp = new MaterialComponent();
 
             matComp.Diffuse = new MatChannelContainer();
             matComp.Diffuse.Color = new float3(1f, 1f, 1f);
             matComp.Diffuse.Mix = 1f;
-            matComp.Diffuse.Texture = "Textures/Landscape/" + textureMapFiles[activeTextureId];
-            //matComp.Diffuse.Texture = "Leaves.jpg";
+            matComp.Diffuse.Texture = AssetsManager.textures[AssetsManager.TEXTURE_MAP_FILES[_mapTextureId]].path;
 
             matComp.Emissive = new MatChannelContainer();
             matComp.Emissive.Color = new float3(1, 1, 0.5f);
@@ -220,13 +267,13 @@ namespace Fusee.Tutorial.Core
             matComp.Specular.Shininess = 1f;
             matComp.Specular.Mix = 1f;
 
-            mapScene.Components.Add(matComp);
+            return matComp;
         }
 
         /*
         * Generates a Meshcomponent. Plane Mesh
         */
-        public static void addMeshComponent()
+        private static MeshComponent generatePlainMapMesh()
         {
             MeshComponent meshComp = new MeshComponent();
             meshComp.BoundingBox = new AABBf(float3.Zero, float3.Zero);
@@ -361,8 +408,7 @@ namespace Fusee.Tutorial.Core
             //Add some random normals
             for (int i = 0; i < tempVerticeList.Count; i++)
             {
-                //tempNormalList.Add(new float3(random.Next(-1, 2), random.Next(1, 2), random.Next(-1, 2)));
-                tempNormalList.Add(new float3((float)random.NextDouble() * 0.5f, 1, (float)random.NextDouble()*0.5f));
+                tempNormalList.Add(new float3((float)Constants.random.NextDouble() * 0.2f, 1, (float)Constants.random.NextDouble() * 0.2f));
             }
 
             tempUVsList.Add(new float2(0f, 0f));
@@ -373,31 +419,26 @@ namespace Fusee.Tutorial.Core
             meshComp.Triangles = tempTriangleList.ToArray();
             meshComp.Normals = tempNormalList.ToArray();
             meshComp.UVs = tempUVsList.ToArray();
-            
-            mapScene.Components.Add(meshComp);
+
+            return meshComp;
         }
 
-        private static void addSky()
+        private static SceneNodeContainer generateSky()
         {
-            //Add sky to MapScene
-            mapScene.Children.Add(skyScene);
+            SceneNodeContainer skyScene = AssetsManager.fusFiles["360Sky"];
 
-            //Transform sky to centre of map
-            TransformComponent skyTransform = mapScene.Children.FindNodes(c => c.Name == "Sky").First()?.GetTransform();
-            float2 centerTileGrid = new float2((int)((gridSize.x - 2) / 2.0f), (int)((gridSize.y - 2) / 2.0f));
-            skyTransform.Translation = new float3(tileIndicies[centerTileGrid].CenterPos);
+            //SET SKY TEXTURE
+            skyScene.GetMaterial().Diffuse.Texture = AssetsManager.textures[AssetsManager.TEXTURE_SKY_FILES[_skyTextureId]].path;
 
-            //Scale Sky to proper size
-            float skyScale = System.Math.Max(gridSize.x, gridSize.y) / 8.0f;
-            skyTransform.Scale = new float3(skyScale, skyScale, skyScale);
+            //TRANSLATE SKY TO CENTRE OF MAP
+            float2 centerTileGrid = new float2((int)((gridSize.x) / 2.0f), (int)((gridSize.y) / 2.0f));
+            skyScene.GetTransform().Translation = new float3(tileIndicies[centerTileGrid].CenterPos);
 
-            mapScene.Children[0].GetMaterial().Diffuse.Texture = "Textures/Sky/" + textureSkyFiles[activeTextureId];
+            //SCALE SKY TO PROPER SIZE
+            float skyScale = mapSize * 0.5f;
+            skyScene.GetTransform().Scale = new float3(skyScale, skyScale, skyScale);
+
+            return skyScene;
         }
-
-        public static void loadMapAssets()
-        {
-            skyScene = AssetStorage.Get<SceneContainer>("360Sky.fus").Children[0];
-        }
-
     }
 }

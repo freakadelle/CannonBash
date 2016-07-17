@@ -18,8 +18,7 @@ C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Core\
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Assets\Bunker_v9.fus
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial.Core.dll.mdb
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Fusee.Tutorial.Core.dll.mdb
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\360Sky.fus
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Leaves.jpg
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Fus\360Sky.fus
 D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Textures\Landscape\mountainsTexture.png
 D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Textures\Landscape\mountainsTexture_0.png
 D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Textures\Landscape\mountainsTexture_1.png
@@ -29,25 +28,23 @@ D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Textures
 D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Textures\Landscape\mountainsTexture_6.png
 D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Textures\Landscape\mountainsTexture_7.png
 D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Textures\Landscape\mountainsTexture_9.png
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\PixelShader_mountains.frag
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Textures\Sky\sky_4.jpg
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Textures\Sky\sky_5.jpg
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Textures\Sky\sky_6.jpg
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Shaders\PixelShader_mountains.frag
 D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Textures\Sky\sky_6.png
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Textures\Sky\sky_8.jpg
 D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Textures\Sky\sky_8.png
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\VertexShader.vert
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Bunker_red.fus
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Bunker_blue.fus
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Bunker_green.fus
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Bunker_pink.fus
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Bunker_white.fus
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Bunker_yellow.fus
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\PixelShader.frag
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\VertexShader_mountain.vert
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\PixelShader_texture.frag
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\VertexShader_texture.vert
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Fusee.Tutorial.Core.dll
-D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Fusee.Tutorial.Core.pdb
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Shaders\VertexShader.vert
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Fus\Bunkers\Bunker_red.fus
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Fus\Bunkers\Bunker_blue.fus
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Fus\Bunkers\Bunker_green.fus
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Fus\Bunkers\Bunker_pink.fus
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Fus\Bunkers\Bunker_white.fus
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Fus\Bunkers\Bunker_yellow.fus
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Shaders\PixelShader.frag
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Shaders\VertexShader_mountain.vert
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Shaders\PixelShader_texture.frag
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Shaders\VertexShader_texture.vert
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Fus\projectile.fus
 D:\Fusee Projekte\GameEngineering\CannonBash\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial.Core.dll
 D:\Fusee Projekte\GameEngineering\CannonBash\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial.Core.pdb
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Fusee.Tutorial.Core.dll
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Fusee.Tutorial.Core.pdb
+D:\Fusee Projekte\GameEngineering\CannonBash\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial06.Core.csprojResolveAssemblyReference.cache

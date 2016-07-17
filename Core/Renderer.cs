@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using Fusee.Base.Common;
 using Fusee.Base.Core;
 using Fusee.Engine.Common;
 using Fusee.Engine.Core;
 using Fusee.Math.Core;
 using Fusee.Serialization;
+using Fusee.Tutorial.Core.Assets;
 using Fusee.Xene;
 
 namespace Fusee.Tutorial.Core
@@ -18,33 +18,11 @@ namespace Fusee.Tutorial.Core
         private static Dictionary<MeshComponent, Mesh> _meshes = new Dictionary<MeshComponent, Mesh>();
         private readonly CollapsingStateStack<float4x4> _model = new CollapsingStateStack<float4x4>();
         private readonly Dictionary<string, ITexture> _textures;
-        private readonly Dictionary<string, ShaderEffect> _shaderEffects;
+        public Dictionary<string, ShaderEffect> shaderEffects;
         private ITexture _textureValue;
         private readonly ShaderEffect _shaderEffect;
 
         #region LookupMesh
-
-        public static void translateVerticesOfMesh(MeshComponent _comp, int _vertInd, float3 _trans)
-        {
-            Mesh mesh;
-            _meshes.TryGetValue(_comp, out mesh);
-
-            mesh = new Mesh
-            {
-                Vertices = _comp.Vertices,
-                Normals = _comp.Normals,
-                UVs = _comp.UVs,
-                Triangles = _comp.Triangles
-            };
-
-            //Translate Vertice
-            float3 tempVert = mesh.Vertices[_vertInd];
-            tempVert = new float3(tempVert.x + _trans.x, tempVert.y + _trans.y, tempVert.z + _trans.z);
-            mesh.Vertices[_vertInd] = tempVert;
-
-            _meshes[_comp] = mesh;
-        }
-
         private Mesh LookupMesh(MeshComponent mc)
         {
             Mesh mesh;
@@ -69,33 +47,25 @@ namespace Fusee.Tutorial.Core
             RC = rc;
 
             // Initialize the shader(s)
-            _shaderEffects = new Dictionary<string, ShaderEffect>();
+            shaderEffects = new Dictionary<string, ShaderEffect>();
 
             _textures = new Dictionary<string, ITexture>();
 
-            var leaves = AssetStorage.Get<ImageData>("Leaves.jpg");
-            _textureValue = RC.CreateTexture(leaves);
-            _textures.Add("Leaves.jpg", _textureValue);
-
-            var sky = AssetStorage.Get<ImageData>("sky.png");
-            _textureValue = RC.CreateTexture(leaves);
-            _textures.Add("sky.png", _textureValue);
-
-            var vertexShader = AssetStorage.Get<string>("VertexShader.vert");
-            var pixelShader = AssetStorage.Get<string>("PixelShader.frag");
-            var vertexShaderMountains = AssetStorage.Get<string>("VertexShader_mountain.vert");
-            var pixelShaderMountains = AssetStorage.Get<string>("PixelShader_mountains.frag");
-            var vertexShaderTexture = AssetStorage.Get<string>("VertexShader_texture.vert");
-            var pixelShaderTexture = AssetStorage.Get<string>("PixelShader_texture.frag");
-
+            foreach (var tex in AssetsManager.textures)
+            {
+                ImageData _img = tex.Value.src;
+                string _name = tex.Value.name;
+                _textureValue = RC.CreateTexture(_img);
+                _textures.Add(_name, _textureValue);
+            }
 
             _shaderEffect = new ShaderEffect(
                 new[]
                 {
                     new EffectPassDeclaration
                     {
-                        VS = vertexShader,
-                        PS = pixelShader,
+                        VS = AssetsManager.shaders_vert["VertexShader"],
+                        PS = AssetsManager.shaders_pix["PixelShader"],
                         StateSet = new RenderStateSet
                         {
                             ZEnable = true,
@@ -117,8 +87,8 @@ namespace Fusee.Tutorial.Core
                 {
                     new EffectPassDeclaration
                     {
-                        VS = vertexShaderMountains,
-                        PS = pixelShaderMountains,
+                        VS = AssetsManager.shaders_vert["VertexShader_mountain"],
+                        PS = AssetsManager.shaders_pix["PixelShader_mountains"],
                         StateSet = new RenderStateSet
                         {
                             // Fix from E-Mail
@@ -137,6 +107,10 @@ namespace Fusee.Tutorial.Core
                     new EffectParameterDeclaration {Name = "ambientMix", Value = 1.0f},
                     new EffectParameterDeclaration {Name = "texmix", Value = 0.0f},
                     new EffectParameterDeclaration {Name = "texture", Value = _textureValue},
+                    new EffectParameterDeclaration {Name = "alpha", Value = 0.0f},
+                    new EffectParameterDeclaration {Name = "waveHeight", Value = 0.0f},
+                    new EffectParameterDeclaration {Name = "waveRoughnessX", Value = 0.0f},
+                    new EffectParameterDeclaration {Name = "waveRoughnessY", Value = 0.0f},
                     new EffectParameterDeclaration {Name = "minMaxHeight", Value = MapGenerator.minMaxHeight}
                 });
 
@@ -145,8 +119,8 @@ namespace Fusee.Tutorial.Core
             {
                     new EffectPassDeclaration
                     {
-                        VS = vertexShaderTexture,
-                        PS = pixelShaderTexture,
+                        VS = AssetsManager.shaders_vert["VertexShader_texture"],
+                        PS = AssetsManager.shaders_pix["PixelShader_texture"],
                         StateSet = new RenderStateSet
                         {
                             // Fix from E-Mail
@@ -163,13 +137,21 @@ namespace Fusee.Tutorial.Core
             });
 
             // Add ShaderEffect
-            _shaderEffects.Add("TileMap", shaderEffectMountains);
-            _shaderEffects.Add("Sky", shaderEffectTexture);
-            _shaderEffects.Add("wuerfel", shaderEffectMountains);
+            shaderEffects.Add("Sky", shaderEffectTexture);
+            shaderEffects.Add("mapRoot", shaderEffectMountains);
 
             _shaderEffect.AttachToContext(RC);
-            shaderEffectMountains.AttachToContext(RC);
             shaderEffectTexture.AttachToContext(RC);
+            shaderEffectMountains.AttachToContext(RC);
+
+            randomShaderEffects();
+        }
+
+        public void randomShaderEffects()
+        {
+            shaderEffects["mapRoot"].SetEffectParam("waveHeight", (float)Constants.random.Next(15, 50));
+            shaderEffects["mapRoot"].SetEffectParam("waveRoughnessX", (float)Constants.random.NextDouble() * 0.025f);
+            shaderEffects["mapRoot"].SetEffectParam("waveRoughnessY", (float)Constants.random.NextDouble() * 0.025f);
         }
 
         protected override void InitState()
@@ -195,7 +177,7 @@ namespace Fusee.Tutorial.Core
         public void OnMesh(MeshComponent mesh)
         {
             ShaderEffect currentShaderEffect;
-            if (_shaderEffects.TryGetValue(CurrentNode.Name, out currentShaderEffect))
+            if (shaderEffects.TryGetValue(CurrentNode.Name, out currentShaderEffect))
                 currentShaderEffect.RenderMesh(LookupMesh(mesh));
             else
                 _shaderEffect.RenderMesh(LookupMesh(mesh));
@@ -209,7 +191,7 @@ namespace Fusee.Tutorial.Core
             // Prepare your Renderer to handle more than one ShaderEffect - e.g. based on object names. 
             ShaderEffect currentShaderEffect;
             RenderMaterial(material,
-                _shaderEffects.TryGetValue(CurrentNode.Name, out currentShaderEffect) ? currentShaderEffect : _shaderEffect);
+                shaderEffects.TryGetValue(CurrentNode.Name, out currentShaderEffect) ? currentShaderEffect : _shaderEffect);
         }
 
         [VisitMethod]
@@ -272,7 +254,27 @@ namespace Fusee.Tutorial.Core
                 shaderEffect.SetEffectParam("ambientcolor", float3.Zero);
             }
         }
+
+        public static void translateVerticesOfMesh(MeshComponent _comp, int _vertInd, float3 _trans)
+        {
+            Mesh mesh;
+            _meshes.TryGetValue(_comp, out mesh);
+
+            mesh = new Mesh
+            {
+                Vertices = _comp.Vertices,
+                Normals = _comp.Normals,
+                UVs = _comp.UVs,
+                Triangles = _comp.Triangles
+            };
+
+            //Translate Vertice
+            float3 tempVert = mesh.Vertices[_vertInd];
+            tempVert = new float3(tempVert.x + _trans.x, tempVert.y + _trans.y, tempVert.z + _trans.z);
+            mesh.Vertices[_vertInd] = tempVert;
+
+            _meshes[_comp] = mesh;
+        }
     }
     #endregion
-
 }

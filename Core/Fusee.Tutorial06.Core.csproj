@@ -43,14 +43,20 @@
     <OutputRoot>$(ProjectBuildRoot)\bin\$(Configuration)\</OutputRoot>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AssetsManager.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="ContainerClone.cs" />
     <Compile Include="Bunker.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Crossjoint.cs" />
     <Compile Include="MapGenerator.cs" />
     <Compile Include="MapTile.cs" />
+    <Compile Include="Projectile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renderer.cs" />
-    <Compile Include="TexturedWall.cs" />
+    <Compile Include="SceneManager.cs" />
+    <Compile Include="TextureImage.cs" />
+    <Compile Include="Tutorial_BACKUP.cs" />
     <Compile Include="Tutorial.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -85,13 +91,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Assets\360Sky.fus">
+    <Content Include="Assets\Fus\360Sky.fus">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Assets\AboutFuseeAssets.txt" />
-    <Content Include="Assets\Leaves.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Assets\Textures\Landscape\mountainsTexture.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -119,58 +122,49 @@
     <Content Include="Assets\Textures\Landscape\mountainsTexture_9.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\PixelShader_mountains.frag">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Textures\Sky\sky_4.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Textures\Sky\sky_5.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Textures\Sky\sky_6.jpg">
+    <Content Include="Assets\Shaders\PixelShader_mountains.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Textures\Sky\sky_6.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Textures\Sky\sky_8.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Assets\Textures\Sky\sky_8.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\VertexShader.vert">
+    <Content Include="Assets\Shaders\VertexShader.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Bunker_red.fus">
+    <Content Include="Assets\Fus\Bunkers\Bunker_red.fus">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Bunker_blue.fus">
+    <Content Include="Assets\Fus\Bunkers\Bunker_blue.fus">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Bunker_green.fus">
+    <Content Include="Assets\Fus\Bunkers\Bunker_green.fus">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Bunker_pink.fus">
+    <Content Include="Assets\Fus\Bunkers\Bunker_pink.fus">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Bunker_white.fus">
+    <Content Include="Assets\Fus\Bunkers\Bunker_white.fus">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Bunker_yellow.fus">
+    <Content Include="Assets\Fus\Bunkers\Bunker_yellow.fus">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\PixelShader.frag">
+    <Content Include="Assets\Shaders\PixelShader.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\VertexShader_mountain.vert">
+    <Content Include="Assets\Shaders\VertexShader_mountain.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\PixelShader_texture.frag">
+    <Content Include="Assets\Shaders\PixelShader_texture.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\VertexShader_texture.vert">
+    <Content Include="Assets\Shaders\VertexShader_texture.vert">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Fus\projectile.fus">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
