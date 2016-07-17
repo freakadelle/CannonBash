@@ -6,6 +6,8 @@ using Fusee.Math.Core;
 using Fusee.Tutorial.Core.Assets;
 using static System.Math;
 using static Fusee.Engine.Core.Input;
+using Fusee.Engine.Core.GUI;
+using Fusee.Base.Core;
 
 namespace Fusee.Tutorial.Core
 {
@@ -36,6 +38,13 @@ namespace Fusee.Tutorial.Core
         private int turnTime;
         private bool turnEnded;
 
+        private GUIHandler _guiHandler;
+        private Font _guiFont;
+        private FontMap _guiFontMap;
+        private GUIText _guiTextPlayer;
+        private GUIText _guiTextHealth;
+        private GUIText _guiTextShotPower;
+
         //INIT IS CALLED ON STARTUP
         public override void Init()
         {
@@ -52,6 +61,30 @@ namespace Fusee.Tutorial.Core
             //INSTANTIATE RENDERER AND BACKBUFFER
             _renderer = new Renderer(RC);
             RC.ClearColor = new float4(0.8f, 0.8f, 1f, 1);
+
+            // INSTANTIATE GUI
+            Width = 1600;
+            Height = 900;
+
+            _guiHandler = new GUIHandler();
+            _guiHandler.AttachToContext(RC);
+
+            _guiFont = AssetsManager.loadAsset<Font>(AssetsManager.FILE_TYPE.FONTS, "Army");
+            _guiFont.UseKerning = true;
+            _guiFontMap = new FontMap(_guiFont, 20);
+
+            _guiTextHealth = new GUIText("100", _guiFontMap, 30, 30);
+            _guiTextHealth.TextColor = new float4(1, 1, 1, 1);
+
+            _guiTextPlayer = new GUIText("Player X", _guiFontMap, 30, 60);
+            _guiTextPlayer.TextColor = new float4(1, 1, 1, 1);
+
+            _guiTextShotPower = new GUIText("0", _guiFontMap, 30, 90);
+            _guiTextShotPower.TextColor = new float4(1, 1, 1, 1);
+
+            _guiHandler.Add(_guiTextHealth);
+            _guiHandler.Add(_guiTextPlayer);
+            _guiHandler.Add(_guiTextShotPower);
         }
 
         //RenderAFrame is called once a frame
@@ -124,6 +157,7 @@ namespace Fusee.Tutorial.Core
             SceneManager.addRootNode("mapRoot", MapGenerator.instantiatePlaneMap());
             SceneManager.addRootNode("bunkerRoot", SceneManager.createEmptySceneNode());
             SceneManager.addRootNode("projectileRoot", SceneManager.createEmptySceneNode());
+            SceneManager.addRootNode("guiRoot", SceneManager.createEmptySceneNode());
 
             //TERRAIN GENERATION - HILLS
             MapGenerator.generateTerrain(12 * numberOfPlayers);

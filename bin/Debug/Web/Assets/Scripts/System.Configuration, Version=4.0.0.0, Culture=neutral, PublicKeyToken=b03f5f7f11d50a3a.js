@@ -37,7 +37,7 @@ var $asm10 = JSIL.DeclareAssembly("System.Configuration, Version=4.0.0.0, Cultur
 
     $.Constant({Static:true , Public:false}, "Version", $.String, "4.0.0.0");
 
-    $.Constant({Static:true , Public:false}, "InformationalVersion", $.String, "4.6.1055.0");
+    $.Constant({Static:true , Public:false}, "InformationalVersion", $.String, "4.6.1038.0");
 
     $.Constant({Static:true , Public:false}, "DailyBuildNumberStr", $.String, "30319");
 

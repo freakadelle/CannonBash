@@ -44,6 +44,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AssetsManager.cs" />
+    <Compile Include="GUI.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="ContainerClone.cs" />
     <Compile Include="Bunker.cs" />
@@ -95,6 +96,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Assets\AboutFuseeAssets.txt" />
+    <Content Include="Assets\Textures\GUI\crosshairTexture.png" />
     <Content Include="Assets\Textures\Landscape\mountainsTexture.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -167,6 +169,7 @@
     <Content Include="Assets\Fus\projectile.fus">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Fonts\Army.ttf" />
   </ItemGroup>
   <!-- ItemGroup>
     <Reference Include="Fusee.SerializationSerializer">
