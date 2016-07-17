@@ -20,7 +20,6 @@ namespace Fusee.Tutorial.Core.Assets
         public TransformComponent bunkerPlatform;
         public TransformComponent bunkerCannon;
 
-        public float shootForce;
         private float _rotateSpeed;
 
         public Bunker(string _name)
@@ -35,7 +34,6 @@ namespace Fusee.Tutorial.Core.Assets
 
             bunkerBase.Scale = float3.One * Constants.BUNKER_SCALE;
 
-            shootForce = 10;
             ammo = 1;
             _rotateSpeed = 0.0001f;
         }
@@ -53,7 +51,7 @@ namespace Fusee.Tutorial.Core.Assets
             bunkerCannon.Rotation = new float3(bunkerCannon.Rotation.x, bunkerCannon.Rotation.y, liftHeight);
         }
 
-        public Projectile shootProjectile()
+        public Projectile shootProjectile(int shootForce)
         {
             float3 projPos = bunkerBase.Translation + (bunkerPlatform.Translation*Constants.BUNKER_SCALE*1.1f) + new float3(0, 0, 0);
             Projectile proj = new Projectile(Constants.projectile_Count, projPos);

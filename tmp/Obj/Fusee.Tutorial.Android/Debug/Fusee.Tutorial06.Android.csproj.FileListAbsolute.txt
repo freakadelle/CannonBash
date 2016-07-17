@@ -1,4 +1,5 @@
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Assets\Fus\360Sky.fus
+C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Assets\Textures\GUI\crosshairTexture.png
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Assets\Textures\Landscape\mountainsTexture.png
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Assets\Textures\Landscape\mountainsTexture_0.png
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Assets\Textures\Landscape\mountainsTexture_1.png
@@ -23,6 +24,8 @@ C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Assets\Sha
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Assets\Shaders\PixelShader_texture.frag
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Assets\Shaders\VertexShader_texture.vert
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Assets\Fus\projectile.fus
+C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Assets\Fonts\Army.ttf
+C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Assets\Fonts\Cabin-Regular.ttf
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Fusee.Tutorial.Android.dll
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Fusee.Tutorial.Android.pdb
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Android\Fusee.Engine.Examples.Simple.Android.apk

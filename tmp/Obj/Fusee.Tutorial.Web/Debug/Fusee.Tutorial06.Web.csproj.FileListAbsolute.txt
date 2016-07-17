@@ -31,6 +31,7 @@ D:\Fusee Projekte\GameEngineering\CannonBash\tmp\Obj\Fusee.Tutorial.Web\Debug\Fu
 D:\Fusee Projekte\GameEngineering\CannonBash\tmp\Obj\Fusee.Tutorial.Web\Debug\Fusee.Tutorial.Web.exe
 D:\Fusee Projekte\GameEngineering\CannonBash\tmp\Obj\Fusee.Tutorial.Web\Debug\Fusee.Tutorial.Web.pdb
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\Fus\360Sky.fus
+C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\Textures\GUI\crosshairTexture.png
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\Textures\Landscape\mountainsTexture.png
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\Textures\Landscape\mountainsTexture_0.png
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\Textures\Landscape\mountainsTexture_1.png
@@ -55,6 +56,8 @@ C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Web\b
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\Shaders\PixelShader_texture.frag
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\Shaders\VertexShader_texture.vert
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\Fus\projectile.fus
+C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\Fonts\Army.ttf
+C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\Fonts\Cabin-Regular.ttf
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\Styles\browser.css
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\Styles\loading_rocket.png
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Fusee.Tutorial.Web.exe

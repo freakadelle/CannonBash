@@ -99,7 +99,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Assets\AboutFuseeAssets.txt" />
-    <Content Include="Assets\Textures\GUI\crosshairTexture.png" />
+    <Content Include="Assets\Textures\GUI\crosshairTexture.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Textures\Landscape\mountainsTexture.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -172,8 +174,12 @@
     <Content Include="Assets\Fus\projectile.fus">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Fonts\Army.ttf" />
-    <Content Include="Assets\Fonts\Cabin-Regular.ttf" />
+    <Content Include="Assets\Fonts\Army.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Fonts\Cabin-Regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <!-- ItemGroup>
     <Reference Include="Fusee.SerializationSerializer">

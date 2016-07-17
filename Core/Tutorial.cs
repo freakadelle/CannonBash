@@ -41,15 +41,20 @@ namespace Fusee.Tutorial.Core
         private int turnTime;
         private bool turnEnded;
 
+        private int frameCounter = 0;
+        private int secCounter = 0;
+
         #if GUI_SIMPLE
         private GUIHandler _guiHandler;
         private GUIPanel _guiPanel;
 
         private Font _guiFont;
         private FontMap _guiFontMap;
-        private GUIText _guiTextPlayer;
         private GUIText _guiTextHealth;
         private GUIText _guiTextShotPower;
+
+        private int _playerHealth = 100;
+        private int _shotPower = 0;
 
         private GUIImage _guiCrossHair;
         #endif
@@ -82,30 +87,30 @@ namespace Fusee.Tutorial.Core
             _guiFont.UseKerning = true;
             _guiFontMap = new FontMap(_guiFont, 20);
 
-            _guiPanel = new GUIPanel("Overlay", _guiFontMap, 0, 0, Width, Height);
+            _guiPanel = new GUIPanel("Player " + (activePlayerId + 1), _guiFontMap, -40, Height - 140, 200, 100);
+            _guiPanel.TextColor = new float4(1.0f, 1.0f, 1.0f, 1.0f);
+            _guiPanel.PanelColor = new float4(1.0f, 1.0f, 1.0f, 0.0f);
+
+            _guiPanel.BorderWidth = 0;
 
             _guiCrossHair = new GUIImage(AssetsManager.guiImages["crosshairTexture"],
-                                         (Width / 2) - (AssetsManager.guiImages["crosshairTexture"].Width / 2),
-                                         (Height / 2) - (AssetsManager.guiImages["crosshairTexture"].Height / 2),
+                                         ((Width / 2) - (AssetsManager.guiImages["crosshairTexture"].Width / 4)) + 40,
+                                         ((Height / 2) - (AssetsManager.guiImages["crosshairTexture"].Height / 4)) - (Height - 140),
                                          -5,
-                                         AssetsManager.guiImages["crosshairTexture"].Width,
-                                         AssetsManager.guiImages["crosshairTexture"].Height);
+                                         AssetsManager.guiImages["crosshairTexture"].Width / 2,
+                                         AssetsManager.guiImages["crosshairTexture"].Height / 2);
+            _guiCrossHair.BorderWidth = 0;
 
-            //_guiTextHealth = new GUIText("100", _guiFontMap, 30, 30);
-            //_guiTextHealth.TextColor = new float4(1, 1, 1, 1);
+            _guiTextHealth = new GUIText("Health: " + _playerHealth, _guiFontMap, 55, 50);
+            _guiTextHealth.TextColor = new float4(1.0f, 1.0f, 1.0f, 1.0f);
 
-            //_guiTextPlayer = new GUIText("Player X", _guiFontMap, 30, 60);
-            //_guiTextPlayer.TextColor = new float4(1, 1, 1, 1);
+            _guiTextShotPower = new GUIText("Power: " + _shotPower, _guiFontMap, 55, 80);
+            _guiTextShotPower.TextColor = new float4(1.0f, 1.0f, 1.0f, 1.0f);
 
-            //_guiTextShotPower = new GUIText("0", _guiFontMap, 30, 90);
-            //_guiTextShotPower.TextColor = new float4(1, 1, 1, 1);
-
-            _guiHandler.Add(_guiPanel);
             _guiPanel.ChildElements.Add(_guiCrossHair);
-            _guiHandler.Add(_guiCrossHair);
-            //_guiHandler.Add(_guiTextHealth);
-            //_guiHandler.Add(_guiTextPlayer);
-            //_guiHandler.Add(_guiTextShotPower);
+            _guiPanel.ChildElements.Add(_guiTextHealth);
+            _guiPanel.ChildElements.Add(_guiTextShotPower);
+            _guiHandler.Add(_guiPanel);
 #endif
         }
 
@@ -238,6 +243,7 @@ namespace Fusee.Tutorial.Core
 
             players[activePlayerId].ammo = 1;
             cam.mountCameraOnBunker(players[activePlayerId]);
+            _guiPanel.Text = "Player " + (activePlayerId + 1);
         }
 
         private void projectileHitTile(MapTile _tile, float _radius, float _strength)
@@ -253,15 +259,33 @@ namespace Fusee.Tutorial.Core
 
             if (Mouse.LeftButton && activePlayer.ammo > 0)
             {
+                // COUNT UP SHOT POWER
+                frameCounter++;
+                if (frameCounter == 6)
+                {
+                    secCounter++;
+                    frameCounter = 0;
+                    _guiTextShotPower.Text = "Power " + secCounter;
+                }
+            }
+            if (!Mouse.LeftButton && secCounter != 0 && activePlayer.ammo > 0)
+            {
+                
                 //SHOOT PROJECTILE AND ADD TO LIST AND SCENE
-                Projectile proj = activePlayer.shootProjectile();
+                Projectile proj = activePlayer.shootProjectile(secCounter);
                 projectiles.Add(proj);
                 SceneManager.rootNodes["projectileRoot"].Children.Add(proj.container);
                 activePlayer.ammo--;
-            } else if (Keyboard.IsKeyDown(KeyCodes.Space))
+                _guiTextShotPower.Text = "Power " + 0;
+                secCounter = 0;
+            }
+
+            else if (Keyboard.IsKeyDown(KeyCodes.Space))
             {
                 MapGenerator.nextTexture();
-            } else if (Keyboard.IsKeyDown(KeyCodes.Enter))
+            }
+
+            else if (Keyboard.IsKeyDown(KeyCodes.Enter))
             {
                 newGame();
                 _renderer.randomShaderEffects();
