@@ -13,6 +13,19 @@ namespace Fusee.Tutorial.Core
     [FuseeApplication(Name = "Tutorial Example", Description = "The official FUSEE Tutorial.")]
     public class Tutorial : RenderCanvas
     {
+        /*
+            Todo: GUI möglich? Anzahl Schüsse/Welcher Spieler an der Reihe/Welche Spieler noch am Leben/Lebenspunkte/Windstärke etc...
+            Todo: Bug beim treffen eines Tiles in unmittelbarer Nähe. Nächster Spieler feuert automatisch Kugel ab
+            Todo: Bug mit Textur beim Verändelrn der Mapgröße.
+            Todo: Bug mit Textur wenn Textur direkt aus dem Dictionary eingelesen wird.
+            Todo: Windstärke einbauen. Macht nur Sinn wenn grafisches Interface möglich
+            Todo: Game Over. Game Win
+            Todo: Menü für die Einstellung der Spieleranzahl und der Auswahl der Map
+            Todo: Bäume auf die Insel generieren
+            Todo: Mapgenerierung verbessern?!
+            Todo: Lavamap fertig machen
+        */
+
         private bool _twoTouchRep;
 
         private Renderer _renderer;
