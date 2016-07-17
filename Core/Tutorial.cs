@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#define GUI_SIMPLE
+using System.Collections.Generic;
 using System.Linq;
 using Fusee.Engine.Common;
 using Fusee.Engine.Core;
@@ -6,8 +7,10 @@ using Fusee.Math.Core;
 using Fusee.Tutorial.Core.Assets;
 using static System.Math;
 using static Fusee.Engine.Core.Input;
-using Fusee.Engine.Core.GUI;
 using Fusee.Base.Core;
+#if GUI_SIMPLE
+using Fusee.Engine.Core.GUI;
+#endif
 
 namespace Fusee.Tutorial.Core
 {
@@ -38,6 +41,7 @@ namespace Fusee.Tutorial.Core
         private int turnTime;
         private bool turnEnded;
 
+        #if GUI_SIMPLE
         private GUIHandler _guiHandler;
         private Font _guiFont;
         private FontMap _guiFontMap;
@@ -45,6 +49,8 @@ namespace Fusee.Tutorial.Core
         private GUIText _guiTextHealth;
         private GUIText _guiTextShotPower;
 
+        private GUIImage _guiCrossHair;
+        #endif
         //INIT IS CALLED ON STARTUP
         public override void Init()
         {
@@ -65,11 +71,17 @@ namespace Fusee.Tutorial.Core
             // INSTANTIATE GUI
             Width = 1600;
             Height = 900;
-
+            
+            #if GUI_SIMPLE
             _guiHandler = new GUIHandler();
             _guiHandler.AttachToContext(RC);
 
-            _guiFont = AssetsManager.loadAsset<Font>(AssetsManager.FILE_TYPE.FONTS, "Army");
+            _guiCrossHair = AssetsManager.guiImages["crosshairTexture"];
+            System.Diagnostics.Debug.WriteLine("_guiCrossHair: " + _guiCrossHair);
+            _guiCrossHair.PosX = 200;
+            _guiCrossHair.PosY = 500;
+
+            _guiFont = AssetsManager.fonts["Army"];
             _guiFont.UseKerning = true;
             _guiFontMap = new FontMap(_guiFont, 20);
 
@@ -85,6 +97,7 @@ namespace Fusee.Tutorial.Core
             _guiHandler.Add(_guiTextHealth);
             _guiHandler.Add(_guiTextPlayer);
             _guiHandler.Add(_guiTextShotPower);
+            #endif
         }
 
         //RenderAFrame is called once a frame

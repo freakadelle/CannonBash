@@ -3,6 +3,7 @@ using Fusee.Base.Common;
 using Fusee.Base.Core;
 using Fusee.Serialization;
 using Fusee.Engine.Core;
+using Fusee.Engine.Core.GUI;
 
 namespace Fusee.Tutorial.Core.Assets
 {
@@ -39,7 +40,7 @@ namespace Fusee.Tutorial.Core.Assets
         public static readonly List<string> TEXTURE_GUI_FILES = new List<string>() { "crosshairTexture" };
 
         // FONT FILE NAMES
-        public static readonly List<string> FONT_FILES = new List<string>() { "Army" };
+        public static readonly List<string> FONT_FILES = new List<string>() { "Army, Cabin-Regular" };
 
         //FUS FILE NAMES
         public static readonly string[] FUS_BUNKER_FILES = { "Bunker_white", "Bunker_pink", "Bunker_yellow", "Bunker_green", "Bunker_blue", "Bunker_red" };
@@ -49,6 +50,8 @@ namespace Fusee.Tutorial.Core.Assets
         //ASSETS STORAGE
         public static Dictionary<string, SceneNodeContainer> fusFiles; 
         public static Dictionary<string, TextureImage> textures;
+        public static Dictionary<string, GUIImage> guiImages;
+        public static Dictionary<string, Font> fonts;
         public static Dictionary<string, string> shaders_pix;
         public static Dictionary<string, string> shaders_vert;
 
@@ -91,6 +94,8 @@ namespace Fusee.Tutorial.Core.Assets
         {
             fusFiles = new Dictionary<string, SceneNodeContainer>();
             textures = new Dictionary<string, TextureImage>();
+            guiImages = new Dictionary<string, GUIImage>();
+            fonts = new Dictionary<string, Font>();
             shaders_pix = new Dictionary<string, string>();
             shaders_vert = new Dictionary<string, string>();
 
@@ -127,10 +132,15 @@ namespace Fusee.Tutorial.Core.Assets
             foreach(var guiTex in TEXTURE_GUI_FILES)
             {
                 ImageData src = loadAsset<ImageData>(FILE_TYPE.TEXTURE_GUI, guiTex);
-                string path = TEXTURE_GUI_FILEPATH + guiTex + ".png";
 
-                TextureImage _tex = new TextureImage(src, guiTex, path);
-                textures.Add(guiTex, _tex);
+                GUIImage _tex = new GUIImage(src, 0, 0, src.Width, src.Height);
+                guiImages.Add(guiTex, _tex);
+            }
+
+            foreach(var font in FONT_FILES)
+            {
+                Font _font = loadAsset<Font>(FILE_TYPE.FONTS, font);
+                fonts.Add(font, _font);
             }
 
             foreach (var shader in SHADER_PIX_FILES)
