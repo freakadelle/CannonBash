@@ -54,7 +54,7 @@ namespace Fusee.Tutorial.Core
             foreach (var tex in AssetsManager.textures)
             {
                 ImageData _img = tex.Value.src;
-                string _name = tex.Value.name;
+                string _name = tex.Value.path;
                 _textureValue = RC.CreateTexture(_img);
                 _textures.Add(_name, _textureValue);
             }

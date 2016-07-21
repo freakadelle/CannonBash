@@ -41,3 +41,4 @@ D:\Fusee Projekte\GameEngineering\CannonBash\tmp\Obj\Fusee.Tutorial.Web\bin\Debu
 D:\Fusee Projekte\GameEngineering\CannonBash\tmp\Obj\Fusee.Tutorial.Web\Debug\Fusee.Tutorial06.Web.csprojResolveAssemblyReference.cache
 D:\Fusee Projekte\GameEngineering\CannonBash\tmp\Obj\Fusee.Tutorial.Web\Debug\Fusee.Tutorial.Web.exe
 D:\Fusee Projekte\GameEngineering\CannonBash\tmp\Obj\Fusee.Tutorial.Web\Debug\Fusee.Tutorial.Web.pdb
+D:\Fusee Projekte\GameEngineering\CannonBash\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\Fus\Cylinder.fus

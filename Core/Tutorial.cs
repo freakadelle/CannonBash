@@ -6,6 +6,7 @@ using Fusee.Math.Core;
 using Fusee.Tutorial.Core.Assets;
 using static System.Math;
 using static Fusee.Engine.Core.Input;
+using static Fusee.Engine.Core.Time;
 
 namespace Fusee.Tutorial.Core
 {
@@ -26,13 +27,12 @@ namespace Fusee.Tutorial.Core
             Todo: Lavamap fertig machen
         */
 
-        private bool _twoTouchRep;
-
         private Renderer _renderer;
+        private List<Bunker> _players;
+        private List<Projectile> _projectiles;
+        //private List<Camera> _cams;
         private Camera cam;
-        private List<Bunker> players;
-        private List<Projectile> projectiles;
-        private int numberOfPlayers = 6, activePlayerId = 0;
+        private int numberOfPlayers = 4, activePlayerId = 0, activeCamId = 0;
         private int turnTime;
         private bool turnEnded;
 
@@ -44,7 +44,8 @@ namespace Fusee.Tutorial.Core
 
             //INITIALIZE CAMERA
             cam = new Camera();
-            cam.projection = float4x4.CreatePerspectiveFieldOfView(cam.FieldOfView, Width / (float)Height, 0.01f, 20);
+            cam.projection = float4x4.CreatePerspectiveFieldOfView(M.PiOver4, Width / (float)Height, 0.01f, 20);
+            cam.pivot = new float3(1, -1.8f, -2.7f);
 
             //INITIALIZE NEW GAME
             newGame();
@@ -64,24 +65,25 @@ namespace Fusee.Tutorial.Core
             handleInputControls();
 
             //UPDATE ALL EXISTING PROJECTILES
-            for (int i = 0; i < projectiles.Count; i++)
+            for (int i = 0; i < _projectiles.Count; i++)
             {
                 //PROJECTILE MOVEMENT
-                projectiles[i].update();
+                _projectiles[i].update();
 
-                MapTile collTile = projectiles[i].isCollided();
+                MapTile collTile = _projectiles[i].isCollided();
 
                 //DESTRY PROJECTILE IF OUT OF MAP
-                if (projectiles[i].isOutOfMap())
+                if (_projectiles[i].isOutOfMap())
                 {
-                    SceneManager.destroyNode(SceneManager.rootNodes["projectileRoot"], projectiles[i].container.Name);
-                    projectiles.RemoveAt(i);
+                    SceneManager.destroyNode(SceneManager.rootNodes["projectileRoot"], _projectiles[i].container.Name);
+                    _projectiles.RemoveAt(i);
                     turnEnded = true;
-                } else if (collTile != null)
+                }
+                else if (collTile != null)
                 {
                     projectileHitTile(collTile, 8, 50);
-                    SceneManager.destroyNode(SceneManager.rootNodes["projectileRoot"], projectiles[i].container.Name);
-                    projectiles.RemoveAt(i);
+                    SceneManager.destroyNode(SceneManager.rootNodes["projectileRoot"], _projectiles[i].container.Name);
+                    _projectiles.RemoveAt(i);
                     turnEnded = true;
                 }
             }
@@ -99,17 +101,19 @@ namespace Fusee.Tutorial.Core
             }
 
             //WATER ANIMATION PROCESS INCREMENT
-            float newAlpha = (float) _renderer.shaderEffects["mapRoot"].GetEffectParam("alpha") + 1.8f;
+            float newAlpha = (float)_renderer.shaderEffects["mapRoot"].GetEffectParam("alpha") + 1.8f;
             _renderer.shaderEffects["mapRoot"].SetEffectParam("alpha", newAlpha);
 
-            //UPDATE CAMERA MOVEMENTS
-            cam.update();
+            ////ADJUST VIEW FOR SPECIFIC CAMERA
+            //Camera activeCamera = _cams[activeCamId];
 
-            //UPDATE VIEW & PROJECTION
-            float4x4 view = (cam.MtxPivot * cam.MtxRot * cam.MtxOffset) * SceneManager.sceneScale;
+            //_cams[0]
+
+            float4x4 view = (cam.MtxPivot * cam.MtxRot * cam.MtxOffset)* SceneManager.sceneScale;
             _renderer.View = view;
             RC.ModelView = view;
             RC.Projection = cam.projection;
+
 
             //RENDER AND PRESENT
             _renderer.Traverse(SceneManager.scene.Children);
@@ -129,18 +133,18 @@ namespace Fusee.Tutorial.Core
             MapGenerator.generateTerrain(12 * numberOfPlayers);
 
             //INITIALIZE LISTS
-            projectiles = new List<Projectile>();
-            players = new List<Bunker>();
+            _projectiles = new List<Projectile>();
+            _players = new List<Bunker>();
 
             //INIT AMOUNT OF PLAYERS AND BUNKERS
             loadPlayers(numberOfPlayers);
 
             //SLICE MAP INTO GRIDS DEPENDING ON AMOUNT OF PLAYER AND RETURN ZENIT TILE OF EACH GRID
-            int grids = Max((int)Ceiling(players.Count / 2.0f), 2);
+            int grids = Max((int)Ceiling(_players.Count / 2.0f), 2);
             List<MapTile> areaZenits = MapGenerator.gridMapReturnZenitTiles(grids);
 
             //MOUNT BUNKERS ON ZENIT TILES
-            foreach (var player in players)
+            foreach (var player in _players)
             {
                 int randomZenit = Constants.random.Next(0, areaZenits.Count);
                 player.mountBunkerOnTile(areaZenits[randomZenit]);
@@ -148,7 +152,7 @@ namespace Fusee.Tutorial.Core
             }
 
             //MOUNT CAMERA ON ACTIVE BUNKER
-            cam.mountCameraOnBunker(players[activePlayerId]);
+            cam.mountCameraOnBunker(_players[activePlayerId]);
 
             turnTime = Constants.TURN_TIME_MAX;
             turnEnded = false;
@@ -165,21 +169,30 @@ namespace Fusee.Tutorial.Core
                 Bunker tempBunker = new Bunker(AssetsManager.FUS_BUNKER_FILES[i]);
 
                 //ADD BUNKER TO LIST AND SCENE
-                players.Add(tempBunker);
-                SceneManager.rootNodes["bunkerRoot"].Children.Add(players[i].scene);
+                _players.Add(tempBunker);
+                SceneManager.rootNodes["bunkerRoot"].Children.Add(_players[i].scene);
             }
         }
 
         private void nextPlayersTurn()
         {
             activePlayerId++;
-            if (activePlayerId >= players.Count)
+            if (activePlayerId >= _players.Count)
             {
                 activePlayerId = 0;
             }
 
-            players[activePlayerId].ammo = 1;
-            cam.mountCameraOnBunker(players[activePlayerId]);
+            _players[activePlayerId].ammo = 1;
+            cam.mountCameraOnBunker(_players[activePlayerId]);
+        }
+
+        private void switchCam()
+        {
+            //activeCamId++;
+            //if (activeCamId >= _cams.Count)
+            //{
+            //    activeCamId = 0;
+            //}
         }
 
         private void projectileHitTile(MapTile _tile, float _radius, float _strength)
@@ -190,28 +203,39 @@ namespace Fusee.Tutorial.Core
         //HANDLE KEYBOARD & MOUSE INPUTS
         private void handleInputControls()
         {
-            //CAMERA ROTATION
-            Bunker activePlayer = players[activePlayerId];
+            ////CAMERA ROTATION
+            Bunker activePlayer = _players[activePlayerId];
 
             if (Mouse.LeftButton && activePlayer.ammo > 0)
             {
                 //SHOOT PROJECTILE AND ADD TO LIST AND SCENE
                 Projectile proj = activePlayer.shootProjectile();
-                projectiles.Add(proj);
+                _projectiles.Add(proj);
                 SceneManager.rootNodes["projectileRoot"].Children.Add(proj.container);
                 activePlayer.ammo--;
-            } else if (Keyboard.IsKeyDown(KeyCodes.Space))
+            }
+            else if (Keyboard.IsKeyDown(KeyCodes.Space))
             {
                 MapGenerator.nextTexture();
-            } else if (Keyboard.IsKeyDown(KeyCodes.Enter))
+            }
+            else if (Keyboard.IsKeyDown(KeyCodes.Enter))
             {
                 newGame();
                 _renderer.randomShaderEffects();
             }
+            else if (Keyboard.IsKeyDown(KeyCodes.V))
+            {
+                switchCam();
+            }
 
+            //MULTI CAMERA CONTROLS
+            //Camera activeCam = _cams[activeCamId];
+
+            //ACTIVE PLAYER AND PLAYER CAMERA CONTROL
             activePlayer.rotatePlatform(Mouse.XVel);
             activePlayer.liftCannon(Mouse.YVel);
             cam.Rotation = new float3(-activePlayer.bunkerCannon.Rotation.z - (float)(PI * 1.5f), -activePlayer.bunkerPlatform.Rotation.y - (float)(PI * 1.5f), 0);
+
         }
 
         //IS CALLED ON WINDOW RESIZE
@@ -226,6 +250,7 @@ namespace Fusee.Tutorial.Core
             // 0.25*PI Rad -> 45° Opening angle along the vertical direction. Horizontal opening angle is calculated based on the aspect ratio
             // Front clipping happens at 1 (Objects nearer than 1 world unit get clipped)
             // Back clipping happens at 2000 (Anything further away from the camera than 2000 world units gets clipped, polygons will be cut)
+            //_cams[activeCamId].projection = float4x4.CreatePerspectiveFieldOfView(_cams[activeCamId].FieldOfView, aspectRatio, 1, 20000);
             cam.projection = float4x4.CreatePerspectiveFieldOfView(cam.FieldOfView, aspectRatio, 1, 20000);
         }
     }

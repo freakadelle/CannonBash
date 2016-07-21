@@ -34,5 +34,14 @@ namespace Fusee.Tutorial.Core.Assets
             float angleFromVector = (float)System.Math.Atan2(_vector.x, -_vector.y);
             return angleFromVector;
         }
+
+        public static float NormRot(float rot)
+        {
+            while (rot > M.Pi)
+                rot -= M.TwoPi;
+            while (rot < -M.Pi)
+                rot += M.TwoPi;
+            return rot;
+        }
     }
 }

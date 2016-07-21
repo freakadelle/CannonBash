@@ -15,6 +15,7 @@ namespace Fusee.Tutorial.Core
         public static float2 minMaxHeight = new float2(999, 0);
         //Todo: Mapsize ist noch nicht allgmeeingültig um verschiedene Größen der Map zu generieren
         private static float mapSize;
+        public static float2 mapUnits;
         private static int _mapTextureId, _skyTextureId;
 
         //MAP GENERATION SETTINGS
@@ -35,6 +36,7 @@ namespace Fusee.Tutorial.Core
             mapScene.Components = new List<SceneComponentContainer>();
 
             mapSize = (jointSize + tileSize) * (gridSize.x + gridSize.y) / 200.0f;
+            mapUnits = new float2((jointSize + tileSize) * gridSize.x, (jointSize + tileSize) * gridSize.y);
             nonPlayableAreaBounds = new float2((int) (gridSize.x / 5.0f), (int) (gridSize.y / 5.0f));
 
             //ADD MAP COMPONENTS

@@ -31,34 +31,22 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
     return ($T06 = JSIL.Memoize($asm14.System.Math)) ();
   };
   var $T07 = function () {
-    return ($T07 = JSIL.Memoize($asm14.System.Boolean)) ();
-  };
-  var $T08 = function () {
-    return ($T08 = JSIL.Memoize($asm06.Fusee.Math.Core.M)) ();
+    return ($T07 = JSIL.Memoize($asm06.Fusee.Math.Core.M)) ();
   };
   var $S00 = function () {
-    return ($S00 = JSIL.Memoize(new JSIL.ConstructorSignature($asm06.TypeRef("Fusee.Math.Core.float3"), [
-        $asm14.TypeRef("System.Single"), $asm14.TypeRef("System.Single"), 
-        $asm14.TypeRef("System.Single")
-      ]))) ();
+    return ($S00 = JSIL.Memoize(new JSIL.ConstructorSignature($asm06.TypeRef("Fusee.Math.Core.float2"), [$asm14.TypeRef("System.Single"), $asm14.TypeRef("System.Single")]))) ();
   };
   var $S01 = function () {
-    return ($S01 = JSIL.Memoize(new JSIL.ConstructorSignature($asm06.TypeRef("Fusee.Math.Core.float2"), [$asm14.TypeRef("System.Single"), $asm14.TypeRef("System.Single")]))) ();
+    return ($S01 = JSIL.Memoize(new JSIL.MethodSignature($asm06.TypeRef("Fusee.Math.Core.float4x4"), [$asm06.TypeRef("Fusee.Math.Core.float4x4"), $asm06.TypeRef("Fusee.Math.Core.float4x4")]))) ();
   };
   var $S02 = function () {
-    return ($S02 = JSIL.Memoize(new JSIL.MethodSignature($asm06.TypeRef("Fusee.Math.Core.float4x4"), [$asm06.TypeRef("Fusee.Math.Core.float4x4"), $asm06.TypeRef("Fusee.Math.Core.float4x4")]))) ();
+    return ($S02 = JSIL.Memoize(new JSIL.MethodSignature($asm06.TypeRef("Fusee.Math.Core.float3"), [$asm06.TypeRef("Fusee.Math.Core.float3"), $asm14.TypeRef("System.Single")]))) ();
   };
   var $S03 = function () {
-    return ($S03 = JSIL.Memoize(new JSIL.MethodSignature($asm06.TypeRef("Fusee.Math.Core.float3"), [$asm06.TypeRef("Fusee.Math.Core.float3"), $asm14.TypeRef("System.Single")]))) ();
+    return ($S03 = JSIL.Memoize(new JSIL.MethodSignature($asm14.TypeRef("System.Single"), [$asm14.TypeRef("System.Single")]))) ();
   };
   var $S04 = function () {
-    return ($S04 = JSIL.Memoize(new JSIL.MethodSignature($asm06.TypeRef("Fusee.Math.Core.float2"), [$asm06.TypeRef("Fusee.Math.Core.float2"), $asm14.TypeRef("System.Single")]))) ();
-  };
-  var $S05 = function () {
-    return ($S05 = JSIL.Memoize(new JSIL.MethodSignature($asm14.TypeRef("System.Single"), [$asm14.TypeRef("System.Single")]))) ();
-  };
-  var $S06 = function () {
-    return ($S06 = JSIL.Memoize(new JSIL.MethodSignature($asm14.TypeRef("System.Single"), [
+    return ($S04 = JSIL.Memoize(new JSIL.MethodSignature($asm14.TypeRef("System.Single"), [
         $asm14.TypeRef("System.Single"), $asm14.TypeRef("System.Single"), 
         $asm14.TypeRef("System.Single")
       ]))) ();
@@ -66,23 +54,18 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
 
 
   function Camera__ctor () {
-    this._angleHorz = 1.04719758;
-    this._angleVert = -0.2617994;
     this.RotationSpeed = 7;
     this.Damping = 0.8;
     $T00().prototype._ctor.call(this);
-    this.Translation = $S00().Construct(0, 0, 0);
-    this.Rotation = $S00().Construct(0, 0, 0);
-    this.Scale = $S00().Construct(0, 0, 0);
-    this.up = $S00().Construct(0, 1, 0);
-    this.target = $S00().Construct(50, 50, 50);
-    this.pivot = $S00().Construct(1, -1.8, -2.7);
+    this.Translation = $T01().Zero.MemberwiseClone();
+    this.Rotation = $T01().Zero.MemberwiseClone();
+    this.Scale = $T01().One.MemberwiseClone();
+    this.up = $T01().One.MemberwiseClone();
+    this.target = $T01().One.MemberwiseClone();
+    this.eye = $T01().One.MemberwiseClone();
+    this.pivot = $T01().Zero.MemberwiseClone();
     this._fieldOfView = 0.7853982;
-    this._zoomLimits = $S01().Construct(1, 100000);
-  }; 
-
-  function Camera_get_CurDamp () {
-    return this._curDamp;
+    this._zoomLimits = $S00().Construct(1, 100000);
   }; 
 
   function Camera_get_FieldOfView () {
@@ -102,8 +85,8 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
   }; 
 
   function Camera_get_MtxRot () {
-    return $S02().CallStatic($T03(), "op_Multiply", null, 
-      $S02().CallStatic($T03(), "op_Multiply", null, 
+    return $S01().CallStatic($T03(), "op_Multiply", null, 
+      $S01().CallStatic($T03(), "op_Multiply", null, 
         $T03().CreateRotationZ(this.Rotation.z).MemberwiseClone(), 
         $T03().CreateRotationX(this.Rotation.x).MemberwiseClone()
       ).MemberwiseClone(), 
@@ -118,14 +101,12 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
   function Camera_mountCameraOnBunker (_bunker) {
     this.Translation = $T01().op_Subtraction(
       $T01().op_UnaryNegation(_bunker.bunkerBase.Translation.MemberwiseClone()).MemberwiseClone(), 
-      $S03().CallStatic($T01(), "op_Multiply", null, $S03().CallStatic($T01(), "op_Multiply", null, _bunker.bunkerPlatform.Translation.MemberwiseClone(), 0.03).MemberwiseClone(), 1.1)
+      $S02().CallStatic($T01(), "op_Multiply", null, $S02().CallStatic($T01(), "op_Multiply", null, _bunker.bunkerPlatform.Translation.MemberwiseClone(), 0.03).MemberwiseClone(), 1.1)
     );
   }; 
 
   function Camera_mouseWheelZoom (wheelVel) {
-    this._zoomVel = +wheelVel * -2;
-    this._angleRoll = +this._angleRoll * (+this._curDamp * 0.8);
-    this._offset = $S04().CallStatic($T02(), "op_Multiply", null, this._offset.MemberwiseClone(), +this._curDamp * 0.8);
+    this.set_Zoom(+this.get_Zoom() + (+wheelVel * -2));
     return false;
   }; 
 
@@ -139,10 +120,6 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
     this._angleVelVert = +this._angleVelVert * +this._curDamp;
   }; 
 
-  function Camera_set_CurDamp (value) {
-    this._curDamp = +value;
-  }; 
-
   function Camera_set_FieldOfView (value) {
     this._fieldOfView = +value;
   }; 
@@ -153,25 +130,16 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
     this.eye.z = +$T06().Min(this._zoomLimits.y, this.eye.z);
   }; 
 
-  function Camera_touchZoom (_twoPointAngle, _twoPointMidPoint, _twoPointDistanceVel, _twoTouchRepeated) {
-    var flag = !_twoTouchRepeated;
-    if (flag) {
-      this._angleRollInit = +_twoPointAngle - +this._angleRoll;
-      this._offsetInit = $T02().op_Subtraction(_twoPointMidPoint.MemberwiseClone(), this._offset);
-    }
-    this._zoomVel = +_twoPointDistanceVel * -0.01;
-    this._angleRoll = +_twoPointAngle - +this._angleRollInit;
-    this._offset = $T02().op_Subtraction(_twoPointMidPoint.MemberwiseClone(), this._offsetInit);
-    return true;
+  function Camera_setCurDamp (_deltaTime) {
+    this._curDamp = Math.fround($T06().Exp(-this.Damping * +_deltaTime));
   }; 
 
   function Camera_update () {
-    this.set_Zoom(+this.get_Zoom() + +this._zoomVel);
-    this._angleHorz = +this._angleHorz + +this._angleVelHorz;
-    this._angleHorz = +$S05().CallStatic($T08(), "MinAngle", null, this._angleHorz);
-    this._angleVert = +this._angleVert + +this._angleVelVert;
-    this._angleVert = +$S06().CallStatic($T08(), "Clamp", null, this._angleVert, -1.57079637, 1.57079637);
-    this._angleRoll = +$S05().CallStatic($T08(), "MinAngle", null, this._angleRoll);
+    this.Rotation.y = +this.Rotation.y + +this._angleVelHorz;
+    this.Rotation.y = +$S03().CallStatic($T07(), "MinAngle", null, this.Rotation.y);
+    this.Rotation.x = +this.Rotation.x + +this._angleVelVert;
+    this.Rotation.x = +$S04().CallStatic($T07(), "Clamp", null, this.Rotation.x, -1.57079637, 1.57079637);
+    this.Rotation.z = +$S03().CallStatic($T07(), "MinAngle", null, this.Rotation.z);
   }; 
 
   JSIL.MakeType({
@@ -186,11 +154,6 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
     $.Method({Static:false, Public:true }, ".ctor", 
       JSIL.MethodSignature.Void, 
       Camera__ctor
-    );
-
-    $.Method({Static:false, Public:true }, "get_CurDamp", 
-      JSIL.MethodSignature.Return($.Single), 
-      Camera_get_CurDamp
     );
 
     $.Method({Static:false, Public:true }, "get_FieldOfView", 
@@ -218,7 +181,7 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
       Camera_get_MtxRot
     );
 
-    $.Method({Static:false, Public:true }, "get_Zoom", 
+    $.Method({Static:false, Public:false}, "get_Zoom", 
       JSIL.MethodSignature.Return($.Single), 
       Camera_get_Zoom
     );
@@ -243,27 +206,19 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
       Camera_rotateDump
     );
 
-    $.Method({Static:false, Public:true }, "set_CurDamp", 
-      JSIL.MethodSignature.Action($.Single), 
-      Camera_set_CurDamp
-    );
-
     $.Method({Static:false, Public:true }, "set_FieldOfView", 
       JSIL.MethodSignature.Action($.Single), 
       Camera_set_FieldOfView
     );
 
-    $.Method({Static:false, Public:true }, "set_Zoom", 
+    $.Method({Static:false, Public:false}, "set_Zoom", 
       JSIL.MethodSignature.Action($.Single), 
       Camera_set_Zoom
     );
 
-    $.Method({Static:false, Public:true }, "touchZoom", 
-      new JSIL.MethodSignature($.Boolean, [
-          $.Single, $asm06.TypeRef("Fusee.Math.Core.float2"), 
-          $.Single, $.Boolean
-        ]), 
-      Camera_touchZoom
+    $.Method({Static:false, Public:true }, "setCurDamp", 
+      JSIL.MethodSignature.Action($.Single), 
+      Camera_setCurDamp
     );
 
     $.Method({Static:false, Public:true }, "update", 
@@ -271,33 +226,21 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
       Camera_update
     );
 
-    $.Field({Static:false, Public:false}, "_angleHorz", $.Single);
-
-    $.Field({Static:false, Public:false}, "_angleVert", $.Single);
-
-    $.Field({Static:false, Public:false}, "_curDamp", $.Single);
-
-    $.Field({Static:false, Public:false}, "_angleVelHorz", $.Single);
-
-    $.Field({Static:false, Public:false}, "_angleVelVert", $.Single);
-
-    $.Field({Static:false, Public:false}, "_angleRoll", $.Single);
-
-    $.Field({Static:false, Public:false}, "_angleRollInit", $.Single);
-
-    $.Field({Static:false, Public:false}, "_zoomVel", $.Single);
-
-    $.Field({Static:false, Public:false}, "_fieldOfView", $.Single);
-
-    $.Field({Static:false, Public:false}, "_offset", $asm06.TypeRef("Fusee.Math.Core.float2"));
-
-    $.Field({Static:false, Public:false}, "_offsetInit", $asm06.TypeRef("Fusee.Math.Core.float2"));
-
-    $.Field({Static:false, Public:false}, "_zoomLimits", $asm06.TypeRef("Fusee.Math.Core.float2"));
-
     $.Field({Static:false, Public:true }, "projection", $asm06.TypeRef("Fusee.Math.Core.float4x4"));
 
-    $.Field({Static:false, Public:false, ReadOnly:true }, "RotationSpeed", $.Single);
+    $.Field({Static:false, Public:true }, "_angleVelHorz", $.Single);
+
+    $.Field({Static:false, Public:true }, "_angleVelVert", $.Single);
+
+    $.Field({Static:false, Public:true }, "_angleRollInit", $.Single);
+
+    $.Field({Static:false, Public:true }, "_fieldOfView", $.Single);
+
+    $.Field({Static:false, Public:true }, "_curDamp", $.Single);
+
+    $.Field({Static:false, Public:false, ReadOnly:true }, "_zoomLimits", $asm06.TypeRef("Fusee.Math.Core.float2"));
+
+    $.Field({Static:false, Public:true , ReadOnly:true }, "RotationSpeed", $.Single);
 
     $.Field({Static:false, Public:true , ReadOnly:true }, "Damping", $.Single);
 
@@ -309,9 +252,7 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
 
     $.Field({Static:false, Public:true }, "pivot", $asm06.TypeRef("Fusee.Math.Core.float3"));
 
-    $.Property({Static:false, Public:true }, "CurDamp", $.Single);
-
-    $.Property({Static:false, Public:true }, "Zoom", $.Single);
+    $.Property({Static:false, Public:false}, "Zoom", $.Single);
 
     $.Property({Static:false, Public:true }, "MtxRot", $asm06.TypeRef("Fusee.Math.Core.float4x4"));
 
@@ -796,6 +737,7 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
     sceneNodeContainer.Children = $S0E().Construct();
     sceneNodeContainer.Components = $S0F().Construct();
     $thisType.mapSize = +(((18 * (+$thisType.gridSize.x + +$thisType.gridSize.y)) / 200));
+    $thisType.mapUnits = $S00().Construct((18 * +$thisType.gridSize.x), (18 * +$thisType.gridSize.y));
     $thisType.nonPlayableAreaBounds = $S00().Construct(+(((+(+$thisType.gridSize.x / 5)) | 0)), +(((+(+$thisType.gridSize.y / 5)) | 0)));
     $S10().CallVirtual("Add", null, sceneNodeContainer.Components, $thisType.generateTransform());
     $S10().CallVirtual("Add", null, sceneNodeContainer.Components, $thisType.generateMaterial());
@@ -968,6 +910,8 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
 
     $.Field({Static:true , Public:false}, "mapSize", $.Single);
 
+    $.Field({Static:true , Public:true }, "mapUnits", $asm06.TypeRef("Fusee.Math.Core.float2"));
+
     $.Field({Static:true , Public:false}, "_mapTextureId", $.Int32);
 
     $.Field({Static:true , Public:false}, "_skyTextureId", $.Int32);
@@ -983,10 +927,11 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
 
     function MapGenerator__cctor () {
       $thisType.minMaxHeight = new $asm06.Fusee.Math.Core.float2();
+      $thisType.mapUnits = new $asm06.Fusee.Math.Core.float2();
       $thisType.gridSize = new $asm06.Fusee.Math.Core.float2();
       $thisType.nonPlayableAreaBounds = new $asm06.Fusee.Math.Core.float2();
       $thisType.minMaxHeight = $S00().Construct(999, 0);
-      $thisType.gridSize = $S00().Construct(100, 100);
+      $thisType.gridSize = $S00().Construct(50, 50);
     }; 
 
     $.Method({Static:true , Public:false}, ".cctor", 
@@ -1394,9 +1339,9 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
     while ($T06().prototype.MoveNext.call(enumerator)) {
       var current = $T06().prototype.get_Current.call(enumerator);
       var src = current.get_Value().src.MemberwiseClone();
-      var name = current.get_Value().$name;
+      var path = current.get_Value().path;
       this._textureValue = (this.RC).CreateTexture(src.MemberwiseClone(), false);
-      (this._textures).Add(name, this._textureValue);
+      (this._textures).Add(path, this._textureValue);
     }
     var expr_AE = JSIL.Array.New($T0D(), 1);
     var effectPassDeclaration = new ($T0D())();
@@ -2154,18 +2099,19 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
 
 
   function Tutorial__ctor () {
-    this.numberOfPlayers = 6;
+    this.numberOfPlayers = 4;
     this.activePlayerId = 0;
+    this.activeCamId = 0;
     $T00().prototype._ctor.call(this);
   }; 
 
   function Tutorial_handleInputControls () {
-    var bunker = (this.players).get_Item(this.activePlayerId);
+    var bunker = (this._players).get_Item(this.activePlayerId);
     var flag = $T05().get_Mouse().get_LeftButton() && 
     ((bunker.ammo | 0) > 0);
     if (flag) {
       var projectile = bunker.shootProjectile();
-      $S00().CallVirtual("Add", null, this.projectiles, projectile);
+      $S00().CallVirtual("Add", null, this._projectiles, projectile);
       $S01().CallVirtual("Add", null, $T0A().rootNodes.get_Item("projectileRoot").Children, projectile.container);
       bunker.ammo = (((bunker.ammo | 0) - 1) | 0);
     } else {
@@ -2177,6 +2123,11 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
         if (flag3) {
           this.newGame();
           (this._renderer).randomShaderEffects();
+        } else {
+          var flag4 = $T05().get_Keyboard().IsKeyDown($T0C().V);
+          if (flag4) {
+            this.switchCam();
+          }
         }
       }
     }
@@ -2188,12 +2139,8 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
   function Tutorial_Init () {
     $T10().loadGameAssets();
     this.cam = new ($T11())();
-    this.cam.projection = $T12().CreatePerspectiveFieldOfView(
-      (this.cam).get_FieldOfView(), 
-      +((+(this.get_Width()) / +(this.get_Height()))), 
-      0.01, 
-      20
-    ).MemberwiseClone();
+    this.cam.projection = $T12().CreatePerspectiveFieldOfView(0.7853982, +((+(this.get_Width()) / +(this.get_Height()))), 0.01, 20).MemberwiseClone();
+    this.cam.pivot = $S02().Construct(1, -1.8, -2.7);
     this.newGame();
     this._renderer = new ($T0E())(this.RenderCanvas$RC$value);
     (this.RenderCanvas$RC$value.ClearColor = $S03().Construct(0.8, 0.8, 1, 1));
@@ -2205,8 +2152,8 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
 
     for (var i = 0; i < (numberOfPlayers | 0); i = ((i + 1) | 0)) {
       var item = new ($T01())($T10().FUS_BUNKER_FILES[i]);
-      $S05().CallVirtual("Add", null, this.players, item);
-      $S01().CallVirtual("Add", null, $T0A().rootNodes.get_Item("bunkerRoot").Children, (this.players).get_Item(i).scene);
+      $S05().CallVirtual("Add", null, this._players, item);
+      $S01().CallVirtual("Add", null, $T0A().rootNodes.get_Item("bunkerRoot").Children, (this._players).get_Item(i).scene);
     }
   }; 
 
@@ -2217,13 +2164,13 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
     $T0A().addRootNode("bunkerRoot", $T0A().createEmptySceneNode("", true));
     $T0A().addRootNode("projectileRoot", $T0A().createEmptySceneNode("", true));
     $T0D().generateTerrain(Math.imul(12, this.numberOfPlayers));
-    this.projectiles = $S06().Construct();
-    this.players = $S07().Construct();
+    this._projectiles = $S06().Construct();
+    this._players = $S07().Construct();
     this.loadPlayers(this.numberOfPlayers);
-    var grids = ($T16().Max(((Math.ceil(+(+((this.players).get_Count()) / 2))) | 0), 2) | 0);
+    var grids = ($T16().Max(((Math.ceil(+(+((this._players).get_Count()) / 2))) | 0), 2) | 0);
     var list = $T0D().gridMapReturnZenitTiles(grids);
 
-    for (var a$0 = this.players._items, i$0 = 0, l$0 = (this.players._size | 0); i$0 < l$0; ($temp00 = i$0, 
+    for (var a$0 = this._players._items, i$0 = 0, l$0 = (this._players._size | 0); i$0 < l$0; ($temp00 = i$0, 
         i$0 = ((i$0 + 1) | 0), 
         $temp00)) {
       var current = a$0[i$0];
@@ -2231,19 +2178,19 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
       current.mountBunkerOnTile(list.get_Item(index));
       list.RemoveAt(index);
     }
-    (this.cam).mountCameraOnBunker((this.players).get_Item(this.activePlayerId));
+    (this.cam).mountCameraOnBunker((this._players).get_Item(this.activePlayerId));
     this.turnTime = 100;
     this.turnEnded = false;
   }; 
 
   function Tutorial_nextPlayersTurn () {
     this.activePlayerId = (((this.activePlayerId | 0) + 1) | 0);
-    var flag = (this.activePlayerId | 0) >= ((this.players).get_Count() | 0);
+    var flag = (this.activePlayerId | 0) >= ((this._players).get_Count() | 0);
     if (flag) {
       this.activePlayerId = 0;
     }
-    (this.players).get_Item(this.activePlayerId).ammo = 1;
-    (this.cam).mountCameraOnBunker((this.players).get_Item(this.activePlayerId));
+    (this._players).get_Item(this.activePlayerId).ammo = 1;
+    (this.cam).mountCameraOnBunker((this._players).get_Item(this.activePlayerId));
   }; 
 
   function Tutorial_projectileHitTile (_tile, _radius, _strength) {
@@ -2254,24 +2201,24 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
     (this.RenderCanvas$RC$value).Clear($T20().$Flags("Color", "Depth"));
     this.handleInputControls();
 
-    for (var i = 0; i < ((this.projectiles).get_Count() | 0); i = ((i + 1) | 0)) {
-      ((this.projectiles).get_Item(i)).update();
-      var mapTile = ((this.projectiles).get_Item(i)).isCollided();
-      if (((this.projectiles).get_Item(i)).isOutOfMap()) {
+    for (var i = 0; i < ((this._projectiles).get_Count() | 0); i = ((i + 1) | 0)) {
+      ((this._projectiles).get_Item(i)).update();
+      var mapTile = ((this._projectiles).get_Item(i)).isCollided();
+      if (((this._projectiles).get_Item(i)).isOutOfMap()) {
         $T0A().destroyNode$b1($T21())(
           $T0A().rootNodes.get_Item("projectileRoot"), 
-          (this.projectiles).get_Item(i).container.Name
+          (this._projectiles).get_Item(i).container.Name
         );
-        (this.projectiles).RemoveAt(i);
+        (this._projectiles).RemoveAt(i);
         this.turnEnded = true;
       } else {
         if (mapTile !== null) {
           this.projectileHitTile(mapTile, 8, 50);
           $T0A().destroyNode$b1($T21())(
             $T0A().rootNodes.get_Item("projectileRoot"), 
-            (this.projectiles).get_Item(i).container.Name
+            (this._projectiles).get_Item(i).container.Name
           );
-          (this.projectiles).RemoveAt(i);
+          (this._projectiles).RemoveAt(i);
           this.turnEnded = true;
         }
       }
@@ -2287,7 +2234,6 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
     }
     var num = $T1E().$Cast(((this._renderer.shaderEffects).get_Item("mapRoot")).GetEffectParam("alpha")) + 1.8;
     ((this._renderer.shaderEffects).get_Item("mapRoot")).SetEffectParam("alpha", $T1E().$Box(num));
-    (this.cam).update();
     var float4x = $S09().CallStatic($T12(), "op_Multiply", null, $S09().CallStatic($T12(), "op_Multiply", null, 
         $S09().CallStatic($T12(), "op_Multiply", null, 
           (this.cam).get_MtxPivot().MemberwiseClone(), 
@@ -2311,6 +2257,9 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
     );
     var aspect = +((+(this.get_Width()) / +(this.get_Height())));
     this.cam.projection = $T12().CreatePerspectiveFieldOfView((this.cam).get_FieldOfView(), aspect, 1, 20000).MemberwiseClone();
+  }; 
+
+  function Tutorial_switchCam () {
   }; 
 
   JSIL.MakeType({
@@ -2370,19 +2319,24 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
       Tutorial_Resize
     );
 
-    $.Field({Static:false, Public:false}, "_twoTouchRep", $.Boolean);
+    $.Method({Static:false, Public:false}, "switchCam", 
+      JSIL.MethodSignature.Void, 
+      Tutorial_switchCam
+    );
 
     $.Field({Static:false, Public:false}, "_renderer", $asm09.TypeRef("Fusee.Tutorial.Core.Renderer"));
 
+    $.Field({Static:false, Public:false}, "_players", $asm14.TypeRef("System.Collections.Generic.List`1", [$asm09.TypeRef("Fusee.Tutorial.Core.Assets.Bunker")]));
+
+    $.Field({Static:false, Public:false}, "_projectiles", $asm14.TypeRef("System.Collections.Generic.List`1", [$asm09.TypeRef("Fusee.Tutorial.Core.Projectile")]));
+
     $.Field({Static:false, Public:false}, "cam", $asm09.TypeRef("Fusee.Tutorial.Core.Camera"));
-
-    $.Field({Static:false, Public:false}, "players", $asm14.TypeRef("System.Collections.Generic.List`1", [$asm09.TypeRef("Fusee.Tutorial.Core.Assets.Bunker")]));
-
-    $.Field({Static:false, Public:false}, "projectiles", $asm14.TypeRef("System.Collections.Generic.List`1", [$asm09.TypeRef("Fusee.Tutorial.Core.Projectile")]));
 
     $.Field({Static:false, Public:false}, "numberOfPlayers", $.Int32);
 
     $.Field({Static:false, Public:false}, "activePlayerId", $.Int32);
+
+    $.Field({Static:false, Public:false}, "activeCamId", $.Int32);
 
     $.Field({Static:false, Public:false}, "turnTime", $.Int32);
 
@@ -2656,7 +2610,7 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core.Assets");
       $thisType.TEXTURE_SKY_FILES = expr_8F;
       $thisType.FUS_BUNKER_FILES = JSIL.Array.New($T01(), ["Bunker_white", "Bunker_pink", "Bunker_yellow", "Bunker_green", "Bunker_blue", "Bunker_red"]);
       $thisType.FUS_SKY_FILES = JSIL.Array.New($T01(), ["360Sky"]);
-      $thisType.FUS_DIVERSE_FILES = JSIL.Array.New($T01(), ["projectile"]);
+      $thisType.FUS_DIVERSE_FILES = JSIL.Array.New($T01(), ["projectile", "Cylinder"]);
     }; 
 
     $.Method({Static:true , Public:false}, ".cctor", 
@@ -2725,6 +2679,16 @@ JSIL.MakeEnum(
     return Math.fround(+((3.1415926535897931 * +degree) / 180));
   }; 
 
+  function Constants_NormRot (rot) {
+
+    for (; +rot > 3.14159274; rot -= 6.28318548) {
+    }
+
+    for (; +rot < -3.14159274; rot += 6.28318548) {
+    }
+    return rot;
+  }; 
+
   function Constants_radianToDegree (radian) {
     return Math.fround(+radian * 57.295779513082323);
   }; 
@@ -2744,6 +2708,11 @@ JSIL.MakeEnum(
     $.Method({Static:true , Public:true }, "degreeToRadian", 
       new JSIL.MethodSignature($.Single, [$.Double]), 
       Constants_degreeToRadian
+    );
+
+    $.Method({Static:true , Public:true }, "NormRot", 
+      new JSIL.MethodSignature($.Single, [$.Single]), 
+      Constants_NormRot
     );
 
     $.Method({Static:true , Public:true }, "radianToDegree", 

@@ -6,7 +6,6 @@
 //using Fusee.Tutorial.Core.Assets;
 //using static System.Math;
 //using static Fusee.Engine.Core.Input;
-//using static Fusee.Engine.Core.Time;
 
 //namespace Fusee.Tutorial.Core
 //{
@@ -19,19 +18,16 @@
 //            Todo: Bug beim treffen eines Tiles in unmittelbarer Nähe. Nächster Spieler feuert automatisch Kugel ab
 //            Todo: Bug mit Textur beim Verändelrn der Mapgröße.
 //            Todo: Bug mit Textur wenn Textur direkt aus dem Dictionary eingelesen wird.
-//            Todo: Windstärke einbauen. Macht nur Sinn wenn grafisches Interface möglich
-//            Todo: Game Over. Game Win
-//            Todo: Menü für die Einstellung der Spieleranzahl und der Auswahl der Map
-//            Todo: Bäume auf die Insel generieren
-//            Todo: Mapgenerierung verbessern?!
-//            Todo: Lavamap fertig machen
+//            Todo: Winstärke einbauen. Macht nur Sinn wenn grafisches Interface möglich
 //        */
 
+//        private bool _twoTouchRep;
+
 //        private Renderer _renderer;
-//        private List<Bunker> _players;
-//        private List<Projectile> _projectiles;
-//        private List<Camera> _cams;
-//        private int numberOfPlayers = 4, activePlayerId = 0, activeCamId = 1;
+//        private Camera cam;
+//        private List<Bunker> players;
+//        private List<Projectile> projectiles;
+//        private int numberOfPlayers = 6, activePlayerId = 0;
 //        private int turnTime;
 //        private bool turnEnded;
 
@@ -42,27 +38,12 @@
 //            AssetsManager.loadGameAssets();
 
 //            //INITIALIZE CAMERA
-//            _cams = new List<Camera>();
-
-//            //PLAYER CAMERA
-//            Camera cam = new Camera();
-//            cam.projection = float4x4.CreatePerspectiveFieldOfView(cam.FieldOfView, Width / (float)Height, 0.01f, 20);
-//            cam.pivot = new float3(1, -1.8f, -2.7f);
-//            _cams.Add(cam);
-
-//            //WORLD CAMERA
 //            cam = new Camera();
 //            cam.projection = float4x4.CreatePerspectiveFieldOfView(cam.FieldOfView, Width / (float)Height, 0.01f, 20);
-//            cam.Rotation = new float3((float)-PI * 0.5f, (float)PI * 0.5f, 0);
-//            cam.up = new float3(0, 1, 0);
-//            cam.target = new float3(50, 50, 50);
-//            cam.eye = new float3(0, 10, 1500);
-//            _cams.Add(cam);
-
+//            cam.Rotation = new float3((float)PI, 0, 0);
+//            cam.pivot = new float3(1, -1.8f, -2.7f);
 //            //INITIALIZE NEW GAME
 //            newGame();
-
-//            cam.Translation = new float3(-MapGenerator.mapUnits.x / 2.0f, 0, -MapGenerator.mapUnits.y / 2.0f);
 
 //            //INSTANTIATE RENDERER AND BACKBUFFER
 //            _renderer = new Renderer(RC);
@@ -79,25 +60,24 @@
 //            handleInputControls();
 
 //            //UPDATE ALL EXISTING PROJECTILES
-//            for (int i = 0; i < _projectiles.Count; i++)
+//            for (int i = 0; i < projectiles.Count; i++)
 //            {
 //                //PROJECTILE MOVEMENT
-//                _projectiles[i].update();
+//                projectiles[i].update();
 
-//                MapTile collTile = _projectiles[i].isCollided();
+//                MapTile collTile = projectiles[i].isCollided();
 
 //                //DESTRY PROJECTILE IF OUT OF MAP
-//                if (_projectiles[i].isOutOfMap())
+//                if (projectiles[i].isOutOfMap())
 //                {
-//                    SceneManager.destroyNode(SceneManager.rootNodes["projectileRoot"], _projectiles[i].container.Name);
-//                    _projectiles.RemoveAt(i);
+//                    SceneManager.destroyNode(SceneManager.rootNodes["projectileRoot"], projectiles[i].container.Name);
+//                    projectiles.RemoveAt(i);
 //                    turnEnded = true;
-//                }
-//                else if (collTile != null)
+//                } else if (collTile != null)
 //                {
 //                    projectileHitTile(collTile, 8, 50);
-//                    SceneManager.destroyNode(SceneManager.rootNodes["projectileRoot"], _projectiles[i].container.Name);
-//                    _projectiles.RemoveAt(i);
+//                    SceneManager.destroyNode(SceneManager.rootNodes["projectileRoot"], projectiles[i].container.Name);
+//                    projectiles.RemoveAt(i);
 //                    turnEnded = true;
 //                }
 //            }
@@ -115,25 +95,17 @@
 //            }
 
 //            //WATER ANIMATION PROCESS INCREMENT
-//            float newAlpha = (float)_renderer.shaderEffects["mapRoot"].GetEffectParam("alpha") + 1.8f;
+//            float newAlpha = (float) _renderer.shaderEffects["mapRoot"].GetEffectParam("alpha") + 1.8f;
 //            _renderer.shaderEffects["mapRoot"].SetEffectParam("alpha", newAlpha);
 
-//            //ADJUST VIEW FOR SPECIFIC CAMERA
-//            Camera activeCamera = _cams[activeCamId];
-//            float4x4 view;
-//            if (activeCamId == 1)
-//            {
-//                view = (activeCamera.MtxCam * activeCamera.MtxRot * activeCamera.MtxOffset) * SceneManager.sceneScale;
-//            }
-//            else
-//            {
-//                view = (activeCamera.MtxPivot * activeCamera.MtxRot * activeCamera.MtxOffset) * SceneManager.sceneScale;
-//            }
+//            //UPDATE CAMERA MOVEMENTS
+//            //cam.update();
 
 //            //UPDATE VIEW & PROJECTION
+//            float4x4 view = (cam.MtxPivot * cam.MtxRot * cam.MtxOffset) * SceneManager.sceneScale;
 //            _renderer.View = view;
 //            RC.ModelView = view;
-//            RC.Projection = activeCamera.projection;
+//            RC.Projection = cam.projection;
 
 //            //RENDER AND PRESENT
 //            _renderer.Traverse(SceneManager.scene.Children);
@@ -153,18 +125,18 @@
 //            MapGenerator.generateTerrain(12 * numberOfPlayers);
 
 //            //INITIALIZE LISTS
-//            _projectiles = new List<Projectile>();
-//            _players = new List<Bunker>();
+//            projectiles = new List<Projectile>();
+//            players = new List<Bunker>();
 
 //            //INIT AMOUNT OF PLAYERS AND BUNKERS
 //            loadPlayers(numberOfPlayers);
 
 //            //SLICE MAP INTO GRIDS DEPENDING ON AMOUNT OF PLAYER AND RETURN ZENIT TILE OF EACH GRID
-//            int grids = Max((int)Ceiling(_players.Count / 2.0f), 2);
+//            int grids = Max((int)Ceiling(players.Count / 2.0f), 2);
 //            List<MapTile> areaZenits = MapGenerator.gridMapReturnZenitTiles(grids);
 
 //            //MOUNT BUNKERS ON ZENIT TILES
-//            foreach (var player in _players)
+//            foreach (var player in players)
 //            {
 //                int randomZenit = Constants.random.Next(0, areaZenits.Count);
 //                player.mountBunkerOnTile(areaZenits[randomZenit]);
@@ -172,7 +144,7 @@
 //            }
 
 //            //MOUNT CAMERA ON ACTIVE BUNKER
-//            _cams[0].mountCameraOnBunker(_players[activePlayerId]);
+//            cam.mountCameraOnBunker(players[activePlayerId]);
 
 //            turnTime = Constants.TURN_TIME_MAX;
 //            turnEnded = false;
@@ -189,30 +161,21 @@
 //                Bunker tempBunker = new Bunker(AssetsManager.FUS_BUNKER_FILES[i]);
 
 //                //ADD BUNKER TO LIST AND SCENE
-//                _players.Add(tempBunker);
-//                SceneManager.rootNodes["bunkerRoot"].Children.Add(_players[i].scene);
+//                players.Add(tempBunker);
+//                SceneManager.rootNodes["bunkerRoot"].Children.Add(players[i].scene);
 //            }
 //        }
 
 //        private void nextPlayersTurn()
 //        {
 //            activePlayerId++;
-//            if (activePlayerId >= _players.Count)
+//            if (activePlayerId >= players.Count)
 //            {
 //                activePlayerId = 0;
 //            }
 
-//            _players[activePlayerId].ammo = 1;
-//            _cams[0].mountCameraOnBunker(_players[activePlayerId]);
-//        }
-
-//        private void switchCam()
-//        {
-//            activeCamId++;
-//            if (activeCamId >= _cams.Count)
-//            {
-//                activeCamId = 0;
-//            }
+//            players[activePlayerId].ammo = 1;
+//            cam.mountCameraOnBunker(players[activePlayerId]);
 //        }
 
 //        private void projectileHitTile(MapTile _tile, float _radius, float _strength)
@@ -223,58 +186,28 @@
 //        //HANDLE KEYBOARD & MOUSE INPUTS
 //        private void handleInputControls()
 //        {
-//            ////CAMERA ROTATION
-//            Bunker activePlayer = _players[activePlayerId];
+//            //CAMERA ROTATION
+//            Bunker activePlayer = players[activePlayerId];
 
 //            if (Mouse.LeftButton && activePlayer.ammo > 0)
 //            {
 //                //SHOOT PROJECTILE AND ADD TO LIST AND SCENE
 //                Projectile proj = activePlayer.shootProjectile();
-//                _projectiles.Add(proj);
+//                projectiles.Add(proj);
 //                SceneManager.rootNodes["projectileRoot"].Children.Add(proj.container);
 //                activePlayer.ammo--;
-//            }
-//            else if (Keyboard.IsKeyDown(KeyCodes.Space))
+//            } else if (Keyboard.IsKeyDown(KeyCodes.Space))
 //            {
 //                MapGenerator.nextTexture();
-//            }
-//            else if (Keyboard.IsKeyDown(KeyCodes.Enter))
+//            } else if (Keyboard.IsKeyDown(KeyCodes.Enter))
 //            {
 //                newGame();
 //                _renderer.randomShaderEffects();
 //            }
-//            else if (Keyboard.IsKeyDown(KeyCodes.V))
-//            {
-//                switchCam();
-//            }
 
-//            //MULTI CAMERA CONTROLS
-//            Camera activeCam = _cams[activeCamId];
-
-//            activeCam.pivot = new float3(activeCam.pivot.x + Keyboard.ADAxis, activeCam.pivot.y + Keyboard.UpDownAxis, activeCam.pivot.z + Keyboard.WSAxis);
-
-//            if (activeCamId == 0)
-//            {
-//                //ACTIVE PLAYER AND PLAYER CAMERA CONTROL
-//                activePlayer.rotatePlatform(Mouse.XVel);
-//                activePlayer.liftCannon(Mouse.YVel);
-//                activeCam.Rotation = new float3(-activePlayer.bunkerCannon.Rotation.z - (float)(PI * 1.5f), -activePlayer.bunkerPlatform.Rotation.y - (float)(PI * 1.5f), 0);
-//            }
-//            else if (activeCamId == 1)
-//            {
-//                activeCam.setCurDamp(DeltaTime);
-
-//                // Zoom & Roll
-//                activeCam.mouseWheelZoom(Mouse.WheelVel);
-
-//                // UpDown / LeftRight rotation
-//                if (Mouse.LeftButton)
-//                    activeCam.rotate(Mouse.Velocity);
-//                else
-//                    activeCam.rotateDump();
-
-//                activeCam.update();
-//            }
+//            activePlayer.rotatePlatform(Mouse.XVel);
+//            activePlayer.liftCannon(Mouse.YVel);
+//            cam.Rotation = new float3(-activePlayer.bunkerCannon.Rotation.z - (float)(PI * 1.5f), -activePlayer.bunkerPlatform.Rotation.y - (float)(PI * 1.5f), 0);
 //        }
 
 //        //IS CALLED ON WINDOW RESIZE
@@ -289,7 +222,7 @@
 //            // 0.25*PI Rad -> 45° Opening angle along the vertical direction. Horizontal opening angle is calculated based on the aspect ratio
 //            // Front clipping happens at 1 (Objects nearer than 1 world unit get clipped)
 //            // Back clipping happens at 2000 (Anything further away from the camera than 2000 world units gets clipped, polygons will be cut)
-//            _cams[activeCamId].projection = float4x4.CreatePerspectiveFieldOfView(_cams[activeCamId].FieldOfView, aspectRatio, 1, 20000);
+//            cam.projection = float4x4.CreatePerspectiveFieldOfView(cam.FieldOfView, aspectRatio, 1, 20000);
 //        }
 //    }
 //}
