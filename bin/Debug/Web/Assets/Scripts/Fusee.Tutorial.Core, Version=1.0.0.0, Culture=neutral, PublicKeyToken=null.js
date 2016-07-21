@@ -5,6 +5,38 @@ var $asm09 = JSIL.DeclareAssembly("Fusee.Tutorial.Core, Version=1.0.0.0, Culture
 JSIL.DeclareNamespace("Fusee");
 JSIL.DeclareNamespace("Fusee.Tutorial");
 JSIL.DeclareNamespace("Fusee.Tutorial.Core");
+/* class Fusee.Tutorial.Core.GUI */ 
+
+(function GUI$Members () {
+  var $, $thisType;
+
+  function GUI__ctor () {
+  }; 
+
+  JSIL.MakeType({
+      BaseType: $asm14.TypeRef("System.Object"), 
+      Name: "Fusee.Tutorial.Core.GUI", 
+      IsPublic: false, 
+      IsReferenceType: true, 
+      MaximumConstructorArguments: 0, 
+    }, function ($ib) {
+    $ = $ib;
+
+    $.Method({Static:false, Public:true }, ".ctor", 
+      JSIL.MethodSignature.Void, 
+      GUI__ctor
+    );
+
+    $.Field({Static:false, Public:true }, "container", $asm07.TypeRef("Fusee.Serialization.SceneNodeContainer"));
+
+    $.Field({Static:false, Public:true }, "transform", $asm07.TypeRef("Fusee.Serialization.TransformComponent"));
+
+
+    return function (newThisType) { $thisType = newThisType; }; 
+  });
+
+})();
+
 /* class Fusee.Tutorial.Core.Camera */ 
 
 (function Camera$Members () {
@@ -101,7 +133,11 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
   function Camera_mountCameraOnBunker (_bunker) {
     this.Translation = $T01().op_Subtraction(
       $T01().op_UnaryNegation(_bunker.bunkerBase.Translation.MemberwiseClone()).MemberwiseClone(), 
+<<<<<<< HEAD
       $S02().CallStatic($T01(), "op_Multiply", null, $S02().CallStatic($T01(), "op_Multiply", null, _bunker.bunkerPlatform.Translation.MemberwiseClone(), 0.03).MemberwiseClone(), 1.1)
+=======
+      $S03().CallStatic($T01(), "op_Multiply", null, $S03().CallStatic($T01(), "op_Multiply", null, _bunker.bunkerPlatform.Translation.MemberwiseClone(), 0.0300000012).MemberwiseClone(), 1.1)
+>>>>>>> 78b12640ffb6436f6d249003daa11150426d5b53
     );
   }; 
 
@@ -597,7 +633,7 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
                   $S06().CallVirtual("Add", null, mapTile.verticesIndicies, (((list.get_Count() | 0) - 1) | 0));
                 }
               }
-              $S07().CallVirtual("Add", null, list2, $S08().CallStatic($T1B(), "ToUInt16", null, (((((list.get_Count() | 0) + 0) | 0) - 4) | 0)));
+              $S07().CallVirtual("Add", null, list2, $S08().CallStatic($T1B(), "ToUInt16", null, (((list.get_Count() | 0) - 4) | 0)));
               $S07().CallVirtual("Add", null, list2, $S08().CallStatic($T1B(), "ToUInt16", null, (((((list.get_Count() | 0) + 1) | 0) - 4) | 0)));
               $S07().CallVirtual("Add", null, list2, $S08().CallStatic($T1B(), "ToUInt16", null, (((((list.get_Count() | 0) + 2) | 0) - 4) | 0)));
               $S07().CallVirtual("Add", null, list2, $S08().CallStatic($T1B(), "ToUInt16", null, (((((list.get_Count() | 0) + 1) | 0) - 4) | 0)));
@@ -1124,7 +1160,7 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
     this.container = $T03().projectile.cloneContainer(_id);
     this.transform = $T04().GetTransform(this.container, 0);
     this.transform.Translation = _pos.MemberwiseClone();
-    this.transform.Scale = $S00().CallStatic($T01(), "op_Multiply", null, $T01().One.MemberwiseClone(), 0.03);
+    this.transform.Scale = $S00().CallStatic($T01(), "op_Multiply", null, $T01().One.MemberwiseClone(), 0.0300000012);
   }; 
 
   function Projectile_isCollided () {
@@ -2010,52 +2046,79 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
     return ($T14 = JSIL.Memoize($asm06.Fusee.Math.Core.float4)) ();
   };
   var $T15 = function () {
-    return ($T15 = JSIL.Memoize($asm14.System.Int32)) ();
+    return ($T15 = JSIL.Memoize($asm04.Fusee.Engine.Core.GUI.GUIHandler)) ();
   };
   var $T16 = function () {
-    return ($T16 = JSIL.Memoize($asm14.System.Math)) ();
+    return ($T16 = JSIL.Memoize($asm14.System.Collections.Generic.Dictionary$b2.Of($asm14.System.String, $asm04.Fusee.Engine.Core.GUI.GUIImage))) ();
   };
   var $T17 = function () {
-    return ($T17 = JSIL.Memoize($asm14.System.String)) ();
+    return ($T17 = JSIL.Memoize($asm0F.System.Diagnostics.Debug)) ();
   };
   var $T18 = function () {
-    return ($T18 = JSIL.Memoize($asm11.System.Linq.Enumerable)) ();
+    return ($T18 = JSIL.Memoize($asm14.System.String)) ();
   };
   var $T19 = function () {
-    return ($T19 = JSIL.Memoize($asm14.System.Double)) ();
+    return ($T19 = JSIL.Memoize($asm04.Fusee.Engine.Core.GUI.GUIImage)) ();
   };
   var $T1A = function () {
-    return ($T1A = JSIL.Memoize($asm14.System.Collections.Generic.List$b1.Of($asm09.Fusee.Tutorial.Core.MapTile))) ();
+    return ($T1A = JSIL.Memoize($asm04.Fusee.Engine.Core.GUI.GUIElement)) ();
   };
   var $T1B = function () {
-    return ($T1B = JSIL.Memoize($asm14.System.Random)) ();
+    return ($T1B = JSIL.Memoize($asm14.System.Collections.Generic.Dictionary$b2.Of($asm14.System.String, $asm01.Fusee.Base.Core.Font))) ();
   };
   var $T1C = function () {
-    return ($T1C = JSIL.Memoize($asm09.Fusee.Tutorial.Core.Assets.Constants)) ();
+    return ($T1C = JSIL.Memoize($asm01.Fusee.Base.Core.Font)) ();
   };
   var $T1D = function () {
-    return ($T1D = JSIL.Memoize($asm09.Fusee.Tutorial.Core.MapTile)) ();
+    return ($T1D = JSIL.Memoize($asm04.Fusee.Engine.Core.FontMap)) ();
   };
   var $T1E = function () {
-    return ($T1E = JSIL.Memoize($asm14.System.Single)) ();
+    return ($T1E = JSIL.Memoize($asm04.Fusee.Engine.Core.GUI.GUIText)) ();
   };
   var $T1F = function () {
-    return ($T1F = JSIL.Memoize($asm06.Fusee.Math.Core.float2)) ();
+    return ($T1F = JSIL.Memoize($asm14.System.Int32)) ();
   };
   var $T20 = function () {
-    return ($T20 = JSIL.Memoize($asm03.Fusee.Engine.Common.ClearFlags)) ();
+    return ($T20 = JSIL.Memoize($asm14.System.Math)) ();
   };
   var $T21 = function () {
-    return ($T21 = JSIL.Memoize($asm07.Fusee.Serialization.SceneNodeContainer)) ();
+    return ($T21 = JSIL.Memoize($asm11.System.Linq.Enumerable)) ();
   };
   var $T22 = function () {
-    return ($T22 = JSIL.Memoize($asm04.Fusee.Engine.Core.ShaderEffect)) ();
+    return ($T22 = JSIL.Memoize($asm14.System.Double)) ();
   };
   var $T23 = function () {
-    return ($T23 = JSIL.Memoize($asm14.System.Collections.Generic.Dictionary$b2.Of($asm14.System.String, $asm04.Fusee.Engine.Core.ShaderEffect))) ();
+    return ($T23 = JSIL.Memoize($asm14.System.Collections.Generic.List$b1.Of($asm09.Fusee.Tutorial.Core.MapTile))) ();
   };
   var $T24 = function () {
-    return ($T24 = JSIL.Memoize($asm0B.Fusee.Xene.SceneVisitor)) ();
+    return ($T24 = JSIL.Memoize($asm14.System.Random)) ();
+  };
+  var $T25 = function () {
+    return ($T25 = JSIL.Memoize($asm09.Fusee.Tutorial.Core.Assets.Constants)) ();
+  };
+  var $T26 = function () {
+    return ($T26 = JSIL.Memoize($asm09.Fusee.Tutorial.Core.MapTile)) ();
+  };
+  var $T27 = function () {
+    return ($T27 = JSIL.Memoize($asm14.System.Single)) ();
+  };
+  var $T28 = function () {
+    return ($T28 = JSIL.Memoize($asm06.Fusee.Math.Core.float2)) ();
+  };
+  var $T29 = function () {
+    return ($T29 = JSIL.Memoize($asm03.Fusee.Engine.Common.ClearFlags)) ();
+  };
+  var $T2A = function () {
+    return ($T2A = JSIL.Memoize($asm07.Fusee.Serialization.SceneNodeContainer)) ();
+  };
+  var $T2B = function () {
+    return ($T2B = JSIL.Memoize($asm04.Fusee.Engine.Core.ShaderEffect)) ();
+  };
+  var $T2C = function () {
+    return ($T2C = JSIL.Memoize($asm14.System.Collections.Generic.Dictionary$b2.Of($asm14.System.String, $asm04.Fusee.Engine.Core.ShaderEffect))) ();
+  };
+  var $T2D = function () {
+    return ($T2D = JSIL.Memoize($asm0B.Fusee.Xene.SceneVisitor)) ();
   };
   var $S00 = function () {
     return ($S00 = JSIL.Memoize(new JSIL.MethodSignature(null, [$asm09.TypeRef("Fusee.Tutorial.Core.Projectile")]))) ();
@@ -2076,25 +2139,40 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
       ]))) ();
   };
   var $S04 = function () {
-    return ($S04 = JSIL.Memoize(new JSIL.MethodSignature($asm0D.TypeRef("System.Int32"), [$asm0D.TypeRef("System.Collections.Generic.IEnumerable`1", ["!!0"])], ["TSource"]))) ();
+    return ($S04 = JSIL.Memoize(new JSIL.ConstructorSignature($asm04.TypeRef("Fusee.Engine.Core.GUI.GUIHandler"), null))) ();
   };
   var $S05 = function () {
-    return ($S05 = JSIL.Memoize(new JSIL.MethodSignature(null, [$asm09.TypeRef("Fusee.Tutorial.Core.Assets.Bunker")]))) ();
+    return ($S05 = JSIL.Memoize(JSIL.MethodSignature.Action($asm0D.TypeRef("System.String")))) ();
   };
   var $S06 = function () {
-    return ($S06 = JSIL.Memoize(new JSIL.ConstructorSignature($asm14.TypeRef("System.Collections.Generic.List`1", [$asm09.TypeRef("Fusee.Tutorial.Core.Projectile")]), null))) ();
+    return ($S06 = JSIL.Memoize(new JSIL.ConstructorSignature($asm04.TypeRef("Fusee.Engine.Core.GUI.GUIText"), [
+        $asm14.TypeRef("System.String"), $asm04.TypeRef("Fusee.Engine.Core.FontMap"), 
+        $asm14.TypeRef("System.Int32"), $asm14.TypeRef("System.Int32")
+      ]))) ();
   };
   var $S07 = function () {
-    return ($S07 = JSIL.Memoize(new JSIL.ConstructorSignature($asm14.TypeRef("System.Collections.Generic.List`1", [$asm09.TypeRef("Fusee.Tutorial.Core.Assets.Bunker")]), null))) ();
+    return ($S07 = JSIL.Memoize(JSIL.MethodSignature.Action($asm04.TypeRef("Fusee.Engine.Core.GUI.GUIElement")))) ();
   };
   var $S08 = function () {
-    return ($S08 = JSIL.Memoize(new JSIL.MethodSignature($asm06.TypeRef("Fusee.Math.Core.float2"), [$asm06.TypeRef("Fusee.Math.Core.float2"), $asm14.TypeRef("System.Single")]))) ();
+    return ($S08 = JSIL.Memoize(new JSIL.MethodSignature($asm0D.TypeRef("System.Int32"), [$asm0D.TypeRef("System.Collections.Generic.IEnumerable`1", ["!!0"])], ["TSource"]))) ();
   };
   var $S09 = function () {
-    return ($S09 = JSIL.Memoize(new JSIL.MethodSignature($asm06.TypeRef("Fusee.Math.Core.float4x4"), [$asm06.TypeRef("Fusee.Math.Core.float4x4"), $asm06.TypeRef("Fusee.Math.Core.float4x4")]))) ();
+    return ($S09 = JSIL.Memoize(new JSIL.MethodSignature(null, [$asm09.TypeRef("Fusee.Tutorial.Core.Assets.Bunker")]))) ();
   };
   var $S0A = function () {
-    return ($S0A = JSIL.Memoize(JSIL.MethodSignature.Action($asm14.TypeRef("System.Collections.Generic.IEnumerable`1", [$asm07.TypeRef("Fusee.Serialization.SceneNodeContainer")])))) ();
+    return ($S0A = JSIL.Memoize(new JSIL.ConstructorSignature($asm14.TypeRef("System.Collections.Generic.List`1", [$asm09.TypeRef("Fusee.Tutorial.Core.Projectile")]), null))) ();
+  };
+  var $S0B = function () {
+    return ($S0B = JSIL.Memoize(new JSIL.ConstructorSignature($asm14.TypeRef("System.Collections.Generic.List`1", [$asm09.TypeRef("Fusee.Tutorial.Core.Assets.Bunker")]), null))) ();
+  };
+  var $S0C = function () {
+    return ($S0C = JSIL.Memoize(new JSIL.MethodSignature($asm06.TypeRef("Fusee.Math.Core.float2"), [$asm06.TypeRef("Fusee.Math.Core.float2"), $asm14.TypeRef("System.Single")]))) ();
+  };
+  var $S0D = function () {
+    return ($S0D = JSIL.Memoize(new JSIL.MethodSignature($asm06.TypeRef("Fusee.Math.Core.float4x4"), [$asm06.TypeRef("Fusee.Math.Core.float4x4"), $asm06.TypeRef("Fusee.Math.Core.float4x4")]))) ();
+  };
+  var $S0E = function () {
+    return ($S0E = JSIL.Memoize(JSIL.MethodSignature.Action($asm14.TypeRef("System.Collections.Generic.IEnumerable`1", [$asm07.TypeRef("Fusee.Serialization.SceneNodeContainer")])))) ();
   };
 
 
@@ -2144,16 +2222,41 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
     this.newGame();
     this._renderer = new ($T0E())(this.RenderCanvas$RC$value);
     (this.RenderCanvas$RC$value.ClearColor = $S03().Construct(0.8, 0.8, 1, 1));
+    this.set_Width(1600);
+    this.set_Height(900);
+    this._guiHandler = $S04().Construct();
+    (this._guiHandler).AttachToContext(this.RenderCanvas$RC$value);
+    this._guiCrossHair = $T10().guiImages.get_Item("crosshairTexture");
+    $S05().CallStatic($T17(), "WriteLine", null, JSIL.ConcatString("_guiCrossHair: ", this._guiCrossHair));
+    (this._guiCrossHair).set_PosX(200);
+    (this._guiCrossHair).set_PosY(500);
+    this._guiFont = $T10().fonts.get_Item("Army");
+    (this._guiFont).set_UseKerning(true);
+    this._guiFontMap = new ($T1D())(this._guiFont, 20, null);
+    this._guiTextHealth = $S06().Construct("100", this._guiFontMap, 30, 30);
+    (this._guiTextHealth.TextColor = $S03().Construct(1, 1, 1, 1));
+    this._guiTextPlayer = $S06().Construct("Player X", this._guiFontMap, 30, 60);
+    (this._guiTextPlayer.TextColor = $S03().Construct(1, 1, 1, 1));
+    this._guiTextShotPower = $S06().Construct("0", this._guiFontMap, 30, 90);
+    (this._guiTextShotPower.TextColor = $S03().Construct(1, 1, 1, 1));
+    $S07().CallVirtual("Add", null, this._guiHandler, this._guiTextHealth);
+    $S07().CallVirtual("Add", null, this._guiHandler, this._guiTextPlayer);
+    $S07().CallVirtual("Add", null, this._guiHandler, this._guiTextShotPower);
   }; 
 
   function Tutorial_loadPlayers (numberOfPlayers) {
-    numberOfPlayers = ($T16().Max(1, numberOfPlayers) | 0);
-    numberOfPlayers = ($T16().Min($S04().CallStatic($T18(), "Count$b1", [$asm14.System.String], $T10().FUS_BUNKER_FILES), numberOfPlayers) | 0);
+    numberOfPlayers = ($T20().Max(1, numberOfPlayers) | 0);
+    numberOfPlayers = ($T20().Min($S08().CallStatic($T21(), "Count$b1", [$asm14.System.String], $T10().FUS_BUNKER_FILES), numberOfPlayers) | 0);
 
     for (var i = 0; i < (numberOfPlayers | 0); i = ((i + 1) | 0)) {
       var item = new ($T01())($T10().FUS_BUNKER_FILES[i]);
+<<<<<<< HEAD
       $S05().CallVirtual("Add", null, this._players, item);
       $S01().CallVirtual("Add", null, $T0A().rootNodes.get_Item("bunkerRoot").Children, (this._players).get_Item(i).scene);
+=======
+      $S09().CallVirtual("Add", null, this.players, item);
+      $S01().CallVirtual("Add", null, $T0A().rootNodes.get_Item("bunkerRoot").Children, (this.players).get_Item(i).scene);
+>>>>>>> 78b12640ffb6436f6d249003daa11150426d5b53
     }
   }; 
 
@@ -2163,18 +2266,26 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
     $T0A().addRootNode("mapRoot", $T0D().instantiatePlaneMap());
     $T0A().addRootNode("bunkerRoot", $T0A().createEmptySceneNode("", true));
     $T0A().addRootNode("projectileRoot", $T0A().createEmptySceneNode("", true));
+    $T0A().addRootNode("guiRoot", $T0A().createEmptySceneNode("", true));
     $T0D().generateTerrain(Math.imul(12, this.numberOfPlayers));
+<<<<<<< HEAD
     this._projectiles = $S06().Construct();
     this._players = $S07().Construct();
     this.loadPlayers(this.numberOfPlayers);
     var grids = ($T16().Max(((Math.ceil(+(+((this._players).get_Count()) / 2))) | 0), 2) | 0);
+=======
+    this.projectiles = $S0A().Construct();
+    this.players = $S0B().Construct();
+    this.loadPlayers(this.numberOfPlayers);
+    var grids = ($T20().Max(((Math.ceil(+(+((this.players).get_Count()) / 2))) | 0), 2) | 0);
+>>>>>>> 78b12640ffb6436f6d249003daa11150426d5b53
     var list = $T0D().gridMapReturnZenitTiles(grids);
 
     for (var a$0 = this._players._items, i$0 = 0, l$0 = (this._players._size | 0); i$0 < l$0; ($temp00 = i$0, 
         i$0 = ((i$0 + 1) | 0), 
         $temp00)) {
       var current = a$0[i$0];
-      var index = ($T1C().random.Next(0, list.get_Count()) | 0);
+      var index = ($T25().random.Next(0, list.get_Count()) | 0);
       current.mountBunkerOnTile(list.get_Item(index));
       list.RemoveAt(index);
     }
@@ -2194,18 +2305,26 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
   }; 
 
   function Tutorial_projectileHitTile (_tile, _radius, _strength) {
-    $T0D().createHillAt(_tile.index, -_strength, $S08().CallStatic($T1F(), "op_Multiply", null, $T1F().One.MemberwiseClone(), _radius), true);
+    $T0D().createHillAt(_tile.index, -_strength, $S0C().CallStatic($T28(), "op_Multiply", null, $T28().One.MemberwiseClone(), _radius), true);
   }; 
 
   function Tutorial_RenderAFrame () {
-    (this.RenderCanvas$RC$value).Clear($T20().$Flags("Color", "Depth"));
+    (this.RenderCanvas$RC$value).Clear($T29().$Flags("Color", "Depth"));
     this.handleInputControls();
 
+<<<<<<< HEAD
     for (var i = 0; i < ((this._projectiles).get_Count() | 0); i = ((i + 1) | 0)) {
       ((this._projectiles).get_Item(i)).update();
       var mapTile = ((this._projectiles).get_Item(i)).isCollided();
       if (((this._projectiles).get_Item(i)).isOutOfMap()) {
         $T0A().destroyNode$b1($T21())(
+=======
+    for (var i = 0; i < ((this.projectiles).get_Count() | 0); i = ((i + 1) | 0)) {
+      ((this.projectiles).get_Item(i)).update();
+      var mapTile = ((this.projectiles).get_Item(i)).isCollided();
+      if (((this.projectiles).get_Item(i)).isOutOfMap()) {
+        $T0A().destroyNode$b1($T2A())(
+>>>>>>> 78b12640ffb6436f6d249003daa11150426d5b53
           $T0A().rootNodes.get_Item("projectileRoot"), 
           (this._projectiles).get_Item(i).container.Name
         );
@@ -2214,7 +2333,7 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
       } else {
         if (mapTile !== null) {
           this.projectileHitTile(mapTile, 8, 50);
-          $T0A().destroyNode$b1($T21())(
+          $T0A().destroyNode$b1($T2A())(
             $T0A().rootNodes.get_Item("projectileRoot"), 
             (this._projectiles).get_Item(i).container.Name
           );
@@ -2232,10 +2351,18 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
     if (flag4) {
       this.turnTime = (((this.turnTime | 0) - 1) | 0);
     }
+<<<<<<< HEAD
     var num = $T1E().$Cast(((this._renderer.shaderEffects).get_Item("mapRoot")).GetEffectParam("alpha")) + 1.8;
     ((this._renderer.shaderEffects).get_Item("mapRoot")).SetEffectParam("alpha", $T1E().$Box(num));
     var float4x = $S09().CallStatic($T12(), "op_Multiply", null, $S09().CallStatic($T12(), "op_Multiply", null, 
         $S09().CallStatic($T12(), "op_Multiply", null, 
+=======
+    var num = $T27().$Cast(((this._renderer.shaderEffects).get_Item("mapRoot")).GetEffectParam("alpha")) + 1.8;
+    ((this._renderer.shaderEffects).get_Item("mapRoot")).SetEffectParam("alpha", $T27().$Box(num));
+    (this.cam).update();
+    var float4x = $S0D().CallStatic($T12(), "op_Multiply", null, $S0D().CallStatic($T12(), "op_Multiply", null, 
+        $S0D().CallStatic($T12(), "op_Multiply", null, 
+>>>>>>> 78b12640ffb6436f6d249003daa11150426d5b53
           (this.cam).get_MtxPivot().MemberwiseClone(), 
           (this.cam).get_MtxRot().MemberwiseClone()
         ).MemberwiseClone(), 
@@ -2244,7 +2371,7 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
     this._renderer.View = float4x.MemberwiseClone();
     (this.RenderCanvas$RC$value.ModelView = float4x.MemberwiseClone());
     (this.RenderCanvas$RC$value.Projection = this.cam.projection.MemberwiseClone());
-    $S0A().CallVirtual("Traverse", null, this._renderer, $T0A().scene.Children);
+    $S0E().CallVirtual("Traverse", null, this._renderer, $T0A().scene.Children);
     this.Present();
   }; 
 
@@ -2342,6 +2469,20 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core");
 
     $.Field({Static:false, Public:false}, "turnEnded", $.Boolean);
 
+    $.Field({Static:false, Public:false}, "_guiHandler", $asm04.TypeRef("Fusee.Engine.Core.GUI.GUIHandler"));
+
+    $.Field({Static:false, Public:false}, "_guiFont", $asm01.TypeRef("Fusee.Base.Core.Font"));
+
+    $.Field({Static:false, Public:false}, "_guiFontMap", $asm04.TypeRef("Fusee.Engine.Core.FontMap"));
+
+    $.Field({Static:false, Public:false}, "_guiTextPlayer", $asm04.TypeRef("Fusee.Engine.Core.GUI.GUIText"));
+
+    $.Field({Static:false, Public:false}, "_guiTextHealth", $asm04.TypeRef("Fusee.Engine.Core.GUI.GUIText"));
+
+    $.Field({Static:false, Public:false}, "_guiTextShotPower", $asm04.TypeRef("Fusee.Engine.Core.GUI.GUIText"));
+
+    $.Field({Static:false, Public:false}, "_guiCrossHair", $asm04.TypeRef("Fusee.Engine.Core.GUI.GUIImage"));
+
 
     return function (newThisType) { $thisType = newThisType; }; 
   })
@@ -2376,34 +2517,46 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core.Assets");
     return ($T06 = JSIL.Memoize($asm14.System.Collections.Generic.Dictionary$b2.Of($asm14.System.String, $asm09.Fusee.Tutorial.Core.TextureImage))) ();
   };
   var $T07 = function () {
-    return ($T07 = JSIL.Memoize($asm14.System.Collections.Generic.Dictionary$b2.Of($asm14.System.String, $asm14.System.String))) ();
+    return ($T07 = JSIL.Memoize($asm14.System.Collections.Generic.Dictionary$b2.Of($asm14.System.String, $asm04.Fusee.Engine.Core.GUI.GUIImage))) ();
   };
   var $T08 = function () {
-    return ($T08 = JSIL.Memoize(System.Array.Of($asm14.System.String))) ();
+    return ($T08 = JSIL.Memoize($asm14.System.Collections.Generic.Dictionary$b2.Of($asm14.System.String, $asm01.Fusee.Base.Core.Font))) ();
   };
   var $T09 = function () {
-    return ($T09 = JSIL.Memoize($asm14.System.Int32)) ();
+    return ($T09 = JSIL.Memoize($asm14.System.Collections.Generic.Dictionary$b2.Of($asm14.System.String, $asm14.System.String))) ();
   };
   var $T0A = function () {
-    return ($T0A = JSIL.Memoize($asm07.Fusee.Serialization.SceneNodeContainer)) ();
+    return ($T0A = JSIL.Memoize(System.Array.Of($asm14.System.String))) ();
   };
   var $T0B = function () {
-    return ($T0B = JSIL.Memoize($asm14.System.Collections.Generic.List$b1.Of($asm07.Fusee.Serialization.SceneNodeContainer))) ();
+    return ($T0B = JSIL.Memoize($asm14.System.Int32)) ();
   };
   var $T0C = function () {
-    return ($T0C = JSIL.Memoize($asm07.Fusee.Serialization.SceneContainer)) ();
+    return ($T0C = JSIL.Memoize($asm07.Fusee.Serialization.SceneNodeContainer)) ();
   };
   var $T0D = function () {
-    return ($T0D = JSIL.Memoize($asm00.Fusee.Base.Common.ImageData)) ();
+    return ($T0D = JSIL.Memoize($asm14.System.Collections.Generic.List$b1.Of($asm07.Fusee.Serialization.SceneNodeContainer))) ();
   };
   var $T0E = function () {
-    return ($T0E = JSIL.Memoize($asm09.Fusee.Tutorial.Core.TextureImage)) ();
+    return ($T0E = JSIL.Memoize($asm07.Fusee.Serialization.SceneContainer)) ();
   };
   var $T0F = function () {
-    return ($T0F = JSIL.Memoize($asm09.Fusee.Tutorial.Core.Assets.ContainerClone)) ();
+    return ($T0F = JSIL.Memoize($asm00.Fusee.Base.Common.ImageData)) ();
   };
   var $T10 = function () {
-    return ($T10 = JSIL.Memoize($asm14.System.Boolean)) ();
+    return ($T10 = JSIL.Memoize($asm09.Fusee.Tutorial.Core.TextureImage)) ();
+  };
+  var $T11 = function () {
+    return ($T11 = JSIL.Memoize($asm04.Fusee.Engine.Core.GUI.GUIImage)) ();
+  };
+  var $T12 = function () {
+    return ($T12 = JSIL.Memoize($asm01.Fusee.Base.Core.Font)) ();
+  };
+  var $T13 = function () {
+    return ($T13 = JSIL.Memoize($asm09.Fusee.Tutorial.Core.Assets.ContainerClone)) ();
+  };
+  var $T14 = function () {
+    return ($T14 = JSIL.Memoize($asm14.System.Boolean)) ();
   };
   var $S00 = function () {
     return ($S00 = JSIL.Memoize(new JSIL.ConstructorSignature($asm14.TypeRef("System.Collections.Generic.List`1", [$asm14.TypeRef("System.String")]), null))) ();
@@ -2418,7 +2571,20 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core.Assets");
     return ($S03 = JSIL.Memoize(new JSIL.ConstructorSignature($asm14.TypeRef("System.Collections.Generic.Dictionary`2", [$asm14.TypeRef("System.String"), $asm09.TypeRef("Fusee.Tutorial.Core.TextureImage")]), null))) ();
   };
   var $S04 = function () {
-    return ($S04 = JSIL.Memoize(new JSIL.ConstructorSignature($asm14.TypeRef("System.Collections.Generic.Dictionary`2", [$asm14.TypeRef("System.String"), $asm14.TypeRef("System.String")]), null))) ();
+    return ($S04 = JSIL.Memoize(new JSIL.ConstructorSignature($asm14.TypeRef("System.Collections.Generic.Dictionary`2", [$asm14.TypeRef("System.String"), $asm04.TypeRef("Fusee.Engine.Core.GUI.GUIImage")]), null))) ();
+  };
+  var $S05 = function () {
+    return ($S05 = JSIL.Memoize(new JSIL.ConstructorSignature($asm14.TypeRef("System.Collections.Generic.Dictionary`2", [$asm14.TypeRef("System.String"), $asm01.TypeRef("Fusee.Base.Core.Font")]), null))) ();
+  };
+  var $S06 = function () {
+    return ($S06 = JSIL.Memoize(new JSIL.ConstructorSignature($asm14.TypeRef("System.Collections.Generic.Dictionary`2", [$asm14.TypeRef("System.String"), $asm14.TypeRef("System.String")]), null))) ();
+  };
+  var $S07 = function () {
+    return ($S07 = JSIL.Memoize(new JSIL.ConstructorSignature($asm04.TypeRef("Fusee.Engine.Core.GUI.GUIImage"), [
+        $asm00.TypeRef("Fusee.Base.Common.ImageData"), $asm14.TypeRef("System.Int32"), 
+        $asm14.TypeRef("System.Int32"), $asm14.TypeRef("System.Int32"), 
+        $asm14.TypeRef("System.Int32")
+      ]))) ();
   };
 
 
@@ -2449,21 +2615,31 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core.Assets");
         id = (("Textures/Landscape/" + _filename + ".png"));
         break;
 
+      case 6: 
+        id = (("Textures/GUI/" + _filename + ".png"));
+        break;
+
+      case 7: 
+        id = (("Fonts/" + _filename + ".ttf"));
+        break;
+
     }
     return $T04().Get$b1(T)(id);
   }; 
 
   function AssetsManager_loadGameAssets () {
-    var $temp00, $temp01, $temp02, $temp03;
+    var $temp00, $temp01, $temp02, $temp03, $temp04, $temp05;
     $thisType.fusFiles = $S02().Construct();
     $thisType.textures = $S03().Construct();
-    $thisType.shaders_pix = $S04().Construct();
-    $thisType.shaders_vert = $S04().Construct();
+    $thisType.guiImages = $S04().Construct();
+    $thisType.fonts = $S05().Construct();
+    $thisType.shaders_pix = $S06().Construct();
+    $thisType.shaders_vert = $S06().Construct();
     var fUS_BUNKER_FILES = $thisType.FUS_BUNKER_FILES;
 
     for (var i = 0; i < (fUS_BUNKER_FILES.length | 0); i = ((i + 1) | 0)) {
       var text = fUS_BUNKER_FILES[i];
-      var sceneNodeContainer = ($thisType.loadAsset$b1($T0C())($T03().FUS_BUNKER, text).Children).get_Item(0);
+      var sceneNodeContainer = ($thisType.loadAsset$b1($T0E())($T03().FUS_BUNKER, text).Children).get_Item(0);
       $thisType.renameNodesRecursively(sceneNodeContainer, "", JSIL.ConcatString("_", text));
       $thisType.fusFiles.Add(text, sceneNodeContainer);
     }
@@ -2471,16 +2647,16 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core.Assets");
 
     for (var j = 0; j < (fUS_SKY_FILES.length | 0); j = ((j + 1) | 0)) {
       var text2 = fUS_SKY_FILES[j];
-      $thisType.fusFiles.Add(text2, ($thisType.loadAsset$b1($T0C())($T03().FUS_DIVERSE, text2).Children).get_Item(0));
+      $thisType.fusFiles.Add(text2, ($thisType.loadAsset$b1($T0E())($T03().FUS_DIVERSE, text2).Children).get_Item(0));
     }
 
     for (var a$0 = $thisType.TEXTURE_SKY_FILES._items, i$0 = 0, l$0 = ($thisType.TEXTURE_SKY_FILES._size | 0); i$0 < l$0; ($temp00 = i$0, 
         i$0 = ((i$0 + 1) | 0), 
         $temp00)) {
       var current = a$0[i$0];
-      var src = $thisType.loadAsset$b1($T0D())($T03().TEXTURE_SKY, current);
+      var src = $thisType.loadAsset$b1($T0F())($T03().TEXTURE_SKY, current);
       var path = (("Textures/Sky/" + current + ".png"));
-      var value = new ($T0E())(src.MemberwiseClone(), current, path);
+      var value = new ($T10())(src.MemberwiseClone(), current, path);
       $thisType.textures.Add(current, value);
     }
 
@@ -2488,32 +2664,49 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core.Assets");
         i$1 = ((i$1 + 1) | 0), 
         $temp01)) {
       var current2 = a$1[i$1];
-      var src2 = $thisType.loadAsset$b1($T0D())($T03().TEXTURE_MAP, current2);
+      var src2 = $thisType.loadAsset$b1($T0F())($T03().TEXTURE_MAP, current2);
       var path2 = (("Textures/Landscape/" + current2 + ".png"));
-      var value2 = new ($T0E())(src2.MemberwiseClone(), current2, path2);
+      var value2 = new ($T10())(src2.MemberwiseClone(), current2, path2);
       $thisType.textures.Add(current2, value2);
     }
 
-    for (var a$2 = $thisType.SHADER_PIX_FILES._items, i$2 = 0, l$2 = ($thisType.SHADER_PIX_FILES._size | 0); i$2 < l$2; ($temp02 = i$2, 
+    for (var a$2 = $thisType.TEXTURE_GUI_FILES._items, i$2 = 0, l$2 = ($thisType.TEXTURE_GUI_FILES._size | 0); i$2 < l$2; ($temp02 = i$2, 
         i$2 = ((i$2 + 1) | 0), 
         $temp02)) {
       var current3 = a$2[i$2];
-      $thisType.shaders_pix.Add(current3, $thisType.loadAsset$b1($T01())($T03().SHADER_PIX, current3));
+      var imageData = $thisType.loadAsset$b1($T0F())($T03().TEXTURE_GUI, current3);
+      var value3 = $S07().Construct(imageData.MemberwiseClone(), 0, 0, imageData.Width, imageData.Height);
+      $thisType.guiImages.Add(current3, value3);
     }
 
-    for (var a$3 = $thisType.SHADER_VERT_FILES._items, i$3 = 0, l$3 = ($thisType.SHADER_VERT_FILES._size | 0); i$3 < l$3; ($temp03 = i$3, 
+    for (var a$3 = $thisType.FONT_FILES._items, i$3 = 0, l$3 = ($thisType.FONT_FILES._size | 0); i$3 < l$3; ($temp03 = i$3, 
         i$3 = ((i$3 + 1) | 0), 
         $temp03)) {
       var current4 = a$3[i$3];
-      $thisType.shaders_vert.Add(current4, $thisType.loadAsset$b1($T01())($T03().SHADER_VERT, current4));
+      var value4 = $thisType.loadAsset$b1($T12())($T03().FONTS, current4);
+      $thisType.fonts.Add(current4, value4);
+    }
+
+    for (var a$4 = $thisType.SHADER_PIX_FILES._items, i$4 = 0, l$4 = ($thisType.SHADER_PIX_FILES._size | 0); i$4 < l$4; ($temp04 = i$4, 
+        i$4 = ((i$4 + 1) | 0), 
+        $temp04)) {
+      var current5 = a$4[i$4];
+      $thisType.shaders_pix.Add(current5, $thisType.loadAsset$b1($T01())($T03().SHADER_PIX, current5));
+    }
+
+    for (var a$5 = $thisType.SHADER_VERT_FILES._items, i$5 = 0, l$5 = ($thisType.SHADER_VERT_FILES._size | 0); i$5 < l$5; ($temp05 = i$5, 
+        i$5 = ((i$5 + 1) | 0), 
+        $temp05)) {
+      var current6 = a$5[i$5];
+      $thisType.shaders_vert.Add(current6, $thisType.loadAsset$b1($T01())($T03().SHADER_VERT, current6));
     }
     var fUS_DIVERSE_FILES = $thisType.FUS_DIVERSE_FILES;
 
     for (var k = 0; k < (fUS_DIVERSE_FILES.length | 0); k = ((k + 1) | 0)) {
       var text3 = fUS_DIVERSE_FILES[k];
-      $thisType.fusFiles.Add(text3, ($thisType.loadAsset$b1($T0C())($T03().FUS_DIVERSE, text3).Children).get_Item(0));
+      $thisType.fusFiles.Add(text3, ($thisType.loadAsset$b1($T0E())($T03().FUS_DIVERSE, text3).Children).get_Item(0));
     }
-    $thisType.projectile = new ($T0F())($thisType.FUS_DIVERSE_FILES[0]);
+    $thisType.projectile = new ($T13())($thisType.FUS_DIVERSE_FILES[0]);
   }; 
 
   function AssetsManager_renameNodesRecursively (elem, _prefix, _appendix) {
@@ -2557,6 +2750,10 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core.Assets");
 
     $.Constant({Static:true , Public:false}, "TEXTURE_MAPS_FILEPATH", $.String, "Textures/Landscape/");
 
+    $.Constant({Static:true , Public:false}, "TEXTURE_GUI_FILEPATH", $.String, "Textures/GUI/");
+
+    $.Constant({Static:true , Public:false}, "FONTS_FILEPATH", $.String, "Fonts/");
+
     $.Constant({Static:true , Public:false}, "SHADERS_FILEPATH", $.String, "Shaders/");
 
     $.Constant({Static:true , Public:false}, "FUS_BUNKERS_FILEPATH", $.String, "Fus/Bunkers/");
@@ -2571,6 +2768,10 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core.Assets");
 
     $.Field({Static:true , Public:true , ReadOnly:true }, "TEXTURE_SKY_FILES", $asm14.TypeRef("System.Collections.Generic.List`1", [$.String]));
 
+    $.Field({Static:true , Public:true , ReadOnly:true }, "TEXTURE_GUI_FILES", $asm14.TypeRef("System.Collections.Generic.List`1", [$.String]));
+
+    $.Field({Static:true , Public:true , ReadOnly:true }, "FONT_FILES", $asm14.TypeRef("System.Collections.Generic.List`1", [$.String]));
+
     $.Field({Static:true , Public:true , ReadOnly:true }, "FUS_BUNKER_FILES", $jsilcore.TypeRef("System.Array", [$.String]));
 
     $.Field({Static:true , Public:false, ReadOnly:true }, "FUS_SKY_FILES", $jsilcore.TypeRef("System.Array", [$.String]));
@@ -2580,6 +2781,10 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core.Assets");
     $.Field({Static:true , Public:true }, "fusFiles", $asm14.TypeRef("System.Collections.Generic.Dictionary`2", [$.String, $asm07.TypeRef("Fusee.Serialization.SceneNodeContainer")]));
 
     $.Field({Static:true , Public:true }, "textures", $asm14.TypeRef("System.Collections.Generic.Dictionary`2", [$.String, $asm09.TypeRef("Fusee.Tutorial.Core.TextureImage")]));
+
+    $.Field({Static:true , Public:true }, "guiImages", $asm14.TypeRef("System.Collections.Generic.Dictionary`2", [$.String, $asm04.TypeRef("Fusee.Engine.Core.GUI.GUIImage")]));
+
+    $.Field({Static:true , Public:true }, "fonts", $asm14.TypeRef("System.Collections.Generic.Dictionary`2", [$.String, $asm01.TypeRef("Fusee.Base.Core.Font")]));
 
     $.Field({Static:true , Public:true }, "shaders_pix", $asm14.TypeRef("System.Collections.Generic.Dictionary`2", [$.String, $.String]));
 
@@ -2608,6 +2813,12 @@ JSIL.DeclareNamespace("Fusee.Tutorial.Core.Assets");
       $S01().CallVirtual("Add", null, expr_8F, "sky_6");
       $S01().CallVirtual("Add", null, expr_8F, "sky_8");
       $thisType.TEXTURE_SKY_FILES = expr_8F;
+      var expr_B1 = $S00().Construct();
+      $S01().CallVirtual("Add", null, expr_B1, "crosshairTexture");
+      $thisType.TEXTURE_GUI_FILES = expr_B1;
+      var expr_C7 = $S00().Construct();
+      $S01().CallVirtual("Add", null, expr_C7, "Army, Cabin-Regular");
+      $thisType.FONT_FILES = expr_C7;
       $thisType.FUS_BUNKER_FILES = JSIL.Array.New($T01(), ["Bunker_white", "Bunker_pink", "Bunker_yellow", "Bunker_green", "Bunker_blue", "Bunker_red"]);
       $thisType.FUS_SKY_FILES = JSIL.Array.New($T01(), ["360Sky"]);
       $thisType.FUS_DIVERSE_FILES = JSIL.Array.New($T01(), ["projectile", "Cylinder"]);
@@ -2640,6 +2851,8 @@ JSIL.MakeEnum(
     SHADER_PIX: 3, 
     FUS_BUNKER: 4, 
     TEXTURE_MAP: 5, 
+    TEXTURE_GUI: 6, 
+    FONTS: 7, 
   }
 );
 
@@ -2727,9 +2940,9 @@ JSIL.MakeEnum(
 
     $.Constant({Static:true , Public:true }, "GRAVITY", $.Single, -0.1);
 
-    $.Constant({Static:true , Public:true }, "BUNKER_SCALE", $.Single, 0.03);
+    $.Constant({Static:true , Public:true }, "BUNKER_SCALE", $.Single, 0.0300000012);
 
-    $.Constant({Static:true , Public:true }, "PROJECTILE_SCALE", $.Single, 0.03);
+    $.Constant({Static:true , Public:true }, "PROJECTILE_SCALE", $.Single, 0.0300000012);
 
     $.Constant({Static:true , Public:true }, "TURN_TIME_MAX", $.Int32, 100);
 
@@ -2944,7 +3157,7 @@ JSIL.MakeEnum(
          ? $T08().GetTransform(expr_A0, 0)
          : null)
     ;
-    this.bunkerBase.Scale = $S05().CallStatic($T09(), "op_Multiply", null, $T09().One.MemberwiseClone(), 0.03);
+    this.bunkerBase.Scale = $S05().CallStatic($T09(), "op_Multiply", null, $T09().One.MemberwiseClone(), 0.0300000012);
     this.shootForce = 10;
     this.ammo = 1;
     this._rotateSpeed = 0.0001;
@@ -2980,7 +3193,7 @@ JSIL.MakeEnum(
   }; 
 
   function Bunker_shootProjectile () {
-    var pos = $T09().op_Addition($T09().op_Addition(this.bunkerBase.Translation.MemberwiseClone(), $S05().CallStatic($T09(), "op_Multiply", null, $S05().CallStatic($T09(), "op_Multiply", null, this.bunkerPlatform.Translation.MemberwiseClone(), 0.03).MemberwiseClone(), 1.1)).MemberwiseClone(), $S06().Construct(0, 0, 0));
+    var pos = $T09().op_Addition($T09().op_Addition(this.bunkerBase.Translation.MemberwiseClone(), $S05().CallStatic($T09(), "op_Multiply", null, $S05().CallStatic($T09(), "op_Multiply", null, this.bunkerPlatform.Translation.MemberwiseClone(), 0.0300000012).MemberwiseClone(), 1.1)).MemberwiseClone(), $S06().Construct(0, 0, 0));
     var projectile = new ($T0D())($T0E().projectile_Count, pos.MemberwiseClone());
     $T0E().projectile_Count = ((($T0E().projectile_Count | 0) + 1) | 0);
     var float = $T0E().angleToVector(+this.bunkerPlatform.Rotation.y + 3.14159274);

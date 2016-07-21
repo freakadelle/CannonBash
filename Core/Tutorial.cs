@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#define GUI_SIMPLE
+using System.Collections.Generic;
 using System.Linq;
 using Fusee.Engine.Common;
 using Fusee.Engine.Core;
@@ -6,7 +7,14 @@ using Fusee.Math.Core;
 using Fusee.Tutorial.Core.Assets;
 using static System.Math;
 using static Fusee.Engine.Core.Input;
+<<<<<<< HEAD
 using static Fusee.Engine.Core.Time;
+=======
+using Fusee.Base.Core;
+#if GUI_SIMPLE
+using Fusee.Engine.Core.GUI;
+#endif
+>>>>>>> 78b12640ffb6436f6d249003daa11150426d5b53
 
 namespace Fusee.Tutorial.Core
 {
@@ -36,6 +44,16 @@ namespace Fusee.Tutorial.Core
         private int turnTime;
         private bool turnEnded;
 
+        #if GUI_SIMPLE
+        private GUIHandler _guiHandler;
+        private Font _guiFont;
+        private FontMap _guiFontMap;
+        private GUIText _guiTextPlayer;
+        private GUIText _guiTextHealth;
+        private GUIText _guiTextShotPower;
+
+        private GUIImage _guiCrossHair;
+        #endif
         //INIT IS CALLED ON STARTUP
         public override void Init()
         {
@@ -53,6 +71,37 @@ namespace Fusee.Tutorial.Core
             //INSTANTIATE RENDERER AND BACKBUFFER
             _renderer = new Renderer(RC);
             RC.ClearColor = new float4(0.8f, 0.8f, 1f, 1);
+
+            // INSTANTIATE GUI
+            Width = 1600;
+            Height = 900;
+            
+            #if GUI_SIMPLE
+            _guiHandler = new GUIHandler();
+            _guiHandler.AttachToContext(RC);
+
+            _guiCrossHair = AssetsManager.guiImages["crosshairTexture"];
+            System.Diagnostics.Debug.WriteLine("_guiCrossHair: " + _guiCrossHair);
+            _guiCrossHair.PosX = 200;
+            _guiCrossHair.PosY = 500;
+
+            _guiFont = AssetsManager.fonts["Army"];
+            _guiFont.UseKerning = true;
+            _guiFontMap = new FontMap(_guiFont, 20);
+
+            _guiTextHealth = new GUIText("100", _guiFontMap, 30, 30);
+            _guiTextHealth.TextColor = new float4(1, 1, 1, 1);
+
+            _guiTextPlayer = new GUIText("Player X", _guiFontMap, 30, 60);
+            _guiTextPlayer.TextColor = new float4(1, 1, 1, 1);
+
+            _guiTextShotPower = new GUIText("0", _guiFontMap, 30, 90);
+            _guiTextShotPower.TextColor = new float4(1, 1, 1, 1);
+
+            _guiHandler.Add(_guiTextHealth);
+            _guiHandler.Add(_guiTextPlayer);
+            _guiHandler.Add(_guiTextShotPower);
+            #endif
         }
 
         //RenderAFrame is called once a frame
@@ -128,6 +177,7 @@ namespace Fusee.Tutorial.Core
             SceneManager.addRootNode("mapRoot", MapGenerator.instantiatePlaneMap());
             SceneManager.addRootNode("bunkerRoot", SceneManager.createEmptySceneNode());
             SceneManager.addRootNode("projectileRoot", SceneManager.createEmptySceneNode());
+            SceneManager.addRootNode("guiRoot", SceneManager.createEmptySceneNode());
 
             //TERRAIN GENERATION - HILLS
             MapGenerator.generateTerrain(12 * numberOfPlayers);

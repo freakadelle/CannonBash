@@ -1,8 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Paths>
   <Jars></Jars>
-  <ResolvedResourceDirectories />
-  <ResolvedAssetDirectories />
+  <ResolvedResourceDirectories>
+    <ResolvedResourceDirectory>C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Android\Debug\__library_projects__\Fusee.Base.Imp.Android\library_project_imports\res</ResolvedResourceDirectory>
+    <ResolvedResourceDirectory>C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Android\Debug\__library_projects__\Fusee.Engine.Imp.Graphics.Android\library_project_imports\res</ResolvedResourceDirectory>
+  </ResolvedResourceDirectories>
+  <ResolvedAssetDirectories>
+    <ResolvedAssetDirectory>C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Android\Debug\__library_projects__\Fusee.Base.Imp.Android\library_project_imports\assets</ResolvedAssetDirectory>
+    <ResolvedAssetDirectory>C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Android\Debug\__library_projects__\Fusee.Engine.Imp.Graphics.Android\library_project_imports\assets</ResolvedAssetDirectory>
+  </ResolvedAssetDirectories>
   <ResolvedEnvironmentFiles />
-  <ResolvedResourceDirectoryStamps />
+  <ResolvedResourceDirectoryStamps>
+    <ResolvedResourceDirectoryStamp>C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Android\Debug\__library_projects__\Fusee.Base.Imp.Android.stamp</ResolvedResourceDirectoryStamp>
+    <ResolvedResourceDirectoryStamp>C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Android\Debug\__library_projects__\Fusee.Engine.Imp.Graphics.Android.stamp</ResolvedResourceDirectoryStamp>
+  </ResolvedResourceDirectoryStamps>
 </Paths>

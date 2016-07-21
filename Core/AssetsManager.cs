@@ -2,6 +2,8 @@
 using Fusee.Base.Common;
 using Fusee.Base.Core;
 using Fusee.Serialization;
+using Fusee.Engine.Core;
+using Fusee.Engine.Core.GUI;
 
 namespace Fusee.Tutorial.Core.Assets
 {
@@ -14,12 +16,16 @@ namespace Fusee.Tutorial.Core.Assets
             SHADER_VERT,
             SHADER_PIX,
             FUS_BUNKER,
-            TEXTURE_MAP
+            TEXTURE_MAP,
+            TEXTURE_GUI,
+            FONTS
         }
 
         //FILE LOCATIONS
         private const string TEXTURE_SKY_FILEPATH = "Textures/Sky/";
         private const string TEXTURE_MAPS_FILEPATH = "Textures/Landscape/";
+        private const string TEXTURE_GUI_FILEPATH = "Textures/GUI/";
+        private const string FONTS_FILEPATH = "Fonts/";
         private const string SHADERS_FILEPATH = "Shaders/";
         private const string FUS_BUNKERS_FILEPATH = "Fus/Bunkers/";
         private const string FUS_ROOT_FILEPATH = "Fus/";
@@ -31,6 +37,10 @@ namespace Fusee.Tutorial.Core.Assets
         //TEXTURE FILE NAMES
         public static readonly List<string> TEXTURE_MAP_FILES = new List<string>() { "mountainsTexture_3", "mountainsTexture_0", "mountainsTexture_4" };
         public static readonly List<string> TEXTURE_SKY_FILES = new List<string>() { "sky_6", "sky_8" };
+        public static readonly List<string> TEXTURE_GUI_FILES = new List<string>() { "crosshairTexture" };
+
+        // FONT FILE NAMES
+        public static readonly List<string> FONT_FILES = new List<string>() { "Army, Cabin-Regular" };
 
         //FUS FILE NAMES
         public static readonly string[] FUS_BUNKER_FILES = { "Bunker_white", "Bunker_pink", "Bunker_yellow", "Bunker_green", "Bunker_blue", "Bunker_red" };
@@ -40,6 +50,8 @@ namespace Fusee.Tutorial.Core.Assets
         //ASSETS STORAGE
         public static Dictionary<string, SceneNodeContainer> fusFiles; 
         public static Dictionary<string, TextureImage> textures;
+        public static Dictionary<string, GUIImage> guiImages;
+        public static Dictionary<string, Font> fonts;
         public static Dictionary<string, string> shaders_pix;
         public static Dictionary<string, string> shaders_vert;
 
@@ -68,6 +80,12 @@ namespace Fusee.Tutorial.Core.Assets
                     case FILE_TYPE.TEXTURE_SKY:
                         _filePath = TEXTURE_SKY_FILEPATH + _filename + ".fus";
                         break;
+                    case FILE_TYPE.TEXTURE_GUI:
+                    _filePath = TEXTURE_GUI_FILEPATH + _filename + ".png";
+                    break;
+                case FILE_TYPE.FONTS:
+                    _filePath = FONTS_FILEPATH + _filename + ".ttf";
+                    break;
             }
             return AssetStorage.Get<T>(_filePath);
         }
@@ -76,6 +94,8 @@ namespace Fusee.Tutorial.Core.Assets
         {
             fusFiles = new Dictionary<string, SceneNodeContainer>();
             textures = new Dictionary<string, TextureImage>();
+            guiImages = new Dictionary<string, GUIImage>();
+            fonts = new Dictionary<string, Font>();
             shaders_pix = new Dictionary<string, string>();
             shaders_vert = new Dictionary<string, string>();
 
@@ -107,6 +127,20 @@ namespace Fusee.Tutorial.Core.Assets
 
                 TextureImage _tex = new TextureImage(src, mapTex, path);
                 textures.Add(mapTex, _tex);
+            }
+
+            foreach(var guiTex in TEXTURE_GUI_FILES)
+            {
+                ImageData src = loadAsset<ImageData>(FILE_TYPE.TEXTURE_GUI, guiTex);
+
+                GUIImage _tex = new GUIImage(src, 0, 0, src.Width, src.Height);
+                guiImages.Add(guiTex, _tex);
+            }
+
+            foreach(var font in FONT_FILES)
+            {
+                Font _font = loadAsset<Font>(FILE_TYPE.FONTS, font);
+                fonts.Add(font, _font);
             }
 
             foreach (var shader in SHADER_PIX_FILES)

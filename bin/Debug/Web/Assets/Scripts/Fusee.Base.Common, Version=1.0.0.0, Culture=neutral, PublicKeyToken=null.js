@@ -240,7 +240,7 @@ JSIL.DeclareNamespace("Fusee.Base.Common");
     if (flag2) {
       throw $S03().Construct("copyFrom", "Not enough pixel data to copy from given index.");
     }
-    this.R = (copyFrom[(((index | 0) + 0) | 0)] | 0);
+    this.R = (copyFrom[index] | 0);
     this.G = (copyFrom[(((index | 0) + 1) | 0)] | 0);
     this.B = (copyFrom[(((index | 0) + 2) | 0)] | 0);
     if (noAlpha) {
@@ -1944,11 +1944,17 @@ JSIL.MakeInterface(
   var $T08 = function () {
     return ($T08 = JSIL.Memoize($asm14.System.IO.Stream)) ();
   };
+  var $T09 = function () {
+    return ($T09 = JSIL.Memoize($asm14.System.IDisposable)) ();
+  };
   var $S00 = function () {
     return ($S00 = JSIL.Memoize(new JSIL.ConstructorSignature($asm14.TypeRef("System.Collections.Generic.Dictionary`2", [$asm14.TypeRef("System.Type"), $asm00.TypeRef("Fusee.Base.Common.AssetHandler")]), null))) ();
   };
   var $S01 = function () {
     return ($S01 = JSIL.Memoize(new JSIL.ConstructorSignature($asm14.TypeRef("System.NotImplementedException"), null))) ();
+  };
+  var $IM00 = function () {
+    return ($IM00 = JSIL.Memoize($asm14.System.IDisposable.Dispose)) ();
   };
 
 
@@ -1988,10 +1994,12 @@ JSIL.MakeInterface(
     var assetHandler = new JSIL.BoxedVariable(new ($T05())());
     var obj = null;
     var stream = this.GetStream(id);
-    var flag = stream === null;
-    if (flag) {
-      var result = null;
-    } else {
+    try {
+      var flag = stream === null;
+      if (flag) {
+        var result = null;
+        return result;
+      }
       var flag2 = (this._assetHandlers).TryGetValue(type, /* ref */ assetHandler);
       if (flag2) {
         var flag3 = (obj = assetHandler.get().Decoder(id, stream)) !== null;
@@ -2000,8 +2008,12 @@ JSIL.MakeInterface(
           return result;
         }
       }
-      result = null;
+    } finally {
+      if (stream !== null) {
+        $IM00().Call(stream, null);
+      }
     }
+    result = null;
     return result;
   }; 
 
@@ -2677,33 +2689,33 @@ JSIL.MakeDelegate("Fusee.Base.Common.ImageData+CopyFunc", false, [],
   }; 
 
   function $l$gc__DisplayClass14_0_$lBlt$gb__1 (idp, isp) {
-    this.dst.PixelData[(((idp | 0) + 0) | 0)] = (this.src.PixelData[(((isp | 0) + 0) | 0)] | 0);
+    this.dst.PixelData[idp] = (this.src.PixelData[isp] | 0);
     this.dst.PixelData[(((idp | 0) + 1) | 0)] = (this.src.PixelData[(((isp | 0) + 1) | 0)] | 0);
     this.dst.PixelData[(((idp | 0) + 2) | 0)] = (this.src.PixelData[(((isp | 0) + 2) | 0)] | 0);
     this.dst.PixelData[(((idp | 0) + 3) | 0)] = 255;
   }; 
 
   function $l$gc__DisplayClass14_0_$lBlt$gb__2 (idp, isp) {
-    this.dst.PixelData[(((idp | 0) + 0) | 0)] = (this.src.PixelData[isp] | 0);
+    this.dst.PixelData[idp] = (this.src.PixelData[isp] | 0);
     this.dst.PixelData[(((idp | 0) + 1) | 0)] = (this.src.PixelData[isp] | 0);
     this.dst.PixelData[(((idp | 0) + 2) | 0)] = (this.src.PixelData[isp] | 0);
     this.dst.PixelData[(((idp | 0) + 3) | 0)] = 255;
   }; 
 
   function $l$gc__DisplayClass14_0_$lBlt$gb__3 (idp, isp) {
-    this.dst.PixelData[(((idp | 0) + 0) | 0)] = (this.src.PixelData[(((isp | 0) + 0) | 0)] | 0);
+    this.dst.PixelData[idp] = (this.src.PixelData[isp] | 0);
     this.dst.PixelData[(((idp | 0) + 1) | 0)] = (this.src.PixelData[(((isp | 0) + 1) | 0)] | 0);
     this.dst.PixelData[(((idp | 0) + 2) | 0)] = (this.src.PixelData[(((isp | 0) + 2) | 0)] | 0);
   }; 
 
   function $l$gc__DisplayClass14_0_$lBlt$gb__4 (idp, isp) {
-    this.dst.PixelData[(((idp | 0) + 0) | 0)] = (this.src.PixelData[isp] | 0);
+    this.dst.PixelData[idp] = (this.src.PixelData[isp] | 0);
     this.dst.PixelData[(((idp | 0) + 1) | 0)] = (this.src.PixelData[isp] | 0);
     this.dst.PixelData[(((idp | 0) + 2) | 0)] = (this.src.PixelData[isp] | 0);
   }; 
 
   function $l$gc__DisplayClass14_0_$lBlt$gb__5 (idp, isp) {
-    var num = (this.src.PixelData[(((isp | 0) + 0) | 0)] | 0);
+    var num = (this.src.PixelData[isp] | 0);
     var num2 = (this.src.PixelData[(((isp | 0) + 1) | 0)] | 0);
     var num3 = (this.src.PixelData[(((isp | 0) + 2) | 0)] | 0);
     this.dst.PixelData[idp] = (((((((((((((num + num) | 0) + num3) | 0) + num2) | 0) + num2) | 0) + num2) | 0) / 6) | 0) & 0xFF);
