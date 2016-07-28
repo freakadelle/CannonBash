@@ -37,8 +37,10 @@ D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Fusee.Tutorial.
 D:\Fusee Projekte\GameEngineering\CannonBash\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial06.Core.csprojResolveAssemblyReference.cache
 D:\Fusee Projekte\GameEngineering\CannonBash\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial.Core.dll
 D:\Fusee Projekte\GameEngineering\CannonBash\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial.Core.pdb
+<<<<<<< HEAD
+D:\Fusee Projekte\GameEngineering\CannonBash\bin\Debug\Libraries\Assets\Fus\Cylinder.fus
+=======
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Assets\Fus\360Sky.fus
-C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Assets\Textures\GUI\crosshairTexture.png
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Assets\Textures\Landscape\mountainsTexture.png
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Assets\Textures\Landscape\mountainsTexture_0.png
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Assets\Textures\Landscape\mountainsTexture_1.png
@@ -63,10 +65,10 @@ C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Assets\S
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Assets\Shaders\PixelShader_texture.frag
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Assets\Shaders\VertexShader_texture.vert
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Assets\Fus\projectile.fus
-C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Assets\Fonts\Army.ttf
-C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Assets\Fonts\Cabin-Regular.ttf
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Fusee.Tutorial.Core.dll
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Fusee.Tutorial.Core.pdb
-C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial06.Core.csprojResolveAssemblyReference.cache
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial.Core.dll
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial.Core.pdb
+C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Core\Debug\Fusee.Tutorial.Core.dll.mdb
+C:\Users\leifg_000\Documents\Projects\CannonBash_02\bin\Debug\Libraries\Fusee.Tutorial.Core.dll.mdb
+>>>>>>> 78b12640ffb6436f6d249003daa11150426d5b53

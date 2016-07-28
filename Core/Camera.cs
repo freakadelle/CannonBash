@@ -4,51 +4,32 @@ using Fusee.Tutorial.Core.Assets;
 
 namespace Fusee.Tutorial.Core
 {
-    class Camera: TransformComponent
+    class Camera : TransformComponent
     {
-        // angle variables
-        private float _angleHorz = M.PiOver6 * 2.0f, _angleVert = -M.PiOver6 * 0.5f, _curDamp,
-                             _angleVelHorz, _angleVelVert, _angleRoll, _angleRollInit, _zoomVel, _fieldOfView;
-        private float2 _offset, _offsetInit, _zoomLimits;
-
         public float4x4 projection;
-        private readonly float RotationSpeed = 7;
-        public readonly float Damping = 0.8f;
-
+        public float _angleVelHorz, _angleVelVert, _angleRollInit, _fieldOfView, _curDamp;
+        private readonly float2 _zoomLimits;
+        public readonly float RotationSpeed = 7, Damping = 0.8f;
         public float3 eye, target, up, pivot;
 
         public Camera()
         {
-            Translation = new float3(0,0,0);
-            Rotation = new float3(0,0,0);
-            Scale = new float3(0,0,0);
-            up = new float3(0, 1, 0);
-            target = new float3(50, 50, 50);
-            pivot = new float3(1,-1.8f,-2.7f);
+            Translation = float3.Zero;
+            Rotation = float3.Zero;
+            Scale = float3.One;
+
+            up = float3.One;
+            target = float3.One;
+            eye = float3.One;
+            pivot = float3.Zero;
+
             _fieldOfView = M.PiOver4;
             _zoomLimits = new float2(1, 100000);
         }
 
-        public bool touchZoom(float _twoPointAngle, float2 _twoPointMidPoint, float _twoPointDistanceVel, bool _twoTouchRepeated)
-        {
-            if (!_twoTouchRepeated)
-            {
-                _angleRollInit = _twoPointAngle - _angleRoll;
-                _offsetInit = _twoPointMidPoint - _offset;
-            }
-            _zoomVel = _twoPointDistanceVel * -0.01f;
-            _angleRoll = _twoPointAngle - _angleRollInit;
-            _offset = _twoPointMidPoint - _offsetInit;
-
-            return true;
-        }
-
         public bool mouseWheelZoom(float wheelVel)
         {
-            _zoomVel = wheelVel * -2.0f;
-            _angleRoll *= _curDamp * 0.8f;
-            _offset *= _curDamp * 0.8f;
-
+            Zoom += wheelVel * -2.0f;
             return false;
         }
 
@@ -66,45 +47,34 @@ namespace Fusee.Tutorial.Core
 
         public void update()
         {
-            Zoom += _zoomVel;
-
-            _angleHorz += _angleVelHorz;
+            Rotation.y += _angleVelHorz;
             // Wrap-around to keep _angleHorz between -PI and + PI
-            _angleHorz = M.MinAngle(_angleHorz);
+            Rotation.y = M.MinAngle(Rotation.y);
 
-            _angleVert += _angleVelVert;
+            Rotation.x += _angleVelVert;
             // Limit pitch to the range between [-PI/2, + PI/2]
-            _angleVert = M.Clamp(_angleVert, -M.PiOver2, M.PiOver2);
+            Rotation.x = M.Clamp(Rotation.x, -M.PiOver2, M.PiOver2);
 
             // Wrap-around to keep _angleRoll between -PI and + PI
-            _angleRoll = M.MinAngle(_angleRoll);
+            Rotation.z = M.MinAngle(Rotation.z);
         }
 
         public void mountCameraOnBunker(Bunker _bunker)
         {
-            //Todo: Warum muss die Translation negativ genommen werden?
             Translation = -_bunker.bunkerBase.Translation - (_bunker.bunkerPlatform.Translation * Constants.BUNKER_SCALE * 1.1f);
+        }
+
+        public void setCurDamp(float _deltaTime)
+        {
+            _curDamp = (float)System.Math.Exp(-Damping * _deltaTime);
         }
 
         //GETTER SETTER
         //-------------------------------------------------
 
-        public float CurDamp
+        private float Zoom
         {
-            get { return _curDamp; }
-            set
-            {
-                _curDamp = value;
-            }
-        }
-
-
-        public float Zoom
-        {
-            get
-            {
-                return eye.z;
-            }
+            get { return eye.z; }
             set
             {
                 eye.z = value;
@@ -150,5 +120,6 @@ namespace Fusee.Tutorial.Core
             get { return _fieldOfView; }
             set { _fieldOfView = value; }
         }
+
     }
 }

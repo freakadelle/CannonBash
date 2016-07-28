@@ -45,7 +45,7 @@ namespace Fusee.Tutorial.Core.Assets
         //FUS FILE NAMES
         public static readonly string[] FUS_BUNKER_FILES = { "Bunker_white", "Bunker_pink", "Bunker_yellow", "Bunker_green", "Bunker_blue", "Bunker_red" };
         private static readonly string[] FUS_SKY_FILES = { "360Sky" };
-        public static readonly string[] FUS_DIVERSE_FILES = { "projectile" };
+        public static readonly string[] FUS_DIVERSE_FILES = { "projectile", "Cylinder" };
 
         //ASSETS STORAGE
         public static Dictionary<string, SceneNodeContainer> fusFiles; 

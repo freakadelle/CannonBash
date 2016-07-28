@@ -25,6 +25,7 @@ contentManifest["Fusee.Tutorial.Web.contentproj"] = [
     ["File",	"Assets/Fus/Bunkers/Bunker_red.fus",	{  "sizeBytes": 85294 }],
     ["File",	"Assets/Fus/Bunkers/Bunker_white.fus",	{  "sizeBytes": 85294 }],
     ["File",	"Assets/Fus/Bunkers/Bunker_yellow.fus",	{  "sizeBytes": 85294 }],
+    ["File",	"Assets/Fus/Cylinder.fus",	{  "sizeBytes": 12334 }],
     ["File",	"Assets/Fus/projectile.fus",	{  "sizeBytes": 47943 }],
     ["File",	"Assets/Shaders/PixelShader.frag",	{  "sizeBytes": 849 }],
     ["File",	"Assets/Shaders/PixelShader_mountains.frag",	{  "sizeBytes": 1312 }],

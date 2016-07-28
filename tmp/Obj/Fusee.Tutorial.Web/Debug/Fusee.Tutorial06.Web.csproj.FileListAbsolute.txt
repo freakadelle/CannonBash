@@ -30,6 +30,9 @@ D:\Fusee Projekte\GameEngineering\CannonBash\tmp\Obj\Fusee.Tutorial.Web\bin\Debu
 D:\Fusee Projekte\GameEngineering\CannonBash\tmp\Obj\Fusee.Tutorial.Web\Debug\Fusee.Tutorial06.Web.csprojResolveAssemblyReference.cache
 D:\Fusee Projekte\GameEngineering\CannonBash\tmp\Obj\Fusee.Tutorial.Web\Debug\Fusee.Tutorial.Web.exe
 D:\Fusee Projekte\GameEngineering\CannonBash\tmp\Obj\Fusee.Tutorial.Web\Debug\Fusee.Tutorial.Web.pdb
+<<<<<<< HEAD
+D:\Fusee Projekte\GameEngineering\CannonBash\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\Fus\Cylinder.fus
+=======
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\Fus\360Sky.fus
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\Textures\GUI\crosshairTexture.png
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Web\bin\Debug\Assets\Textures\Landscape\mountainsTexture.png
@@ -65,3 +68,4 @@ C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Web\b
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Web\Debug\Fusee.Tutorial06.Web.csprojResolveAssemblyReference.cache
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Web\Debug\Fusee.Tutorial.Web.exe
 C:\Users\leifg_000\Documents\Projects\CannonBash_02\tmp\Obj\Fusee.Tutorial.Web\Debug\Fusee.Tutorial.Web.pdb
+>>>>>>> 78b12640ffb6436f6d249003daa11150426d5b53
